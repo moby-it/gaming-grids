@@ -1,0 +1,9 @@
+@import '/styles/reset.css';
+@import '/styles/typography.css';
+@import '/styles/spacing.css';
+
+body {
+  background-color: rgb(48, 48, 48);
+  color: white;
+  padding: var(--gap-1) var(--gap-3);
+}
