@@ -1,19 +1,24 @@
 <script setup lang="ts">
 defineProps<{
-  imgUrl?: string;
-  header?: string;
+  text?: string;
+  isRestriction: boolean;
+  selected: boolean;
 }>();
 </script>
 <template>
-  <section class="cell" v-if="!$props.header">
+  <section class="cell" :class="{ selected }" v-if="!$props.isRestriction">
+    <p>{{ text }}</p>
   </section>
-  <h5 class="restriction" v-else> {{ $props.header }} </h5>
+  <h5 class="restriction" v-else> {{ $props.text }} </h5>
 </template>
 <style scoped>
 .restriction {
   margin: auto;
 }
+
 .cell {
+  display: flex;
+  justify-self: center;
   cursor: pointer;
   margin: auto;
   width: 6rem;
@@ -25,6 +30,13 @@ defineProps<{
 
   &:hover {
     transform: scale(1.05);
+  }
+
+  &.selected {
+    background-color: darkgray;
+  }
+  p {
+    margin: auto;
   }
 }
 </style>
