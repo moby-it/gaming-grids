@@ -17,6 +17,7 @@ const selectedCell = ref<SelectedCell>({
 });
 const activeCell = computed(() => {
   if (!showSearch) return -1;
+  console.log(selectedCell.value.x)
   return selectedCell.value.x + selectedCell.value.y * 4;
 });
 const showSearch = computed(() => selectedCell.value.x >= 0 || selectedCell.value.y >= 0);
@@ -29,8 +30,7 @@ function selectCell(cellIndex: number) {
   }, 0);
 }
 function handlePlayerChosen(playerName: string) {
-  const idx = selectedCell.value.x + selectedCell.value.y * 3;
-  cells[idx] = playerName;
+  cells[activeCell.value] = playerName;
   console.log('player chosen: ', playerName);
   selectedCell.value.value = '';
   selectedCell.value.x = -1;
