@@ -7,7 +7,7 @@ defineProps<{
 <template>
   <section class="cell" v-if="!$props.header">
   </section>
-  <h3 class="restriction" v-else> {{ $props.header }} </h3>
+  <h5 class="restriction" v-else> {{ $props.header }} </h5>
 </template>
 <style scoped>
 .restriction {
@@ -16,8 +16,8 @@ defineProps<{
 .cell {
   cursor: pointer;
   margin: auto;
-  width: 120px;
-  height: 120px;
+  width: 6rem;
+  height: 6rem;
   border-radius: var(--radius);
   border: 1px solid gray;
   box-shadow: 3px 5px 7px black;

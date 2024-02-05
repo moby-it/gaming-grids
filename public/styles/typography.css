@@ -89,3 +89,9 @@ em {
 .italic {
   font-style: italic;
 }
+
+@media (width <= 450px) {
+  body {
+    font-size: 12px;
+  }
+}
