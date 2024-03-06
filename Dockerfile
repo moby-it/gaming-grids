@@ -9,5 +9,8 @@ COPY . .
 RUN pnpm build
 
 FROM build as run
+
+LABEL org.opencontainers.image.source=https://github.com/moby-it/gaming-grids
+
 EXPOSE 3000
 CMD exec node .output/server/index.mjs
