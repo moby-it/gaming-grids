@@ -6,7 +6,7 @@ const timeout = ref();
 const results = ref<string[] | null>(null);
 
 async function fetchResults() {
-  const res = await $fetch('/api/players', { query: { search: model.value } });
+  const res = await $fetch('/api/champions', { query: { search: model.value } });
   if (res) {
     results.value = res;
   }

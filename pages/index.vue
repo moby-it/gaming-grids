@@ -4,12 +4,14 @@ export type SelectedCell = {
   y: number;
   value: string;
 };
-const question = 'Which player has earned the most awards at Worlds, ranging from 2018 to 2021?';
-const rowRestrictions = ["T1", 'Fnatic', 'G2'];
+const { data, error } = await useFetch('/api/dailyQuestion');
+const rowRestrictions = data.value?.restrictions[0];
 const cells = new Array(12);
-rowRestrictions.forEach((rr, idx) => {
-  cells[idx * 4] = rr;
-});
+if (rowRestrictions) {
+  rowRestrictions.forEach((rr, idx) => {
+    cells[idx * 4] = rr;
+  });
+}
 const selectedCell = ref<SelectedCell>({
   x: -1,
   y: -1,
@@ -17,7 +19,6 @@ const selectedCell = ref<SelectedCell>({
 });
 const activeCell = computed(() => {
   if (!showSearch) return -1;
-  console.log(selectedCell.value.x)
   return selectedCell.value.x + selectedCell.value.y * 4;
 });
 const showSearch = computed(() => selectedCell.value.x >= 0 || selectedCell.value.y >= 0);
@@ -31,7 +32,6 @@ function selectCell(cellIndex: number) {
 }
 function handlePlayerChosen(playerName: string) {
   cells[activeCell.value] = playerName;
-  console.log('player chosen: ', playerName);
   selectedCell.value.value = '';
   selectedCell.value.x = -1;
   selectedCell.value.y = -1;
@@ -45,8 +45,9 @@ if (process.client) {
   });
 }
 </script>
+
 <template>
-  <h4>{{ question }}</h4>
+  <h4>{{ data?.name }}</h4>
   <Teleport to="body">
     <Transition>
       <section class="search-container" v-if="showSearch">
@@ -55,17 +56,15 @@ if (process.client) {
     </Transition>
   </Teleport>
   <section class="grid">
-    <Cell :selected="index === activeCell" v-for="(cell, index) of cells" :text="cell" 
-    :is-restriction="index % 4 === 0"
+    <Cell :selected="index === activeCell" v-for="(cell, index) of cells" :text="cell" :is-restriction="index % 4 === 0"
       @click="selectCell(index)" />
   </section>
 </template>
+
 <style scoped>
 h4 {
-  margin: auto;
   text-align: center;
   margin-bottom: var(--gap-2);
-  max-width: 600px;
 }
 
 .search-container {
@@ -73,16 +72,30 @@ h4 {
   top: 15vh;
   left: 50%;
   transform: translateX(-50%);
-  box-shadow: 4px 6px 9px black;
 }
 
 .grid {
-  max-width: 400px;
+  max-width: fit-content;
   margin: auto;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: min-content repeat(3, 1fr);
-  gap: var(--gap-1);
   justify-content: center;
+}
+
+.grid .cell:last-child {
+  border: none;
+}
+
+.grid .cell:nth-child(4n) {
+  border-right: none;
+}
+
+.grid .cell:nth-child(10) {
+  border-bottom: none;
+}
+
+.grid .cell:nth-child(11) {
+  border-bottom: none;
 }
 </style>
