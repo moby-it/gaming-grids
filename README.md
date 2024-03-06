@@ -1,75 +1,19 @@
-# Nuxt 3 Minimal Starter
+# League Grid
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A puzzle solving app for daily League of Legends Immaculate Grid Puzzles by [Moby IT](https://moby-it.com).
 
-## Setup
+## Main Features
 
-Make sure to install the dependencies:
+Taken from this [project brief](https://docs.google.com/document/d/1z9pTbSC5WpVhPoq-czuN7d8uEoRyj_wNOVK6LSrzydM/edit#heading=h.cpe8xe7cgu5r).
 
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+1. 3x3 grid
+2. There are solution restrictions to every row and column
+3. Each cell has a set of possible solutions that match the row/column restrictions.
+4. When a player clicks a cell, he can search through champions with autocomplete.
+5. The player has 9 guesses. Each time they choose a champion, they lose a guess.
+6. User registration/login.
+7. User Profile
+    - Past Results
+8. Scoring system.
+    - Each cell’s score is the % of players that chose the same response.
+      The puzzle score is the sum of all cell scores
