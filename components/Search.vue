@@ -26,17 +26,15 @@ watchEffect(async () => {
     <ul class="results" v-if="results && results.length">
       <li v-for="(result) of results" @click="() => $emit('playerChosen', result)">{{ result }}</li>
     </ul>
-    <p v-if="results && results.length === 0">No players found</p>
   </section>
 </template>
 <style scoped>
 .search {
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 35px;
+  width: 400px;
+  height: 50px;
   display: flex;
-
   & input {
     flex: 1;
   }
@@ -53,14 +51,15 @@ watchEffect(async () => {
     top: 100%;
     cursor: pointer;
     background-color: gray;
-    width: 300px;
+    width: 400px;
+
 
     li {
       padding: 4px var(--gap-1);
-      border-bottom: 1px solid darkgray;
+      border-bottom: 1px solid var(--neutral-200);
 
       &:hover {
-        background-color: rgb(159, 159, 159);
+        background-color: var(--neutral-600);
       }
     }
   }

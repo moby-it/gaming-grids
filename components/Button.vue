@@ -25,8 +25,8 @@ button {
 }
 
 button.primary {
-  background: linear-gradient(0.25turn, var(--primary-100), var(--primary-200));
-  box-shadow: 1px 1px var(--primary-100)
+  background: linear-gradient(0.25turn, var(--primary-200), var(--primary-600));
+  box-shadow: 1px 1px var(--primary-600)
 }
 
 button:disabled {

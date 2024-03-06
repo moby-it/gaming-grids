@@ -124,7 +124,7 @@ onClickOutside(searchBar, () => {
   text-transform: uppercase;
   position: relative;
   left: var(--gap-2);
-  top: calc(50vh + var(--gap-1));
+  top: 184px;
   text-align: center;
 }
 

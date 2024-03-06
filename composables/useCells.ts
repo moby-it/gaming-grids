@@ -6,7 +6,6 @@ const Input = v.object({
   name: v.string()
 });
 export const useCells = (data: unknown) => {
-  console.log(data);
   const { success, output } = v.safeParse(Input, data);
   if (!success) throw createError('failed to parse restrictions');
   const cells: Array<string | undefined> = new Array(16).fill(undefined);
