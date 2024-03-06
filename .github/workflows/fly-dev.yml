@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.ref_name }}
+          tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
   deploy:
     needs: [build]
     runs-on: ubuntu-22.04
@@ -35,9 +35,9 @@ jobs:
           username: ${{ secrets.CONTAINER_USERNAME }}
           password: ${{ secrets.CONTAINER_PASSWORD }}
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: docker pull ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.ref_name }}
+      - run: docker pull ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
       - name: deploy
         run: |
-          flyctl deploy --image ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.ref_name }} \
-            --image-label ${{ github.ref_name }} \
+          flyctl deploy --image ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }} \
+            --image-label ${{ github.sha }} \
             --local-only
