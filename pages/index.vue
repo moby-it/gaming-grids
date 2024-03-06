@@ -4,12 +4,22 @@ export type SelectedCell = {
   y: number;
   value: string;
 };
-const { data, error } = await useFetch('/api/dailyQuestion');
+const guesses = ref(9);
+const { data } = await useFetch('/api/dailyQuestion');
 const rowRestrictions = data.value?.restrictions[0];
-const cells = new Array(12);
+const columnRestrictions = data.value?.restrictions[1];
+const cells: Array<string | undefined> = new Array(16).fill(undefined);
+cells[0] = data.value?.name;
 if (rowRestrictions) {
   rowRestrictions.forEach((rr, idx) => {
-    cells[idx * 4] = rr;
+    cells[((idx + 1) * 4)] = rr;
+  });
+}
+if (columnRestrictions) {
+  columnRestrictions.forEach((rr, idx) => {
+    if (idx <= 3) {
+      cells[idx + 1] = rr;
+    }
   });
 }
 const selectedCell = ref<SelectedCell>({
@@ -47,7 +57,6 @@ if (process.client) {
 </script>
 
 <template>
-  <h4>{{ data?.name }}</h4>
   <Teleport to="body">
     <Transition>
       <section class="search-container" v-if="showSearch">
@@ -56,8 +65,12 @@ if (process.client) {
     </Transition>
   </Teleport>
   <section class="grid">
-    <Cell :selected="index === activeCell" v-for="(cell, index) of cells" :text="cell" :is-restriction="index % 4 === 0"
+    <Cell :selected="index === activeCell" v-for="(cell, index) of cells" :text="cell" :index="index"
       @click="selectCell(index)" />
+    <p>
+      GUESSES LEFT <br>
+      <span> {{ guesses }} </span>
+    </p>
   </section>
 </template>
 
@@ -76,26 +89,39 @@ h4 {
 
 .grid {
   max-width: fit-content;
-  margin: auto;
+  margin: var(--gap-4) auto;
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-columns: min-content repeat(3, 1fr);
-  justify-content: center;
+  grid-template-areas:
+    ". col-restr col-restr col-restr guesses"
+    "row-restr play-area play-area play-area guesses"
+    "row-restr play-area play-area play-area guesses"
+    "row-restr play-area play-area play-area guesses"
+  ;
 }
 
-.grid .cell:last-child {
-  border: none;
+.grid p {
+  grid-area: guesses;
+  margin: auto var(--gap-2);
+  text-align: center;
 }
 
-.grid .cell:nth-child(4n) {
-  border-right: none;
+.grid p>span {
+  font-size: 3rem;
 }
 
-.grid .cell:nth-child(10) {
-  border-bottom: none;
+.grid .cell:nth-child(6) {
+  border-top-left-radius: var(--radius);
 }
 
-.grid .cell:nth-child(11) {
-  border-bottom: none;
+.grid .cell:nth-child(8) {
+  border-top-right-radius: var(--radius);
+}
+
+.grid .cell:nth-child(14) {
+  border-bottom-left-radius: var(--radius);
+}
+
+.grid .cell:nth-child(16) {
+  border-bottom-right-radius: var(--radius);
 }
 </style>

@@ -4,7 +4,7 @@
 @import '/styles/colors.css';
 
 body {
-  background-color: var(--dark);
+  background: var(--dark);
   color: var(--light);
 }
 

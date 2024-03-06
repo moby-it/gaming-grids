@@ -1,14 +1,19 @@
 :root {
-  --dark: rgb(48, 48, 48);
-  --light: white;
 
-  --primary: gray;
-  --secondary: 2rem;
-  --tertiary: 2rem;
-  --primary-light: 4rem;
-  --primary-dark: 4rem;
-  --secondary-light: 4rem;
-  --secondary-dark: 4rem;
-  --tertiary-light: 4rem;
-  --tertiary-dark: 4rem;
+
+  --primary-a: hsl(175, 90%, 41%);
+  --primary-b: hsl(187, 97%, 34%);
+  --primary-c: hsl(198, 100%, 25%);
+  --primary-d: hsl(192, 71%, 14%);
+  --accent-a: hsl(40, 45%, 61%);
+  --accent-b: hsl(41, 56%, 51%);
+  --accent-c: hsl(38, 50%, 31%);
+  --accent-d: hsl(42, 56%, 18%);
+  --neutral-a: hsl(48, 3%, 35%);
+  --neutral-b: hsl(240, 4%, 25%);
+  --neutral-c: hsl(210, 14%, 14%);
+  --neutral-d: hsl(200, 20%, 15%);
+
+  --dark: linear-gradient(#091428, #0A1428);
+  --light: hsl(41, 51%, 88%);
 }
