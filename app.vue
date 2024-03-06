@@ -10,5 +10,7 @@ useHead({
 </script>
 <template>
   <Header />
-  <NuxtPage />
+  <main>
+    <NuxtPage />
+  </main>
 </template>
