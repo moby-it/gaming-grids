@@ -5,7 +5,7 @@ const props = defineProps<{
   selected: boolean;
 }>();
 const isRowRestriction = props.index !== 0 && props.index % 4 === 0;
-const isColRestriction = props.index <= 4;
+const isColRestriction = props.index < 4;
 const isRestriction = isRowRestriction || isColRestriction;
 
 </script>
@@ -14,7 +14,8 @@ const isRestriction = isRowRestriction || isColRestriction;
   <section class="cell" :class="{ selected }" v-if="!isRestriction">
     <p>{{ text }}</p>
   </section>
-  <h5 class="restriction" :class="{ 'highlight': index === 0 }" v-else> {{ $props.text }} </h5>
+  <h5 class="restriction" :class="{ 'highlight': index === 0 }"
+    :style="{ paddingBottom: isColRestriction ? 'var(--gap-2)' : 0 }" v-else> {{ $props.text }} </h5>
 </template>
 
 <style scoped>

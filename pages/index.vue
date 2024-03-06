@@ -100,7 +100,7 @@ onClickOutside(searchBar, () => {
 
 .grid {
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(4, min-content);
   grid-template-columns: repeat(4, 1fr);
 }
 
@@ -124,7 +124,7 @@ onClickOutside(searchBar, () => {
   text-transform: uppercase;
   position: relative;
   left: var(--gap-2);
-  top: 184px;
+  top: calc(145px - var(--gap-2));
   text-align: center;
 }
 
