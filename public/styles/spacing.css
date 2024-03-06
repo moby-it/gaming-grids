@@ -5,3 +5,12 @@
   --gap-4: 5rem;
   --radius: 12px;
 }
+
+@media (width <= 768px) {
+  :root {
+    --gap-1: 1.25rem;
+    --gap-2: 1.5rem;
+    --gap-3: 1.75rem;
+    --gap-4: 2rem;
+  }
+}

@@ -6,10 +6,7 @@
 body {
   background: var(--dark);
   color: var(--light);
-}
-
-main {
-  padding: var(--gap-1) var(--gap-3);
+  scrollbar-gutter: stable;
 }
 
 input,

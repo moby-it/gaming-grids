@@ -107,4 +107,18 @@ em {
   body {
     font-size: 12px;
   }
+  h1 {
+    font-size: 2rem;
+    /* 40px */
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    /* 32px */
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    /* 28px */
+  }
 }

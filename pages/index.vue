@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useCells } from '~/composables/useCells';
+
 export type SelectedCell = {
   x: number;
   y: number;
@@ -6,28 +8,13 @@ export type SelectedCell = {
 };
 const guesses = ref(9);
 const { data } = await useFetch('/api/dailyQuestion');
-const rowRestrictions = data.value?.restrictions[0];
-const columnRestrictions = data.value?.restrictions[1];
-const cells: Array<string | undefined> = new Array(16).fill(undefined);
-cells[0] = data.value?.name;
-if (rowRestrictions) {
-  rowRestrictions.forEach((rr, idx) => {
-    cells[((idx + 1) * 4)] = rr;
-  });
-}
-if (columnRestrictions) {
-  columnRestrictions.forEach((rr, idx) => {
-    if (idx <= 3) {
-      cells[idx + 1] = rr;
-    }
-  });
-}
+const { cells } = useCells(data.value);
 const selectedCell = ref<SelectedCell>({
   x: -1,
   y: -1,
   value: ''
 });
-const activeCell = computed(() => {
+const activeCellIndex = computed(() => {
   if (!showSearch) return -1;
   return selectedCell.value.x + selectedCell.value.y * 4;
 });
@@ -41,7 +28,10 @@ function selectCell(cellIndex: number) {
   }, 0);
 }
 function handlePlayerChosen(playerName: string) {
-  cells[activeCell.value] = playerName;
+  cells[activeCellIndex.value] = playerName;
+  resetSelectedCell();
+}
+function resetSelectedCell() {
   selectedCell.value.value = '';
   selectedCell.value.x = -1;
   selectedCell.value.y = -1;
@@ -54,59 +44,64 @@ if (process.client) {
     }
   });
 }
+const searchBar = ref(null);
+onClickOutside(searchBar, () => {
+  resetSelectedCell();
+});
 </script>
 
 <template>
   <Teleport to="body">
     <Transition>
       <section class="search-container" v-if="showSearch">
-        <Search v-model="selectedCell.value" @player-chosen="handlePlayerChosen" />
+        <Search ref="searchBar" v-model="selectedCell.value" @player-chosen="handlePlayerChosen" />
       </section>
     </Transition>
   </Teleport>
-  <section class="grid">
-    <Cell :selected="index === activeCell" v-for="(cell, index) of cells" :text="cell" :index="index"
-      @click="selectCell(index)" />
+  <section class="grid-container">
+    <section class="grid">
+      <Cell :selected="index === activeCellIndex" v-for="(cell, index) of cells" :text="cell" :index="index"
+        @click="selectCell(index)" />
+    </section>
     <p>
-      GUESSES LEFT <br>
+      guesses left <br>
       <span> {{ guesses }} </span>
     </p>
   </section>
 </template>
 
 <style scoped>
-h4 {
-  text-align: center;
-  margin-bottom: var(--gap-2);
+.grid-container {
+  display: flex;
+  align-items: flex-start;
+  margin-left: auto;
+  justify-content: center;
+}
+
+@media (width <=768px) {
+  .grid-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .search-container {
   position: absolute;
+  width: 100vw;
+  background-color: hsla(0, 0%, 60%, 0.4);
+}
+
+.search-container .search {
+  position: fixed;
   top: 15vh;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .grid {
-  max-width: fit-content;
-  margin: var(--gap-4) auto;
   display: grid;
-  grid-template-areas:
-    ". col-restr col-restr col-restr guesses"
-    "row-restr play-area play-area play-area guesses"
-    "row-restr play-area play-area play-area guesses"
-    "row-restr play-area play-area play-area guesses"
-  ;
-}
-
-.grid p {
-  grid-area: guesses;
-  margin: auto var(--gap-2);
-  text-align: center;
-}
-
-.grid p>span {
-  font-size: 3rem;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .grid .cell:nth-child(6) {
@@ -123,5 +118,29 @@ h4 {
 
 .grid .cell:nth-child(16) {
   border-bottom-right-radius: var(--radius);
+}
+
+.grid-container p {
+  text-transform: uppercase;
+  position: relative;
+  left: var(--gap-2);
+  top: calc(50vh + var(--gap-1));
+  text-align: center;
+}
+
+.grid-container p>span {
+  font-size: 3rem;
+}
+
+@media (width <=768px) {
+  .grid-container p>span {
+    font-size: 1.5rem;
+  }
+
+  .grid-container p {
+    text-transform: uppercase;
+    position: relative;
+    top: calc(var(--gap-1));
+  }
 }
 </style>

@@ -26,7 +26,7 @@
         <path d="M12 18.01L12.01 17.9989" stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
-      <Button @clicked="console.log('should sign in')">Sign In</Button>
+      <Button @clicked="console.log('should sign in')" primary >Sign In</Button>
     </div>
   </header>
 </template>
