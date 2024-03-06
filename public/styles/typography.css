@@ -22,28 +22,34 @@
 
 /* IBM Plex Sans - for body text */
 @font-face {
-  font-family: 'IBM Plex Sans';
-  src: url('/fonts/IBMPlexSans-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+  font-family: Beaufort;
+  src: url('/fonts/BeaufortforLOL-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'IBM Plex Sans';
-  src: url('/fonts/IBMPlexSans-Bold.ttf') format('truetype');
+  font-family: Beaufort;
+  src: url('/fonts/BeaufortforLOL-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'IBM Plex Sans';
-  src: url('/fonts/IBMPlexSans-Italic.ttf') format('truetype');
+  font-family: Beaufort;
+  src: url('/fonts/BeaufortforLOL-Italic.ttf') format('truetype');
+  font-style: italic;
   font-weight: normal;
+}
+
+@font-face {
+  font-family: Beaufort;
+  src: url('/fonts/BeaufortforLOL-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
   font-style: italic;
 }
 
+
 body {
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: Beaufort, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   letter-spacing: 0.1rem;
@@ -55,30 +61,37 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'IBM Plex Serif', serif;
+  font-family: Beaufort, sans-serif;
 }
+
 h1 {
-  font-size: 2.5rem; /* 40px */
+  font-size: 2.5rem;
+  /* 40px */
 }
 
 h2 {
-  font-size: 2rem; /* 32px */
+  font-size: 2rem;
+  /* 32px */
 }
 
 h3 {
-  font-size: 1.75rem; /* 28px */
+  font-size: 1.75rem;
+  /* 28px */
 }
 
 h4 {
-  font-size: 1.5rem; /* 24px */
+  font-size: 1.5rem;
+  /* 24px */
 }
 
 h5 {
-  font-size: 1.25rem; /* 20px */
+  font-size: 1.25rem;
+  /* 20px */
 }
 
 h6 {
-  font-size: 1rem; /* 16px */
+  font-size: 1rem;
+  /* 16px */
 }
 
 strong,
@@ -90,7 +103,7 @@ em {
   font-style: italic;
 }
 
-@media (width <= 450px) {
+@media (width <=450px) {
   body {
     font-size: 12px;
   }

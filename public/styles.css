@@ -1,22 +1,31 @@
 @import '/styles/reset.css';
 @import '/styles/typography.css';
 @import '/styles/spacing.css';
+@import '/styles/colors.css';
 
 body {
-  background-color: rgb(48, 48, 48);
-  color: white;
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+main {
   padding: var(--gap-1) var(--gap-3);
 }
 
-input, textarea {
-  background-color: rgb(80,80,80); /* Very dark grey */
-  color: #fff; /* White text */
+input,
+textarea {
+  background-color: rgb(80, 80, 80);
+  /* Very dark grey */
+  color: #fff;
+  /* White text */
   border: none;
   padding: 0 var(--gap-1);
+
   &::placeholder {
     color: rgba(255, 255, 255, 0.4);
   }
 }
+
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.3s ease;

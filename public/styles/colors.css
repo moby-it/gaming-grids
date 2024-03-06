@@ -1,0 +1,14 @@
+:root {
+  --dark: rgb(48, 48, 48);
+  --light: white;
+
+  --primary: gray;
+  --secondary: 2rem;
+  --tertiary: 2rem;
+  --primary-light: 4rem;
+  --primary-dark: 4rem;
+  --secondary-light: 4rem;
+  --secondary-dark: 4rem;
+  --tertiary-light: 4rem;
+  --tertiary-dark: 4rem;
+}
