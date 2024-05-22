@@ -1,117 +1,113 @@
 <script setup lang="ts">
-import { resetSelectedCell, type Cell } from '~/utils/cells';
+import { resetSelectedCell, type Cell } from "~/utils/cells";
 const selectedCell = ref<Cell>({
-    x: -1,
-    y: -1,
-    value: ''
+	x: -1,
+	y: -1,
+	value: "",
 });
 const showSearch = computed(() => selectedCell.value.x >= 0 || selectedCell.value.y >= 0);
 const searchBar = ref(null);
 const { name, cells, restrictions, guesses } = await useGame();
 
 if (process.client) {
-    window.addEventListener('keyup', (e) => {
-        if (e.key === 'Escape') {
-            resetSelectedCell(selectedCell.value);
-        }
-    });
+	window.addEventListener("keyup", (e) => {
+		if (e.key === "Escape") {
+			resetSelectedCell(selectedCell.value);
+		}
+	});
 }
 onClickOutside(searchBar, () => {
-    resetSelectedCell(selectedCell.value);
+	resetSelectedCell(selectedCell.value);
 });
 function handlePlayerChosen(playerName: string): void {
-    if (guesses.value > 0) {
-        cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
-        --guesses.value;
-    }
-    resetSelectedCell(selectedCell.value);
+	if (guesses.value > 0) {
+		cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
+		--guesses.value;
+	}
+	resetSelectedCell(selectedCell.value);
 }
 </script>
 
 <template>
-    <section class="game">
-        <main>
-            <section class="search-container">
-                <Search ref="searchBar" @player-chosen="handlePlayerChosen" v-if="showSearch" />
-            </section>
-            <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell" />
-        </main>
-        <footer class="guesses">
-            <p>
-                guesses left:
-            </p>
-            <span> {{ guesses }} </span>
-        </footer>
-    </section>
-
+	<section class="game">
+		<main>
+			<section class="search-container">
+				<Search ref="searchBar" @player-chosen="handlePlayerChosen" v-if="showSearch" />
+			</section>
+			<Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell" />
+		</main>
+		<footer class="guesses">
+			<p>guesses left:</p>
+			<span> {{ guesses }} </span>
+		</footer>
+	</section>
 </template>
 
 <style>
 .game {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    align-content: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	text-align: center;
+	align-content: center;
 }
 
 main {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    margin-top: 5px;
-    padding: 0;
-
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: center;
+	margin-top: 5px;
+	padding: 0;
 }
 
 .search-container {
-    position: absolute;
-    width: 400px;
-    height: 50px;
-    margin-left: 9rem;
+	position: absolute;
+	width: 400px;
+	height: 50px;
+	margin-left: 9rem;
 }
 
 footer {
-    font-family: 'Beaufort';
-    text-align: center;
-    margin-left: 30px;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--accent-200);
+	font-family: "Beaufort";
+	text-align: center;
+	margin-left: 30px;
+	font-size: 18px;
+	font-weight: 600;
+	color: var(--accent-200);
 }
 
-@media (max-width:992px) {
-    main {
-        margin-top: 3px;
-    }
+@media (max-width: 992px) {
+	main {
+		margin-top: 3px;
+	}
 }
 
-@media (max-width:768px) {
-    main {
-        margin-top: 3px;
-    }
+@media (max-width: 768px) {
+	main {
+		margin-top: 3px;
+	}
 
-    .search-container {
-        padding-top: 0;
-        height: 3rem;
-    }
+	.search-container {
+		padding-top: 0;
+		height: 3rem;
+	}
 
-    footer {
-        margin-left: 5px;
-        font-size: 15px;
-    }
+	footer {
+		margin-left: 5px;
+		font-size: 15px;
+	}
 }
 
 @media (width <=576px) {
-    .game {
-        flex-direction: column;
-        text-align: center;
-    }
+	.game {
+		flex-direction: column;
+		text-align: center;
+	}
 
-    footer {
-        margin-left: 90px;
-        font-size: 13px;
-    }
+	footer {
+		margin-left: 90px;
+		font-size: 13px;
+	}
 }
 </style>
