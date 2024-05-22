@@ -3,7 +3,7 @@ const { name, cells, restrictions, guesses } = await useGame();
 const selectedCell = ref<Cell>({
     x: -1, y: -1, value: ''
 });
-const showSearch = computed(() => selectedCell.value.x >= 0 || selectedCell.value.y >= 0);
+const showSearch = computed(() => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value);
 function handlePlayerChosen(playerName: string): void {
     if (guesses.value > 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
@@ -19,7 +19,8 @@ function handlePlayerChosen(playerName: string): void {
             <section class="search-container">
                 <Search @player-chosen="handlePlayerChosen" v-if="showSearch" :selected-cell="selectedCell" />
             </section>
-            <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell" />
+            <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
+                :guesses="guesses" />
         </main>
         <Guesses :guesses="guesses" />
     </section>
