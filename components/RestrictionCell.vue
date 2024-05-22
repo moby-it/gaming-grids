@@ -11,7 +11,7 @@ const props = defineProps<{
   </div>
 </template>
 
-<style>
+<style scoped>
 .restriction {
   display: flex;
   width: 9rem;

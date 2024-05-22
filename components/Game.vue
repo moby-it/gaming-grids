@@ -1,24 +1,9 @@
 <script setup lang="ts">
-import { resetSelectedCell, type Cell } from '~/utils/cells';
+const { name, cells, restrictions, guesses } = await useGame();
 const selectedCell = ref<Cell>({
-    x: -1,
-    y: -1,
-    value: ''
+    x: -1, y: -1, value: ''
 });
 const showSearch = computed(() => selectedCell.value.x >= 0 || selectedCell.value.y >= 0);
-const searchBar = ref(null);
-const { name, cells, restrictions, guesses } = await useGame();
-
-if (process.client) {
-    window.addEventListener('keyup', (e) => {
-        if (e.key === 'Escape') {
-            resetSelectedCell(selectedCell.value);
-        }
-    });
-}
-onClickOutside(searchBar, () => {
-    resetSelectedCell(selectedCell.value);
-});
 function handlePlayerChosen(playerName: string): void {
     if (guesses.value > 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
@@ -32,23 +17,19 @@ function handlePlayerChosen(playerName: string): void {
     <section class="game">
         <main>
             <section class="search-container">
-                <Search ref="searchBar" @player-chosen="handlePlayerChosen" v-if="showSearch" />
+                <Search @player-chosen="handlePlayerChosen" v-if="showSearch" :selected-cell="selectedCell" />
             </section>
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell" />
         </main>
-        <footer class="guesses">
-            <p>
-                guesses left:
-            </p>
-            <span> {{ guesses }} </span>
-        </footer>
+        <Guesses :guesses="guesses" />
     </section>
 
 </template>
 
-<style>
+<style scoped>
 .game {
     display: flex;
+    justify-content: center;
     flex-direction: row;
     align-items: center;
     text-align: center;
@@ -96,22 +77,12 @@ footer {
         padding-top: 0;
         height: 3rem;
     }
-
-    footer {
-        margin-left: 5px;
-        font-size: 15px;
-    }
 }
 
 @media (width <=576px) {
     .game {
         flex-direction: column;
         text-align: center;
-    }
-
-    footer {
-        margin-left: 90px;
-        font-size: 13px;
     }
 }
 </style>

@@ -1,14 +1,28 @@
 <script setup lang="ts">
+const props = defineProps<{
+  selectedCell: Cell;
+}>();
 const model = defineModel();
 const emits = defineEmits(['playerChosen']);
 const handlePlayerChosen = (playerName: string) => {
   emits('playerChosen', playerName);
 };
+if (process.client) {
+  window.addEventListener('keyup', (e) => {
+    if (e.key === 'Escape') {
+      resetSelectedCell(props.selectedCell);
+    }
+  });
+}
+const searchBar: Ref<HTMLInputElement | null> = ref(null);
+onClickOutside(searchBar, () => {
+  resetSelectedCell(props.selectedCell);
+});
 </script>
 
 <template>
   <section class="search">
-    <input autocomplete="off" id="search-player" v-model="model" placeholder="Type a player name">
+    <input ref="searchBar" autocomplete="off" id="search-player" v-model="model" placeholder="Type a player name">
     <SearchResults :input="model" @player-chosen="handlePlayerChosen" />
   </section>
 </template>
@@ -22,9 +36,10 @@ const handlePlayerChosen = (playerName: string) => {
   padding-top: 20px;
 
   & input {
-    background-color: rgba(0, 89, 128, 0.3);
+    background-color: rgba(0, 89, 128, 0.5);
     flex: 1;
     border-radius: 10px 10px 0 0;
+    color: var(--accent-300);
   }
 
   & input:focus {

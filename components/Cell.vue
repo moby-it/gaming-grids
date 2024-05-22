@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getCellRadius } from '~/utils/cells';
 const props = defineProps<{
   x: number;
   y: number;
@@ -37,7 +36,7 @@ const props = defineProps<{
   }
 
   &.answered {
-    background-color: var(--primary-700);
+    background-color: var(--primary-600);
     color: var(--accent-300);
     cursor: default;
   }
@@ -73,7 +72,6 @@ const props = defineProps<{
   .cell {
     width: 5rem;
     height: 5rem;
-
   }
 }
 </style>

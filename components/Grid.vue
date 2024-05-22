@@ -9,11 +9,13 @@ const props = defineProps<{
 
 <template>
     <section class="grid-container">
-        <section class="column-restrictions">
+        <section class="grid-head">
             <RestrictionCell :text="props.name" />
-            <RestrictionCell v-for="       restriction in props.restrictions.column       " :text="restriction" />
+            <section class="column-restrictions">
+                <RestrictionCell v-for="       restriction in props.restrictions.column       " :text="restriction" />
+            </section>
         </section>
-        <section class="row-restrictions-cells">
+        <section class="grid-body">
             <section class="row-restrictions">
                 <RestrictionCell v-for="       restriction in props.restrictions.row     " :text="restriction" />
             </section>
@@ -31,6 +33,14 @@ const props = defineProps<{
 .grid-container {
     display: flex;
     flex-direction: column;
+
+}
+
+.grid-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
 
 }
 
@@ -53,7 +63,7 @@ const props = defineProps<{
     flex-direction: column;
 }
 
-.row-restrictions-cells {
+.grid-body {
     display: flex;
 }
 </style>

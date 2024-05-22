@@ -4,6 +4,7 @@ export function navigateList(eventName:string,
     focusedListItem:HTMLLIElement|null,
    emits: (event:'playerChosen', ...args: any[]) => void
 ):void{
+ 
         if (results.value?.length) {
           if (focusedChoice.value === null){ 
             focusedChoice.value = 0;
