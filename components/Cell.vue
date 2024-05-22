@@ -17,11 +17,6 @@ const props = defineProps<{
 </template>
 
 <style scoped>
-.restriction {
-  margin: auto;
-  text-align: center;
-}
-
 .cell {
   display: flex;
   cursor: pointer;
@@ -36,7 +31,7 @@ const props = defineProps<{
   }
 
   &.selected {
-    background-color: var(--neutral-600);
+    background-color: hsla(210, 14%, 14%, 0.8);
   }
 
   p {
@@ -44,17 +39,31 @@ const props = defineProps<{
   }
 }
 
-@media (width <=768px) {
+@media (max-width:992px) {
   .cell {
     width: 9rem;
     height: 9rem;
   }
 }
 
-@media (width <=425px) {
+@media (max-width:768px) {
+  .cell {
+    width: 8rem;
+    height: 8rem;
+  }
+}
+
+@media (max-width:576px) {
   .cell {
     width: 6rem;
     height: 6rem;
+  }
+}
+
+@media (width <=425px) {
+  .cell {
+    width: 5rem;
+    height: 5rem;
   }
 }
 </style>

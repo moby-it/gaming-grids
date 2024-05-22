@@ -26,7 +26,7 @@
         <path d="M12 18.01L12.01 17.9989" stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
-      <Button @clicked="console.log('should sign in')" primary >Sign In</Button>
+      <Button @clicked="console.log('should sign in')" primary>Sign In</Button>
     </div>
   </header>
 </template>
@@ -38,7 +38,7 @@ svg {
 
 header {
   display: flex;
-  padding: var(--gap-1);
+  padding: 10px;
   justify-content: space-between;
   border-bottom: 1px solid darkgray;
 }
@@ -51,5 +51,30 @@ header div {
 
 hgroup {
   text-align: center;
+}
+
+
+
+@media (max-width:576px) {
+
+  h2 {
+
+    font-size: 20px;
+  }
+
+  svg {
+    height: 20px;
+  }
+}
+
+@media (max-width:425px) {
+
+  h2 {
+    font-size: 13px;
+  }
+
+  svg {
+    height: 13 px;
+  }
 }
 </style>

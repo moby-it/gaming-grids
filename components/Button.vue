@@ -5,7 +5,7 @@ defineEmits(['clicked']);
 
 <template>
   <button :class="{ primary, accent }" @click="$emit('clicked')">
-    <slot></slot>
+    <p>Sign in</p>
   </button>
 </template>
 
@@ -18,6 +18,7 @@ button {
   border: none;
   cursor: pointer;
   transition: transform 200ms ease-in;
+  font-size: 17px;
 
   &:hover {
     transform: translateY(-2px);
@@ -33,4 +34,22 @@ button:disabled {
   cursor: default;
 }
 
+@media (max-width:992px) {
+  button {
+    font-size: 15px;
+
+  }
+}
+
+@media (max-width:576px) {
+  button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width:492px) {
+  button {
+    font-size: 10px;
+  }
+}
 </style>

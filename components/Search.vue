@@ -16,19 +16,52 @@ const handlePlayerChosen = (playerName: string) => {
 <style scoped>
 .search {
   display: flex;
-  flex-direction: column;
   width: 400px;
+  flex-direction: column;
   height: 50px;
   padding-top: 20px;
 
   & input {
-
+    background-color: rgba(0, 89, 128, 0.3);
     flex: 1;
-    border-radius: var(--radius);
+    border-radius: 10px 10px 0 0;
   }
 
   & input:focus {
     outline: none;
+  }
+}
+
+@media (max-width:992px) {
+  .search {
+
+    width: 350px;
+    margin-left: 25px;
+  }
+}
+
+@media (max-width:768px) {
+  .search {
+
+    width: 300px;
+    margin-left: 40px;
+  }
+}
+
+@media (max-width:576px) {
+  .search {
+    padding-top: 0;
+    width: 250px;
+    margin-left: 50px;
+  }
+}
+
+
+@media (max-width:425px) {
+  .search {
+    padding-top: 10px;
+    width: 200px;
+    margin-left: 67px;
   }
 }
 </style>

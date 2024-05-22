@@ -37,16 +37,24 @@ function handlePlayerChosen(playerName: string): void {
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell" />
         </main>
         <footer class="guesses">
-            <h1>
+            <p>
                 guesses left:
-            </h1>
-            <h2> {{ guesses }} </h2>
+            </p>
+            <span> {{ guesses }} </span>
         </footer>
     </section>
 
 </template>
 
 <style>
+.game {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    align-content: center;
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -54,15 +62,6 @@ main {
     align-items: center;
     margin-top: 5px;
     padding: 0;
-
-}
-
-.game {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-
 }
 
 .search-container {
@@ -70,11 +69,45 @@ main {
     width: 400px;
     height: 50px;
     margin-left: 9rem;
-    margin-top: 5rem;
 }
 
 footer {
     text-align: center;
     margin-left: 30px;
+    font-size: 20px;
+}
+
+@media (max-width:992px) {
+    main {
+        margin-top: 3px;
+    }
+}
+
+@media (max-width:768px) {
+    main {
+        margin-top: 3px;
+    }
+
+    .search-container {
+        padding-top: 0;
+        height: 3rem;
+    }
+
+    footer {
+
+        margin-left: 5px;
+        font-size: 15px;
+    }
+}
+
+@media (width <=576px) {
+    .game {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    footer {
+        margin-left: 90px;
+    }
 }
 </style>

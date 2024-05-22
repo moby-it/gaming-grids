@@ -28,6 +28,7 @@ watchEffect(async () => {
   if (props.input) {
     timeout.value = setTimeout(() => {
       fetchResults();
+      focusedChoice.value = 0;
     }, 0);
   }
 });
@@ -42,24 +43,64 @@ watchEffect(async () => {
 </template>
 
 <style scoped>
-ul.results {
+.results {
   display: flex;
   flex-direction: column;
   position: absolute;
   margin-top: 50px;
   cursor: pointer;
-  background-color: gray;
+  background-color: rgba(128, 128, 128, 0.3);
   width: 400px;
   max-height: 300px;
-  overflow-y: scroll;
-  border-radius: 10px;
+  overflow-y: auto;
+  border-radius: 0 0 10px 10px;
+  background-color: rgba(0, 89, 128, 0.3);
 
   li {
-    padding: 4.5px var(--gap-1);
-    border-bottom: 1px solid var(--neutral-200);
+    padding: 9px var(--gap-1);
+
 
     &.focused {
       background-color: var(--neutral-600);
+    }
+  }
+}
+
+@media (max-width:992px) {
+  .results {
+    width: 350px;
+    max-height: 200px;
+    margin-top: 50px;
+
+    li {
+      padding: 2.5px var(--gap-1);
+    }
+  }
+}
+
+@media (max-width:768px) {
+  .results {
+    width: 300px;
+  }
+}
+
+
+@media (max-width:576px) {
+  .results {
+    width: 250px;
+    max-height: 180px;
+  }
+
+}
+
+
+@media (max-width:425px) {
+  .results {
+    width: 200px;
+    max-height: 160px;
+
+    li {
+      padding: 5px var(--gap-1);
     }
   }
 }
