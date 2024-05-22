@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h2># League Grid #</h2>
+    <h2><img src="../public/LoL_Icon_Flat_GOLD.png" /> eague Grid </h2>
     <div>
       <svg width="40px" height="40px" stroke-width="1.2" viewBox="0 0 24 24" fill="none"
         xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
@@ -36,11 +36,16 @@ svg {
   cursor: pointer;
 }
 
+img {
+  height: 40px;
+}
+
 header {
   display: flex;
   padding: 10px;
   justify-content: space-between;
-  border-bottom: 1px solid darkgray;
+  color: var(--accent-300);
+  border-bottom: 1px solid var(--accent-300);
 }
 
 header div {
@@ -56,6 +61,9 @@ hgroup {
 
 
 @media (max-width:576px) {
+  img {
+    height: 30px;
+  }
 
   h2 {
 

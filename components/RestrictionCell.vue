@@ -6,7 +6,8 @@ const props = defineProps<{
 
 <template>
   <div class="restriction">
-    <h5> {{ props.text }} </h5>
+    <span> {{ props.text }}
+    </span>
   </div>
 </template>
 
@@ -18,20 +19,23 @@ const props = defineProps<{
   text-align: baseline;
   justify-content: center;
   align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-200);
+  font-family: 'Spiegel';
 
-  h5 {
-    font-size: 20px;
+  &:hover {
+    color: var(--accent-600);
   }
+
 }
 
 @media (max-width:992px) {
   .restriction {
     width: 9rem;
     height: 9rem;
+    font-size: 15px;
 
-    h5 {
-      font-size: 15px;
-    }
   }
 
 
@@ -42,9 +46,9 @@ const props = defineProps<{
     width: 8rem;
     height: 8rem;
 
-    h5 {
-      font-size: 14px;
-    }
+
+    font-size: 14px;
+
   }
 
 }
@@ -60,10 +64,7 @@ const props = defineProps<{
   .restriction {
     width: 5rem;
     height: 5rem;
-
-    h5 {
-      font-size: 12px;
-    }
+    font-size: 12px;
   }
 
 }

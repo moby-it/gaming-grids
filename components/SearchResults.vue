@@ -44,6 +44,7 @@ watchEffect(async () => {
 
 <style scoped>
 .results {
+
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -57,11 +58,12 @@ watchEffect(async () => {
   background-color: rgba(0, 89, 128, 0.3);
 
   li {
+    font-family: 'Beaufort';
     padding: 9px var(--gap-1);
 
 
     &.focused {
-      background-color: var(--neutral-600);
+      background-color: var(--primary-600);
     }
   }
 }

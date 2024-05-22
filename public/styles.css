@@ -4,9 +4,10 @@
 @import '/styles/colors.css';
 
 body {
-  background: var(--dark);
+  background: var(--primary-900);
   color: var(--light);
   scrollbar-gutter: stable;
+  height: 100vh;
 }
 
 main {

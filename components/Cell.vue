@@ -6,11 +6,12 @@ const props = defineProps<{
   text?: string;
   index?: number;
   selected?: boolean;
+  answered: boolean;
 }>();
 </script>
 
 <template>
-  <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected }">
+  <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected, answered }">
     <p>{{ props.text }}</p>
   </section>
 
@@ -20,18 +21,25 @@ const props = defineProps<{
 .cell {
   display: flex;
   cursor: pointer;
-  margin: auto;
+  margin: 1px;
+  font-size: 20px;
   width: 9rem;
   height: 9rem;
-  border: 1px solid var(--neutral-100);
+  outline: 2px solid var(--accent-300);
   transition: transform 0.2s;
 
   &:hover {
-    background-color: var(--neutral-100);
+    background-color: var(--accent-200);
   }
 
   &.selected {
-    background-color: hsla(210, 14%, 14%, 0.8);
+    background-color: var(--accent-600);
+  }
+
+  &.answered {
+    background-color: var(--primary-700);
+    color: var(--accent-300);
+    cursor: default;
   }
 
   p {
@@ -57,6 +65,7 @@ const props = defineProps<{
   .cell {
     width: 6rem;
     height: 6rem;
+    font-size: 15px;
   }
 }
 
@@ -64,6 +73,7 @@ const props = defineProps<{
   .cell {
     width: 5rem;
     height: 5rem;
+
   }
 }
 </style>

@@ -7,14 +7,14 @@
 }
 
 @font-face {
-  font-family: 'IBM Plex Serif';
+  font-family: 'IBM Plex Serif bold';
   src: url('/fonts/IBMPlexSerif-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'IBM Plex Serif';
+  font-family: 'IBM Plex Serif italic';
   src: url('/fonts/IBMPlexSerif-Italic.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
@@ -22,34 +22,58 @@
 
 /* IBM Plex Sans - for body text */
 @font-face {
-  font-family: Beaufort;
+  font-family: 'Beaufort';
   src: url('/fonts/BeaufortforLOL-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: Beaufort;
+  font-family: 'Beaufort Bold';
   src: url('/fonts/BeaufortforLOL-Bold.ttf') format('truetype');
+  font-size: 20px;
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: Beaufort;
+  font-family: 'Beaufort Italic';
   src: url('/fonts/BeaufortforLOL-Italic.ttf') format('truetype');
   font-style: italic;
   font-weight: normal;
 }
 
 @font-face {
-  font-family: Beaufort;
+  font-family: 'Beaufort Bold Italic';
   src: url('/fonts/BeaufortforLOL-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Spiegel';
+  src: url('/fonts/Spiegel_TT_Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Spiegel Bold';
+  src: url('/fonts/Spiegel_TT_Bold.ttf');
+  font-weight: bold
+}
+
+@font-face {
+  font-family: 'Spiegel Italic';
+  src: url('/fonts/Spiegel_TT_Regular_Italic.ttf');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Spiegel Bold Italic';
+  src: url('/fonts/Spiegel_TT_Bold_Italic.ttf');
   font-weight: bold;
   font-style: italic;
 }
 
 
 body {
-  font-family: Beaufort, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   letter-spacing: 0.1rem;
@@ -61,7 +85,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Beaufort, sans-serif;
+  font-family: 'Beaufort', sans-serif;
 }
 
 h1 {
@@ -107,16 +131,17 @@ em {
   body {
     font-size: 12px;
   }
+
   h1 {
     font-size: 2rem;
     /* 40px */
   }
-  
+
   h2 {
     font-size: 1.5rem;
     /* 32px */
   }
-  
+
   h3 {
     font-size: 1.25rem;
     /* 28px */
