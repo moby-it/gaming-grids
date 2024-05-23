@@ -3,7 +3,7 @@ const props = defineProps<{
     name: string;
     cells: string[][];
     selectedCell: Cell;
-    restrictions: { column: string[], row: string[] };
+    restrictions: { column: string[], row: string[]; };
     guesses: number;
 }>();
 </script>

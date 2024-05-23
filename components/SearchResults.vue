@@ -2,8 +2,8 @@
 import type ListItem from './ListItem.vue';
 
 const props = defineProps<{
-  input: unknown
-}>()
+  input: unknown;
+}>();
 const results = ref<string[] | null>(null);
 const timeout = ref();
 const focusedChoice = ref<number | null>(null);
@@ -17,10 +17,10 @@ onMounted(() => {
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
     }
-  })
+  });
   window.addEventListener('keyup', (e: KeyboardEvent) => {
 
-    const focusedListItem = listItems.value.find(li => li.$el.classList.contains('focused'))
+    const focusedListItem = listItems.value.find(li => li.$el.classList.contains('focused'));
     navigateList(e.key, results, focusedChoice, focusedListItem?.$el as HTMLLIElement, emits);
   }
   );
