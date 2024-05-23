@@ -24,10 +24,7 @@ export function checkActive(guesses:number,selectedCell:Cell,
       }, 0);
     }
   }
-  export function handlePlayerChosen(cells:string[][],selectedCell:Cell,playerName: string):void {
-    cells[selectedCell.x - 1][selectedCell.y - 1] = playerName;
-    resetSelectedCell(selectedCell)
-  }
+
   export function getCellRadius(x: number, y: number): string {
 
     let borderRadius = '';

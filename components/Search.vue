@@ -14,15 +14,11 @@ if (process.client) {
     }
   });
 }
-const searchBar: Ref<HTMLInputElement | null> = ref(null);
-onClickOutside(searchBar, () => {
-  resetSelectedCell(props.selectedCell);
-});
 </script>
 
 <template>
   <section class="search">
-    <input ref="searchBar" autocomplete="off" id="search-player" v-model="model" placeholder="Type a player name">
+    <input autocomplete="off" id="search-player" v-model="model" placeholder="Type a player name">
     <SearchResults :input="model" @player-chosen="handlePlayerChosen" />
   </section>
 </template>

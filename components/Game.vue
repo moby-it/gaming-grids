@@ -1,9 +1,17 @@
 <script setup lang="ts">
-const { name, cells, restrictions, guesses } = await useGame();
+import { type Cell } from '~/utils/cells';
 const selectedCell = ref<Cell>({
-    x: -1, y: -1, value: ''
+    x: -1,
+    y: -1,
+    value: ''
 });
-const showSearch = computed(() => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value);
+const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
+const searchBar = ref(null);
+const { name, cells, restrictions, guesses } = await useGame();
+
+onClickOutside(searchBar, () => {
+    resetSelectedCell(selectedCell.value);
+});
 function handlePlayerChosen(playerName: string): void {
     if (guesses.value > 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
@@ -17,7 +25,8 @@ function handlePlayerChosen(playerName: string): void {
     <section class="game">
         <main>
             <section class="search-container">
-                <Search @player-chosen="handlePlayerChosen" v-if="showSearch" :selected-cell="selectedCell" />
+                <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
+                    :selectedCell="selectedCell" />
             </section>
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
                 :guesses="guesses" />
@@ -78,6 +87,8 @@ footer {
         padding-top: 0;
         height: 3rem;
     }
+
+
 }
 
 @media (width <=576px) {
@@ -85,5 +96,7 @@ footer {
         flex-direction: column;
         text-align: center;
     }
+
+
 }
 </style>
