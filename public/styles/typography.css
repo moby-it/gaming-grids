@@ -29,7 +29,6 @@
 @font-face {
   font-family: 'Beaufort Bold';
   src: url('/fonts/BeaufortforLOL-Bold.ttf') format('truetype');
-  font-size: 20px;
   font-weight: bold;
   font-style: normal;
 }
@@ -72,9 +71,17 @@
   font-style: italic;
 }
 
+:root {
+  --font-size-xs: 10px;
+  --font-size-s: 14px;
+  --font-size-m: 16px;
+  --font-size-l: 20px;
+  --font-size-xl: 30px;
+}
 
 body {
-  font-size: 16px;
+  font-family: 'Beaufort';
+  font-size: var(--font-size-l);
   line-height: 1.5;
   letter-spacing: 0.1rem;
 }
@@ -90,32 +97,26 @@ h6 {
 
 h1 {
   font-size: 2.5rem;
-  /* 40px */
 }
 
 h2 {
   font-size: 2rem;
-  /* 32px */
 }
 
 h3 {
   font-size: 1.75rem;
-  /* 28px */
 }
 
 h4 {
   font-size: 1.5rem;
-  /* 24px */
 }
 
 h5 {
   font-size: 1.25rem;
-  /* 20px */
 }
 
 h6 {
   font-size: 1rem;
-  /* 16px */
 }
 
 strong,
@@ -127,23 +128,22 @@ em {
   font-style: italic;
 }
 
-@media (width <=450px) {
-  body {
-    font-size: 12px;
+@media (max-width:992px) {
+  :root {
+    --font-size-l: 16px;
+  }
+}
+
+@media (max-width:768px) {
+
+  :root {
+    --font-size-l: 14px;
   }
 
-  h1 {
-    font-size: 2rem;
-    /* 40px */
-  }
+}
 
-  h2 {
-    font-size: 1.5rem;
-    /* 32px */
-  }
-
-  h3 {
-    font-size: 1.25rem;
-    /* 28px */
+@media (max-width:425px) {
+  :root {
+    --font-size-xl: 20px;
   }
 }

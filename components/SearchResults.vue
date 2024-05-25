@@ -2,8 +2,8 @@
 import type ListItem from './ListItem.vue';
 
 const props = defineProps<{
-  input: unknown;
-}>();
+  input: unknown
+}>()
 const results = ref<string[] | null>(null);
 const timeout = ref();
 const focusedChoice = ref<number | null>(null);
@@ -17,10 +17,7 @@ onMounted(() => {
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
     }
-  });
-  window.addEventListener('keyup', (e: KeyboardEvent) => {
-
-    const focusedListItem = listItems.value.find(li => li.$el.classList.contains('focused'));
+    const focusedListItem = listItems.value.find(li => li.$el.classList.contains('focused'))
     navigateList(e.key, results, focusedChoice, focusedListItem?.$el as HTMLLIElement, emits);
   }
   );
@@ -49,43 +46,21 @@ watchEffect(async () => {
   display: flex;
   flex-direction: column;
   position: absolute;
-  margin-top: 50px;
+  margin-top: var(--gap-6);
   cursor: pointer;
-  width: 400px;
-  max-height: 300px;
+  width: var(--result-list-width);
+  max-height: var(--result-list-height);
   overflow-y: auto;
-  border-radius: 0 0 10px 10px;
-  background-color: rgba(0, 89, 128, 0.5);
-
+  border-radius: 0 0 var(--radius) var(--radius);
+  background-color: var(--primary-600);
+  box-shadow: 2px 2px 5px var(--primary-700);
 }
 
-@media (max-width:992px) {
-  .results {
-    width: 350px;
-    max-height: 200px;
-    margin-top: 50px;
 
-  }
-}
-
-@media (max-width:768px) {
-  .results {
-    width: 300px;
-  }
-}
 
 @media (max-width:576px) {
   .results {
-    width: 250px;
-    max-height: 180px;
-  }
-}
-
-
-@media (max-width:425px) {
-  .results {
-    width: 200px;
-    max-height: 160px;
+    margin-top: var(--gap-5)
   }
 }
 </style>

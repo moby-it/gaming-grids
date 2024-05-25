@@ -3,7 +3,7 @@ const props = defineProps<{
     name: string;
     cells: string[][];
     selectedCell: Cell;
-    restrictions: { column: string[], row: string[]; };
+    restrictions: { column: string[], row: string[] };
     guesses: number;
 }>();
 </script>
@@ -34,23 +34,21 @@ const props = defineProps<{
 .grid-container {
     display: flex;
     flex-direction: column;
-
+    margin-left: 1px;
 }
 
 .grid-head {
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
-
 }
 
 .column-restrictions {
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: flex-end;
     align-items: center;
-
 }
 
 .row-restrictions {
@@ -60,7 +58,6 @@ const props = defineProps<{
 }
 
 .rows {
-    display: flex;
     flex-direction: column;
 }
 

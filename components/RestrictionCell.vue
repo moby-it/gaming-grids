@@ -13,58 +13,18 @@ const props = defineProps<{
 
 <style scoped>
 .restriction {
-  display: flex;
-  width: 9rem;
-  height: 9rem;
-  text-align: baseline;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--accent-200);
+  width: var(--cell);
+  height: var(--cell);
   font-family: 'Spiegel';
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  text-align: baseline;
+  align-items: center;
+  color: var(--accent-200);
 
   &:hover {
     color: var(--accent-600);
-  }
-
-}
-
-@media (max-width:992px) {
-  .restriction {
-    width: 9rem;
-    height: 9rem;
-    font-size: 15px;
-
-  }
-
-
-}
-
-@media (max-width:768px) {
-  .restriction {
-    width: 8rem;
-    height: 8rem;
-
-
-    font-size: 14px;
-
-  }
-
-}
-
-@media (max-width:576px) {
-  .restriction {
-    width: 6rem;
-    height: 6rem;
-  }
-}
-
-@media (width <=425px) {
-  .restriction {
-    width: 5rem;
-    height: 5rem;
-    font-size: 12px;
   }
 
 }

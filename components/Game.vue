@@ -31,7 +31,7 @@ function handlePlayerChosen(playerName: string): void {
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
                 :guesses="guesses" />
         </main>
-        <Guesses :guesses="guesses" />
+        <Guesses class="guesses" :guesses="guesses" />
     </section>
 
 </template>
@@ -40,63 +40,34 @@ function handlePlayerChosen(playerName: string): void {
 .game {
     display: flex;
     justify-content: center;
-    flex-direction: row;
     align-items: center;
-    text-align: center;
-    align-content: center;
+}
+
+.guesses {
+    margin-left: var(--gap-5);
+    margin-top: var(--cell);
 }
 
 main {
-    display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    margin-top: 5px;
-    padding: 0;
-
 }
 
 .search-container {
     position: absolute;
-    width: 400px;
-    height: 50px;
-    margin-left: 9rem;
-}
-
-footer {
-    font-family: 'Beaufort';
-    text-align: center;
-    margin-left: 30px;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--accent-200);
-}
-
-@media (max-width:992px) {
-    main {
-        margin-top: 3px;
-    }
+    margin-top: var(--margin-sm);
+    margin-left: var(--cell)
 }
 
 @media (max-width:768px) {
-    main {
-        margin-top: 3px;
-    }
-
-    .search-container {
-        padding-top: 0;
-        height: 3rem;
-    }
-
-
-}
-
-@media (width <=576px) {
     .game {
         flex-direction: column;
-        text-align: center;
     }
 
-
+    .guesses {
+        margin-top: var(--gap-5);
+        margin-left: var(--cell);
+    }
 }
 </style>

@@ -19,13 +19,14 @@ const props = defineProps<{
 <style scoped>
 .cell {
   display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  margin: 1px;
-  font-size: 20px;
-  width: 9rem;
-  height: 9rem;
-  outline: 2px solid var(--accent-300);
-  transition: transform 0.2s;
+  width: var(--cell);
+  height: var(--cell);
+  background-color: var(--primary-900);
+  border: 1px solid var(--accent-300);
+  margin: -1px;
 
   &:hover {
     background-color: var(--accent-200);
@@ -39,39 +40,6 @@ const props = defineProps<{
     background-color: var(--primary-600);
     color: var(--accent-300);
     cursor: default;
-  }
-
-  p {
-    margin: auto;
-  }
-}
-
-@media (max-width:992px) {
-  .cell {
-    width: 9rem;
-    height: 9rem;
-  }
-}
-
-@media (max-width:768px) {
-  .cell {
-    width: 8rem;
-    height: 8rem;
-  }
-}
-
-@media (max-width:576px) {
-  .cell {
-    width: 6rem;
-    height: 6rem;
-    font-size: 15px;
-  }
-}
-
-@media (width <=425px) {
-  .cell {
-    width: 5rem;
-    height: 5rem;
   }
 }
 </style>

@@ -14,9 +14,3 @@ useHead({
     <NuxtPage />
   </main>
 </template>
-
-<style scoped>
-main {
-  padding: 0;
-}
-</style>

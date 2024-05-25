@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h2><img src="../public/LoL_Icon_Flat_GOLD.png" /> eague Grid </h2>
+    <h2><img src="../LoL_Icon_Flat_GOLD.png" />eague Grid </h2>
     <div>
       <svg width="40px" height="40px" stroke-width="1.2" viewBox="0 0 24 24" fill="none"
         xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
@@ -37,12 +37,12 @@ svg {
 }
 
 img {
-  height: 40px;
+  height: var(--gap-6)
 }
 
 header {
   display: flex;
-  padding: 10px;
+  padding: var(--gap-2) 0;
   justify-content: space-between;
   color: var(--accent-300);
   border-bottom: 1px solid var(--accent-300);
@@ -58,31 +58,35 @@ hgroup {
   text-align: center;
 }
 
-
-
 @media (max-width:576px) {
   img {
-    height: 30px;
+    height: var(--gap-5)
+  }
+
+  header div {
+    gap: var(--gap-2) 0;
   }
 
   h2 {
-
-    font-size: 20px;
+    font-size: 1rem;
   }
 
   svg {
-    height: 20px;
+    height: var(--gap-5);
   }
 }
 
 @media (max-width:425px) {
-
-  h2 {
-    font-size: 13px;
+  header {
+    display: flex;
+    padding: var(--gap-1);
+    justify-content: space-between;
+    color: var(--accent-300);
+    border-bottom: 1px solid var(--accent-300);
   }
 
-  svg {
-    height: 13 px;
+  header div {
+    gap: 0;
   }
 }
 </style>
