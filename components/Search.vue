@@ -1,85 +1,70 @@
 <script setup lang="ts">
-
+const props = defineProps<{
+  selectedCell: Cell;
+}>();
 const model = defineModel();
 const emits = defineEmits(['playerChosen']);
-const timeout = ref();
-const results = ref<string[] | null>(null);
-const focusedChoice = ref<number | null>(null);
-async function fetchResults() {
-  const res = await $fetch('/api/champions', { query: { search: model.value } });
-  if (res) {
-    results.value = res;
-  }
-}
-onMounted(() => {
+const handlePlayerChosen = (playerName: string) => {
+  emits('playerChosen', playerName);
+};
+if (process.client) {
   window.addEventListener('keyup', (e) => {
-    if (results.value?.length) {
-      if (focusedChoice.value === null) return focusedChoice.value = 0;
-      if (e.key === 'ArrowUp' && focusedChoice.value > 0) return focusedChoice.value--;
-      if (e.key === 'ArrowDown' && focusedChoice.value < results.value.length) return focusedChoice.value++;
-      if (e.key === 'Enter') emits('playerChosen', results.value[focusedChoice.value]);
+    if (e.key === 'Escape') {
+      resetSelectedCell(props.selectedCell);
     }
   });
-});
-watchEffect(async () => {
-  if (timeout.value) clearTimeout(timeout.value);
-  if (model.value) {
-    timeout.value = setTimeout(() => {
-      fetchResults();
-    }, 500);
-  }
-});
+}
 </script>
 
 <template>
   <section class="search">
     <input autocomplete="off" id="search-player" v-model="model" placeholder="Type a player name">
-    <ul class="results" v-if="results && results.length">
-      <li @mouseenter="focusedChoice = index" :class="{ focused: focusedChoice === index }"
-        v-for="(result, index) of results" @click="() => $emit('playerChosen', result)">{{
-      result }}</li>
-    </ul>
+    <SearchResults :input="model" @player-chosen="handlePlayerChosen" />
   </section>
 </template>
 
 <style scoped>
 .search {
   display: flex;
+  width: 27rem;
+  height: var(--gap-6);
   flex-direction: column;
-  width: 400px;
-  height: 50px;
-  display: flex;
 
   & input {
+    background-color: var(--primary-600);
     flex: 1;
-    border-radius: var(--radius);
+    border-radius: var(--radius) var(--radius) 0 0;
+    color: var(--accent-300);
   }
 
   & input:focus {
     outline: none;
   }
+}
 
-  ul.results {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: 0;
-    top: 100%;
-    cursor: pointer;
-    background-color: gray;
-    width: 400px;
-    max-height: 300px;
-    overflow-y: scroll;
+@media (max-width:992px) {
+  .search {
+    width: 24rem;
+  }
+}
 
-    li {
-      padding: 4px var(--gap-1);
-      border-bottom: 1px solid var(--neutral-200);
+@media (max-width:768px) {
+  .search {
+    width: 21rem;
+  }
+}
 
-      &.focused {
-        background-color: var(--neutral-600);
-      }
-    }
+@media (max-width:576px) {
+  .search {
+    width: 18rem;
+  }
+}
 
+
+@media (max-width:425px) {
+  .search {
+    height: var(--gap-5);
+    width: 15rem;
   }
 }
 </style>

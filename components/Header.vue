@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h2># League Grid #</h2>
+    <h2><img src="../LoL_Icon_Flat_GOLD.png" />eague Grid </h2>
     <div>
       <svg width="40px" height="40px" stroke-width="1.2" viewBox="0 0 24 24" fill="none"
         xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
@@ -26,7 +26,7 @@
         <path d="M12 18.01L12.01 17.9989" stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
-      <Button @clicked="console.log('should sign in')" primary >Sign In</Button>
+      <Button @clicked="console.log('should sign in')" primary>Sign In</Button>
     </div>
   </header>
 </template>
@@ -36,11 +36,16 @@ svg {
   cursor: pointer;
 }
 
+img {
+  height: var(--gap-6)
+}
+
 header {
   display: flex;
-  padding: var(--gap-1);
+  padding: var(--gap-2) 0;
   justify-content: space-between;
-  border-bottom: 1px solid darkgray;
+  color: var(--accent-300);
+  border-bottom: 1px solid var(--accent-300);
 }
 
 header div {
@@ -51,5 +56,37 @@ header div {
 
 hgroup {
   text-align: center;
+}
+
+@media (max-width:576px) {
+  img {
+    height: var(--gap-5)
+  }
+
+  header div {
+    gap: var(--gap-2) 0;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  svg {
+    height: var(--gap-5);
+  }
+}
+
+@media (max-width:425px) {
+  header {
+    display: flex;
+    padding: var(--gap-1);
+    justify-content: space-between;
+    color: var(--accent-300);
+    border-bottom: 1px solid var(--accent-300);
+  }
+
+  header div {
+    gap: 0;
+  }
 }
 </style>

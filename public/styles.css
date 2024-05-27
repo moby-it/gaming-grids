@@ -4,13 +4,10 @@
 @import '/styles/colors.css';
 
 body {
-  background: var(--dark);
+  background: var(--neutral-900);
   color: var(--light);
   scrollbar-gutter: stable;
-}
-
-main {
-  padding: var(--gap-2);
+  height: 100vh;
 }
 
 input,
