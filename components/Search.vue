@@ -26,7 +26,7 @@ if (process.client) {
 <style scoped>
 .search {
   display: flex;
-  width: var(--result-list-width);
+  width: 27rem;
   height: var(--gap-6);
   flex-direction: column;
 
@@ -42,11 +42,29 @@ if (process.client) {
   }
 }
 
+@media (max-width:992px) {
+  .search {
+    width: 24rem;
+  }
+}
 
+@media (max-width:768px) {
+  .search {
+    width: 21rem;
+  }
+}
 
 @media (max-width:576px) {
   .search {
-    height: var(--gap-5)
+    width: 18rem;
+  }
+}
+
+
+@media (max-width:425px) {
+  .search {
+    height: var(--gap-5);
+    width: 15rem;
   }
 }
 </style>

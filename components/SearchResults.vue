@@ -48,19 +48,39 @@ watchEffect(async () => {
   position: absolute;
   margin-top: var(--gap-6);
   cursor: pointer;
-  width: var(--result-list-width);
-  max-height: var(--result-list-height);
+  width: 27rem;
+  max-height: 14rem;
   overflow-y: auto;
   border-radius: 0 0 var(--radius) var(--radius);
   background-color: var(--primary-600);
   box-shadow: 2px 2px 5px var(--primary-700);
 }
 
+@media (max-width:992px) {
+  .results {
+    width: 24rem;
+    max-height: 12rem;
+  }
+}
 
+@media (max-width:768px) {
+  .results {
+    margin-top: var(--gap-5);
+    width: 21rem;
+    max-height: 11rem;
+  }
+}
 
 @media (max-width:576px) {
   .results {
-    margin-top: var(--gap-5)
+    width: 18rem;
+  }
+}
+
+@media (max-width:425px) {
+  .results {
+    max-height: 11rem;
+    width: 15rem;
   }
 }
 </style>
