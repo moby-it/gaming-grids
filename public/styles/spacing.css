@@ -18,7 +18,7 @@
 
 @media (width <=768px) {
   :root {
-    --gap-4: 2rem;
+
     --cell: 7rem;
   }
 }

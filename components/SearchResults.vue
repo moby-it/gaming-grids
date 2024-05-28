@@ -27,7 +27,7 @@ watchEffect(async () => {
   if (props.input) {
     timeout.value = setTimeout(() => {
       fetchResults(props.input, results);
-      focusedChoice.value = 0;
+      focusedChoice.value = null;
     }, 0);
   }
 });
@@ -67,7 +67,7 @@ watchEffect(async () => {
   .results {
     margin-top: var(--gap-5);
     width: 21rem;
-    max-height: 11rem;
+    max-height: 12rem;
   }
 }
 
@@ -79,7 +79,7 @@ watchEffect(async () => {
 
 @media (max-width:425px) {
   .results {
-    max-height: 11rem;
+
     width: 15rem;
   }
 }

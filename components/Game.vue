@@ -5,6 +5,7 @@ const selectedCell = ref<Cell>({
     y: -1,
     value: ''
 });
+
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 const searchBar = ref(null);
 const { name, cells, restrictions, guesses } = await useGame();
@@ -12,6 +13,7 @@ const { name, cells, restrictions, guesses } = await useGame();
 onClickOutside(searchBar, () => {
     resetSelectedCell(selectedCell.value);
 });
+
 function handlePlayerChosen(playerName: string): void {
     if (guesses.value > 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
@@ -28,6 +30,9 @@ function handlePlayerChosen(playerName: string): void {
                 <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
                     :selectedCell="selectedCell" />
             </section>
+            <Teleport to="body">
+                <HelpModal ref="helpModal" />
+            </Teleport>
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
                 :guesses="guesses" />
         </main>
@@ -44,7 +49,7 @@ function handlePlayerChosen(playerName: string): void {
 }
 
 .guesses {
-    margin-left: var(--gap-5);
+    margin-left: var(--gap-6);
     margin-top: var(--cell);
 }
 
