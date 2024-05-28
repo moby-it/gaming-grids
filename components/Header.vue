@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h2><img src="../LoL_Icon_Flat_GOLD.png" />eague Grid </h2>
+    <h2><nuxt-img src="/LoL_Icon_Flat_GOLD.png" />eague Grid </h2>
     <div>
       <svg width="40px" height="40px" stroke-width="1.2" viewBox="0 0 24 24" fill="none"
         xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
