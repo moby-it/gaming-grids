@@ -1,6 +1,6 @@
 FROM node:20.10.0-alpine as install
 WORKDIR /src
-RUN npm i -g pnpm@8.15.4
+RUN npm i -g pnpm@9.0.4
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
