@@ -20,4 +20,4 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.ref }}
+          tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.head_ref }}-${{ github.sha }}
