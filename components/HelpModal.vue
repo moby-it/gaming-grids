@@ -9,9 +9,9 @@ setTimeout(() => show.value = true, 0)
 </script>
 
 <template>
-    <section class="modal-container">
-        <Transition>
-            <section ref="modal" class="help-modal" v-if="show">
+    <Transition>
+        <section class="modal-container" v-if="show">
+            <section ref="modal" class="help-modal">
                 <header>
                     <h4>
                         How to play LeagueGrid.
@@ -36,8 +36,8 @@ setTimeout(() => show.value = true, 0)
                 <p>A champion can be used more than once.</p>
                 <p>A new grid is available each day at midnight GMT!</p>
             </section>
-        </Transition>
-    </section>
+        </section>
+    </Transition>
 </template>
 
 <style scoped>

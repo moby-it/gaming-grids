@@ -10,8 +10,9 @@ const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.va
 const searchBar = ref(null);
 const { name, cells, restrictions, guesses } = await useGame();
 
-onClickOutside(searchBar, () => {
+onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
+    e.stopPropagation();
 });
 
 function handlePlayerChosen(playerName: string): void {
