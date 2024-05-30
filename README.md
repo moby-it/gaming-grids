@@ -2,6 +2,8 @@
 
 A puzzle solving app for daily League of Legends Immaculate Grid Puzzles by [Moby IT](https://moby-it.com).
 
+Latest main brach is always deployed [here](https://league.mobyplaygrounds.com/)
+
 ## Main Features
 
 Taken from this [project brief](https://docs.google.com/document/d/1z9pTbSC5WpVhPoq-czuN7d8uEoRyj_wNOVK6LSrzydM/edit#heading=h.cpe8xe7cgu5r).
