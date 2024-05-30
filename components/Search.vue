@@ -32,6 +32,7 @@ if (process.client) {
 
   & input {
     background-color: var(--primary-600);
+    padding-left: var(--gap-4);
     flex: 1;
     border-radius: var(--radius) var(--radius) 0 0;
     color: var(--accent-300);

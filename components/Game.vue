@@ -24,15 +24,12 @@ function handlePlayerChosen(playerName: string): void {
 </script>
 
 <template>
-    <section class="game">
+    <section id="game" class="game">
         <main>
             <section class="search-container">
                 <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
                     :selectedCell="selectedCell" />
             </section>
-            <Teleport to="body">
-                <HelpModal ref="helpModal" />
-            </Teleport>
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
                 :guesses="guesses" />
         </main>

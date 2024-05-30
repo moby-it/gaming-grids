@@ -27,7 +27,7 @@ watchEffect(async () => {
   if (props.input) {
     timeout.value = setTimeout(() => {
       fetchResults(props.input, results);
-      focusedChoice.value = null;
+      focusedChoice.value = 0;
     }, 0);
   }
 });

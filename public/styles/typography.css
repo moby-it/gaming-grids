@@ -156,6 +156,5 @@ em {
 @media (max-width:425px) {
   :root {
     --font-size-xl: 20px;
-    --font-size-s: 10px;
   }
 }
