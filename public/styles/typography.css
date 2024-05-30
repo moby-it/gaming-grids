@@ -72,7 +72,7 @@
 }
 
 :root {
-  --font-size-xs: 10px;
+  --font-size-xs: 12px;
   --font-size-s: 14px;
   --font-size-m: 16px;
   --font-size-l: 20px;
@@ -131,15 +131,26 @@ em {
 @media (max-width:992px) {
   :root {
     --font-size-l: 16px;
+    --font-size-s: 13px;
   }
 }
 
 @media (max-width:768px) {
 
   :root {
-    --font-size-l: 14px;
+
+    --font-size-s: 12px;
+
   }
 
+
+}
+
+@media (max-width:576px) {
+
+  :root {
+    --font-size-s: 12px;
+  }
 }
 
 @media (max-width:425px) {

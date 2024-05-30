@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{ primary?: boolean; accent?: boolean; }>();
-defineEmits(['clicked']);
+const emits = defineEmits(['clicked']);
 </script>
 
 <template>
@@ -34,10 +34,10 @@ button:disabled {
   cursor: default;
 }
 
-
 @media (max-width:425px) {
   button {
-    margin-right: 0;
+    font-size: var(--font-size-s);
+
   }
 
 }

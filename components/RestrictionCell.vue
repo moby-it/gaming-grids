@@ -28,4 +28,10 @@ const props = defineProps<{
   }
 
 }
+
+@media (max-width:425px) {
+  .restriction {
+    font-size: var(--font-size-s);
+  }
+}
 </style>

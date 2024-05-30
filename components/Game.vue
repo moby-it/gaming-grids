@@ -5,13 +5,16 @@ const selectedCell = ref<Cell>({
     y: -1,
     value: ''
 });
+
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 const searchBar = ref(null);
 const { name, cells, restrictions, guesses } = await useGame();
 
-onClickOutside(searchBar, () => {
+onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
+    e.stopPropagation();
 });
+
 function handlePlayerChosen(playerName: string): void {
     if (guesses.value > 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
@@ -22,7 +25,7 @@ function handlePlayerChosen(playerName: string): void {
 </script>
 
 <template>
-    <section class="game">
+    <section id="game" class="game">
         <main>
             <section class="search-container">
                 <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
@@ -44,7 +47,7 @@ function handlePlayerChosen(playerName: string): void {
 }
 
 .guesses {
-    margin-left: var(--gap-5);
+    margin-left: var(--gap-6);
     margin-top: var(--cell);
 }
 
