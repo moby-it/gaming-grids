@@ -46,7 +46,6 @@ setTimeout(() => show.value = true, 0)
     bottom: 0;
     width: 100%;
     height: 100vh;
-    background-color: hsla(198, 100%, 25%, 0.2);
     display: flex;
     justify-content: center;
     align-items: start;

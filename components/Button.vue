@@ -1,10 +1,12 @@
 <script setup lang="ts">
-defineProps<{ primary?: boolean; accent?: boolean; }>();
-const emits = defineEmits(['clicked']);
+defineProps<{
+  primary?: boolean; accent?: boolean;
+  signIn?: boolean;
+}>();
 </script>
 
 <template>
-  <button :class="{ primary, accent }" @click="$emit('clicked')">
+  <button :class="{ primary, accent, signIn }">
     <slot></slot>
   </button>
 </template>
@@ -30,6 +32,13 @@ button.primary {
   background: linear-gradient(0.25turn, var(--primary-600), var(--primary-700));
 }
 
+button.signIn {
+  background: var(--accent-300);
+  width: 14rem;
+  display: flex;
+  justify-content: space-evenly;
+}
+
 button:disabled {
   cursor: default;
 }
@@ -37,7 +46,6 @@ button:disabled {
 @media (max-width:425px) {
   button {
     font-size: var(--font-size-s);
-
   }
 
 }
