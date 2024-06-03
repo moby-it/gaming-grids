@@ -2,10 +2,7 @@
 
 const emits = defineEmits(['closeModal'])
 const modal = ref(null);
-onClickOutside(modal, (e: Event) => {
-    emits('closeModal');
-    e.stopPropagation();
-});
+
 </script>
 <template>
     <Transition>
@@ -15,13 +12,13 @@ onClickOutside(modal, (e: Event) => {
             </header>
 
             <section class="card">
-                <Button @clicked="console.log('google')" signIn>
+                <Button @click="console.log('google')" signIn>
                     <NuxtImg src="/Google__G__logo.svg.webp" height="20px" />
                     Sign in with Google
                 </Button>
             </section>
             <section class="card">
-                <Button @clicked="console.log('apple')" signIn>
+                <Button @click="console.log('apple')" signIn>
                     <NuxtImg src="/Apple_logo_black.svg.png" height="23px" />
                     Sign in with Apple
                 </Button>

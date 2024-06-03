@@ -29,7 +29,7 @@ button {
 }
 
 button.primary {
-  background: linear-gradient(0.25turn, var(--primary-600), var(--primary-700));
+  background: linear-gradient(0.25turn, var(--accent-300), var(--accent-600));
 }
 
 button.signIn {

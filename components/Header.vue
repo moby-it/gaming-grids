@@ -36,7 +36,7 @@ const route = useRoute();
         <Button @click="navigateTo('/sign-in')" primary>Sign In</Button>
       </section>
       <section v-if="route.path === '/sign-in'">
-        <Button @click="console.log('called')" primary>Back</Button>
+        <Button @click="navigateTo('/')" primary>Back</Button>
       </section>
     </div>
   </header>
