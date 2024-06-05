@@ -26,7 +26,7 @@ export const useAuth = () => {
     async function signOut() {
         loading.value = true;
         const { error } = await supabase.auth.signOut();
-        if (error) console.log(error); else await fetchUser();
+        if (error) user.value = null;
 
     }
     return {
