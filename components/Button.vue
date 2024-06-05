@@ -1,12 +1,12 @@
 <script setup lang="ts">
-defineProps<{
-  primary?: boolean; accent?: boolean;
-  signIn?: boolean;
+type buttonClass = 'sign-in' | 'primary' | 'accent'
+const props = defineProps<{
+  buttonClass: buttonClass
 }>();
 </script>
 
 <template>
-  <button :class="{ primary, accent, signIn }">
+  <button :class="props.buttonClass">
     <slot></slot>
   </button>
 </template>
@@ -14,7 +14,7 @@ defineProps<{
 <style scoped>
 button {
   color: white;
-  padding: var(--gap-3);  
+  padding: var(--gap-3);
   border-radius: var(--radius);
   outline: none;
   border: none;
@@ -32,8 +32,9 @@ button.primary {
   background: linear-gradient(0.25turn, var(--accent-300), var(--accent-600));
 }
 
-button.signIn {
+button.sign-in {
   background: var(--accent-300);
+  flex-direction: row;
   width: 14rem;
   display: flex;
   justify-content: space-evenly;

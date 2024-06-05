@@ -27,14 +27,20 @@ onClickOutside(info, (e: Event) => {
         </header>
         <section v-if="showInfo" ref="info" class="info">
             <h5>
-                {{ props.username }}
+                {{ props.username?.split(' ')[0] }}
             </h5>
             <h6>
                 {{ props.email }}
             </h6>
 
             <footer @click="$emit('logOut')">
-                <h5 class="logout">logout</h5>
+                <section class="logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5M4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4z" />
+                    </svg>
+                    <h5>Logout</h5>
+                </section>
             </footer>
         </section>
     </section>
@@ -85,13 +91,15 @@ header {
 
     & h5,
     h6 {
-        padding: var(--gap-1) var(--gap-3)
+        padding: var(--gap-2) var(--gap-3);
     }
 
     & h6 {
         color: var(--accent-200) !important;
         font-size: var(--font-size-s);
     }
+
+
 }
 
 footer {
@@ -101,20 +109,27 @@ footer {
         background-color: var(--primary-700)
     }
 
-    &p {
-        color: blue;
-    }
-
 }
 
 .logout {
     border-top: 1px solid var(--accent-900);
+    display: flex;
+    align-items: center;
+    justify-content: start;
     border-radius: 0 0 var(--radius) var(--radius);
     color: var(--accent-300);
     font-size: var(--font-size-m);
     cursor: pointer;
+
+    & h5 {
+        font-size: var(--font-size-s);
+        padding: var(--gap-2);
+    }
 }
 
+svg {
+    padding-left: var(--gap-2);
+}
 
 @media (max-width:576px) {
     .img {

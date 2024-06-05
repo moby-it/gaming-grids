@@ -36,11 +36,12 @@ const route = useRoute();
           stroke-linejoin="round"></path>
       </svg>
       <ClientOnly>
-        <Button v-if="route.path === '/' && !user" @click="navigateTo('/sign-in')" primary>Sign-in</Button>
+        <Button v-if="route.path === '/' && !user" @click="navigateTo('/sign-in')"
+          buttonClass="primary">Sign-in</Button>
         <User v-if="user" :email="user.email" :username="user.user_metadata?.name"
           :userImageUrl="user.user_metadata?.avatar_url" @log-out="signOut" />
       </ClientOnly>
-      <Button v-if="route.path === '/sign-in'" @click="navigateTo('/')" primary>League Grid</Button>
+      <Button v-if="route.path === '/sign-in'" @click="navigateTo('/')" buttonClass="primary">League Grid</Button>
     </div>
   </header>
   <Teleport to="#game" v-if="modals.helpModal.value">

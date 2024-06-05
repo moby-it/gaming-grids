@@ -10,7 +10,7 @@ const { signInWithGoogle } = useAuth();
             </header>
 
             <section class="card">
-                <Button @click="async () => await signInWithGoogle()" signIn>
+                <Button @click="async () => await signInWithGoogle()" buttonClass="sign-in">
                     <NuxtImg src="/Google__G__logo.svg.webp" height="20px" />
                     Sign in with Google
                 </Button>
@@ -30,11 +30,9 @@ header {
 }
 
 .sign-in {
-    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    align-content: center;
     background-color: hsla(225, 57%, 17%, 0.9);
     border: 1px solid var(--accent-600);
     border-radius: var(--radius);
@@ -46,11 +44,14 @@ h1 {
 }
 
 Button {
-    margin: var(--gap-2) var(--gap-1);
+    margin: var(--gap-1);
+    display: flex;
+    flex-direction: row;
 }
 
 .card {
     padding: var(--gap-4) var(--gap-5);
+    flex-direction: row;
 
 }
 </style>
