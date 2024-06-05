@@ -1,22 +1,9 @@
 <script setup lang="ts">
-const helpModal = ref(null);
-const ShowHelpModal: Ref<boolean> = ref(false);
-function showModal() {
-  ShowHelpModal.value = true;
-}
-function hideModal() {
-  ShowHelpModal.value = false;
-}
-
-if (process.client) {
-  if (!localStorage.getItem('seenModal')) ShowHelpModal.value = true;
-  localStorage.setItem('seenModal', 'true');
-  window.addEventListener('keyup', (e) => {
-    if (e.key === 'Escape') {
-      ShowHelpModal.value = false;
-    }
-  });
-}
+import User from './User.vue';
+const { signOut, user, fetchUser } = useAuth();
+await fetchUser();
+const modals = useModal();
+const route = useRoute();
 </script>
 <template>
   <header>
@@ -38,8 +25,8 @@ if (process.client) {
           d="M10.8056 5.11325L11.2147 3.1856C11.8314 2.93813 12.1686 2.93813 12.2853 3.1856L13.1944 5.11325L15.2275 5.42427C15.4884 5.46418 15.5923 5.79977 15.4035 5.99229L13.9326 7.4917L14.2797 9.60999C14.3243 9.88202 14.0515 10.0895 13.8181 9.96099L12 8.96031L10.1819 9.96099C9.94851 10.0895 9.67568 9.88202 9.72026 9.60999L10.0674 7.4917L8.59651 5.99229C8.40766 5.79977 8.51163 5.46418 8.77248 5.42427L10.8056 5.11325Z"
           stroke="#c8aa6f" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>
-      <svg @click="showModal" width="40px" height="40px" stroke-width="1.7" viewBox="0 0 24 24" fill="none"
-        xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
+      <svg v-if="route.path === '/'" @click="modals.showHelpModal" width="40px" height="40px" stroke-width="1.7"
+        viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
         <path
           d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
           stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -48,14 +35,18 @@ if (process.client) {
         <path d="M12 18.01L12.01 17.9989" stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
-      <Button @clicked="console.log('should sign in')" primary>Sign In</Button>
+      <ClientOnly>
+        <Button v-if="route.path === '/' && !user" @click="navigateTo('/sign-in')"
+          buttonClass="primary">Sign-in</Button>
+        <User v-if="user" :email="user.email" :username="user.user_metadata?.name"
+          :userImageUrl="user.user_metadata?.avatar_url" @log-out="signOut" />
+      </ClientOnly>
+      <Button v-if="route.path === '/sign-in'" @click="navigateTo('/')" buttonClass="primary">League Grid</Button>
     </div>
   </header>
-  <ClientOnly>
-    <Teleport to="#game">
-      <HelpModal @close-modal="hideModal" ref="helpModal" v-if="ShowHelpModal" />
-    </Teleport>
-  </ClientOnly>
+  <Teleport to="#game" v-if="modals.helpModal.value">
+    <HelpModal @close-modal="modals.hideHelpModal" ref="helpModal" />
+  </Teleport>
 </template>
 
 <style scoped>
@@ -70,7 +61,7 @@ img {
 header {
   display: flex;
   padding: var(--gap-2);
-  justify-content: space-between;
+  justify-content: space-evenly;
   color: var(--accent-300);
   border-bottom: 1px solid var(--accent-300);
 }
@@ -109,7 +100,6 @@ hgroup {
   header {
     display: flex;
     padding: var(--gap-1);
-    justify-content: space-between;
     color: var(--accent-300);
     border-bottom: 1px solid var(--accent-300);
   }

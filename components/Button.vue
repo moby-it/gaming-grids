@@ -1,10 +1,12 @@
 <script setup lang="ts">
-defineProps<{ primary?: boolean; accent?: boolean; }>();
-const emits = defineEmits(['clicked']);
+type buttonClass = 'sign-in' | 'primary' | 'accent'
+const props = defineProps<{
+  buttonClass: buttonClass
+}>();
 </script>
 
 <template>
-  <button :class="{ primary, accent }" @click="$emit('clicked')">
+  <button :class="props.buttonClass">
     <slot></slot>
   </button>
 </template>
@@ -12,14 +14,14 @@ const emits = defineEmits(['clicked']);
 <style scoped>
 button {
   color: white;
-  padding: var(--gap-2) var(--gap-3);
+  padding: var(--gap-3);
   border-radius: var(--radius);
   outline: none;
   border: none;
   cursor: pointer;
   transition: transform 200ms ease-in;
   margin-right: var(--gap-1);
-  font-size: var(--font-size-l);
+  font-size: var(--font-size-m);
 
   &:hover {
     transform: translateY(-2px);
@@ -27,7 +29,15 @@ button {
 }
 
 button.primary {
-  background: linear-gradient(0.25turn, var(--primary-600), var(--primary-700));
+  background: linear-gradient(0.25turn, var(--accent-300), var(--accent-600));
+}
+
+button.sign-in {
+  background: var(--accent-300);
+  flex-direction: row;
+  width: 14rem;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 button:disabled {
@@ -37,7 +47,6 @@ button:disabled {
 @media (max-width:425px) {
   button {
     font-size: var(--font-size-s);
-
   }
 
 }
