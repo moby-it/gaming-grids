@@ -1,26 +1,18 @@
 <script setup lang="ts">
-
-const emits = defineEmits(['closeModal'])
-const modal = ref(null);
+const { signInWithGoogle } = useAuth();
 
 </script>
 <template>
     <Transition>
-        <section ref="modal" class="sign-in">
+        <section class="sign-in">
             <header>
                 <h1>Sign in</h1>
             </header>
 
             <section class="card">
-                <Button @click="console.log('google')" signIn>
+                <Button @click="async () => await signInWithGoogle()" signIn>
                     <NuxtImg src="/Google__G__logo.svg.webp" height="20px" />
                     Sign in with Google
-                </Button>
-            </section>
-            <section class="card">
-                <Button @click="console.log('apple')" signIn>
-                    <NuxtImg src="/Apple_logo_black.svg.png" height="23px" />
-                    Sign in with Apple
                 </Button>
             </section>
         </section>
@@ -50,7 +42,7 @@ header {
 
 h1 {
     border-bottom: 2px solid var(--accent-300);
-    margin-bottom: var(--gap-6)
+    margin-bottom: var(--gap-4)
 }
 
 Button {

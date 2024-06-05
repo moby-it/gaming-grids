@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import User from './User.vue';
+const { signOut, user, fetchUser } = useAuth();
+await fetchUser();
 const modals = useModal();
 const route = useRoute();
 </script>
@@ -32,12 +35,12 @@ const route = useRoute();
         <path d="M12 18.01L12.01 17.9989" stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round"
           stroke-linejoin="round"></path>
       </svg>
-      <section v-if="route.path === '/'">
-        <Button @click="navigateTo('/sign-in')" primary>Sign In</Button>
-      </section>
-      <section v-if="route.path === '/sign-in'">
-        <Button @click="navigateTo('/')" primary>Back</Button>
-      </section>
+      <ClientOnly>
+        <Button v-if="route.path === '/' && !user" @click="navigateTo('/sign-in')" primary>Sign-in</Button>
+        <User v-if="user" :email="user.email" :username="user.user_metadata?.name"
+          :userImageUrl="user.user_metadata?.avatar_url" @log-out="signOut" />
+      </ClientOnly>
+      <Button v-if="route.path === '/sign-in'" @click="navigateTo('/')" primary>League Grid</Button>
     </div>
   </header>
   <Teleport to="#game" v-if="modals.helpModal.value">
@@ -57,7 +60,7 @@ img {
 header {
   display: flex;
   padding: var(--gap-2);
-  justify-content: space-between;
+  justify-content: space-evenly;
   color: var(--accent-300);
   border-bottom: 1px solid var(--accent-300);
 }
@@ -96,7 +99,6 @@ hgroup {
   header {
     display: flex;
     padding: var(--gap-1);
-    justify-content: space-between;
     color: var(--accent-300);
     border-bottom: 1px solid var(--accent-300);
   }

@@ -14,14 +14,14 @@ defineProps<{
 <style scoped>
 button {
   color: white;
-  padding: var(--gap-2) var(--gap-3);
+  padding: var(--gap-3);  
   border-radius: var(--radius);
   outline: none;
   border: none;
   cursor: pointer;
   transition: transform 200ms ease-in;
   margin-right: var(--gap-1);
-  font-size: var(--font-size-l);
+  font-size: var(--font-size-m);
 
   &:hover {
     transform: translateY(-2px);
