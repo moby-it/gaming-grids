@@ -7,7 +7,7 @@ const route = useRoute();
 </script>
 <template>
   <header>
-    <h2>
+    <h2 class="logo" @click="async () => navigateTo('/')">
       <NuxtImg src="/LoL_Icon_Flat_GOLD.png" />eague Grid
     </h2>
     <div>
@@ -36,12 +36,10 @@ const route = useRoute();
           stroke-linejoin="round"></path>
       </svg>
       <ClientOnly>
-        <Button v-if="route.path === '/' && !user" @click="navigateTo('/sign-in')"
-          buttonClass="primary">Sign-in</Button>
-        <User v-if="user" :email="user.email" :username="user.user_metadata?.name"
+        <Button v-if="!user" @click="navigateTo('/sign-in')" buttonClass="primary">Sign-in</Button>
+        <User v-else :email="user.email" :username="user.user_metadata?.name"
           :userImageUrl="user.user_metadata?.avatar_url" @log-out="signOut" />
       </ClientOnly>
-      <Button v-if="route.path === '/sign-in'" @click="navigateTo('/')" buttonClass="primary">League Grid</Button>
     </div>
   </header>
   <Teleport to="#game" v-if="modals.helpModal.value">
@@ -74,6 +72,10 @@ header div {
 
 hgroup {
   text-align: center;
+}
+
+.logo {
+  cursor: pointer;
 }
 
 @media (max-width:576px) {

@@ -17,7 +17,7 @@ export const useAuth = () => {
 
     async function signInWithGoogle(): Promise<void> {
         loading.value = true;
-        const { data: res, error } = await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google'
         })
         if (error) console.log(error); else await fetchUser();
