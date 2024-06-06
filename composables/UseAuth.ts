@@ -4,7 +4,6 @@ export const useAuth = () => {
     const session = useSupabaseSession();
     const user = ref();
     const loading = ref(true);
-    const { devRedirectUrl, prodRedirectUrl, isDevelopment } = useRuntimeConfig().public;
     supabase.auth.onAuthStateChange((event, session) => {
         setTimeout(async () => {
             await fetchUser()
@@ -19,9 +18,7 @@ export const useAuth = () => {
     async function signInWithGoogle(): Promise<void> {
         loading.value = true;
         const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google', options: {
-                redirectTo: isDevelopment ? devRedirectUrl : prodRedirectUrl
-            }
+            provider: 'google'
         })
         if (error) console.log(error); else await fetchUser();
     }
