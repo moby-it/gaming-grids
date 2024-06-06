@@ -1,5 +1,12 @@
+<script setup>
+const { user, fetchUser } = useAuth();
+await fetchUser();
+if (user.value) {
+    await navigateTo('/')
+}
+</script>
 <template>
-    <section>
+    <section v-if="!user">
         <SignInCard />
     </section>
 </template>
