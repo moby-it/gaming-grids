@@ -12,7 +12,10 @@ const { name, cells, restrictions, guesses } = await useGame();
 
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
-    e.stopPropagation();
+    const target = e.target as HTMLTextAreaElement
+    if (target.classList[0] !== 'cell') {
+        e.stopPropagation();
+    }
 });
 
 function handlePlayerChosen(playerName: string): void {

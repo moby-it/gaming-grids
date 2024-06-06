@@ -9,7 +9,7 @@ const showInfo = ref(false);
 const emits = defineEmits(['logOut']);
 onClickOutside(info, (e: Event) => {
     showInfo.value = false;
-    e.stopImmediatePropagation();
+    e.stopPropagation();
 });
 </script>
 <template>

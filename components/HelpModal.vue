@@ -1,43 +1,64 @@
 <script setup lang="ts">
 const emits = defineEmits(['closeModal']);
 const modal = ref(null);
-onClickOutside(modal, () => {
-    emits('closeModal');
+const { helpModal, showHelpModal, hideHelpModal } = useModal();
+onClickOutside(modal, (e: Event) => {
+    hideHelpModal();
+    e.stopPropagation();
 });
 const show: Ref<boolean> = ref(false);
-setTimeout(() => show.value = true, 0)
+setTimeout(() => { show.value = true }, 0);
 </script>
 
+
 <template>
-    <Transition>
-        <section class="modal-container" v-if="show">
-            <section ref="modal" class="help-modal">
-                <header>
-                    <h4>
-                        How to play LeagueGrid.
-                    </h4>
-                    <svg class="exit" @click="$emit('closeModal')" xmlns="http://www.w3.org/2000/svg" width="1.5rem"
-                        height="1.5rem" viewBox="0 0 24 24">
-                        <path fill="currentColor"
-                            d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
-                    </svg>
-                </header>
-                <p>You have nine guesses to fill-put the grid.</p>
-                <p> Select a champion for each cell that matches the restrictions in the respective row/column
-                    combination.
-                </p>
-                <p>You get one undo per day to help you correct an incorrect guess, or try to find a rarer selection to
-                    improve your score.</p>
-                <p>Rarity scores are based on how unique your selections are in relation to the rest of the contenders.
-                    The
-                    lower your rarity score, the better. Searching for unique Champions will help you keep your rarity
-                    score
-                    low!</p>
-                <p>A champion can be used more than once.</p>
-                <p>A new grid is available each day at midnight GMT!</p>
-            </section>
-        </section>
-    </Transition>
+    <svg @click="showHelpModal" width="40px" height="40px" stroke-width="1.7" viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg" color="#c8aa6f">
+        <path
+            d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+            stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M9 9C9 5.49997 14.5 5.5 14.5 9C14.5 11.5 12 10.9999 12 13.9999" stroke="#c8aa6f" stroke-width="1.7"
+            stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M12 18.01L12.01 17.9989" stroke="#c8aa6f" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round"></path>
+    </svg>
+    <ClientOnly>
+        <Teleport to="#help-modal">
+            <Transition>
+                <section class="modal-container" v-if="helpModal">
+                    <section ref="modal" class="help-modal">
+                        <header>
+                            <h4>
+                                How to play LeagueGrid.
+                            </h4>
+                            <svg class="exit" @click="hideHelpModal" xmlns="http://www.w3.org/2000/svg" width="1.5rem"
+                                height="1.5rem" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z" />
+                            </svg>
+                        </header>
+                        <p>You have nine guesses to fill-put the grid.</p>
+                        <p> Select a champion for each cell that matches the restrictions in the respective row/column
+                            combination.
+                        </p>
+                        <p>You get one undo per day to help you correct an incorrect guess, or try to find a rarer
+                            selection
+                            to
+                            improve your score.</p>
+                        <p>Rarity scores are based on how unique your selections are in relation to the rest of the
+                            contenders.
+                            The
+                            lower your rarity score, the better. Searching for unique Champions will help you keep your
+                            rarity
+                            score
+                            low!</p>
+                        <p>A champion can be used more than once.</p>
+                        <p>A new grid is available each day at midnight GMT!</p>
+                    </section>
+                </section>
+            </Transition>
+        </Teleport>
+    </ClientOnly>
 </template>
 
 <style scoped>
@@ -59,6 +80,10 @@ setTimeout(() => show.value = true, 0)
 .v-enter-from,
 .v-leave-to {
     opacity: 0;
+}
+
+svg {
+    cursor: pointer;
 }
 
 .help-modal {
