@@ -9,7 +9,7 @@ const showInfo = ref(false);
 const emits = defineEmits(['logOut']);
 onClickOutside(info, (e: Event) => {
     showInfo.value = false;
-    e.stopImmediatePropagation();
+    e.stopPropagation();
 });
 </script>
 <template>
@@ -50,7 +50,7 @@ onClickOutside(info, (e: Event) => {
 header {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     cursor: pointer;
     color: var(--accent-200);
 

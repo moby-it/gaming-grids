@@ -11,6 +11,7 @@ useHead({
 <template>
   <Header />
   <main>
+    <section id="help-modal"></section>
     <NuxtPage />
   </main>
 </template>
