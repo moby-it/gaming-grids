@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
+          tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:stable , ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
   deploy:
     needs: [build]
     runs-on: ubuntu-22.04
