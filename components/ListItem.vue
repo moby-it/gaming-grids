@@ -1,11 +1,12 @@
 <script setup lang="ts">
 const props = defineProps<{
-    text: string
+    text: string;
+    index: number;
 }>();
-const emits = defineEmits(['playerChosen']);
+const emits = defineEmits(['playerChosen', 'touchLi']);
 </script>
 <template>
-    <li @click="() => $emit('playerChosen', props.text)">
+    <li @touchstart="$emit('touchLi', props.index)" @click="() => $emit('playerChosen', props.text)">
         <p>{{ props.text }}</p>
     </li>
 </template>

@@ -22,6 +22,9 @@ onMounted(() => {
   }
   );
 });
+function handleTouch(index: number) {
+  focusedChoice.value = index;
+}
 watchEffect(async () => {
   if (timeout.value) clearTimeout(timeout.value);
   if (props.input) {
@@ -35,9 +38,9 @@ watchEffect(async () => {
 
 <template>
   <ul class="results" v-if="results && results.length && input">
-    <ListItem :text="result" ref="listItems" @mousemove="focusedChoice = index"
+    <ListItem :index="index" :text="result" ref="listItems" @mousemove="focusedChoice = index"
       :class="{ focused: focusedChoice === index }" v-for="(result, index) of results"
-      @player-chosen="handlePlayerChosen"></ListItem />
+      @player-chosen="handlePlayerChosen" @touch-li="handleTouch"></ListItem />
   </ul>
 </template>
 
