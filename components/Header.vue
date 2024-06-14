@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import User from './User.vue';
-const { signOut, user, fetchUser } = useAuth();
-await fetchUser();
+const { signOut, user } = useAuth();
 </script>
 <template>
   <header>
@@ -26,8 +25,7 @@ await fetchUser();
       <HelpModal />
       <ClientOnly>
         <Button v-if="!user" @click="navigateTo('/sign-in')" buttonClass="primary">Sign-in</Button>
-        <User v-else :email="user.email" :username="user.user_metadata?.name"
-          :userImageUrl="user.user_metadata?.avatar_url" @log-out="signOut" />
+        <User v-else :name="user.name" :avatar-url="user.avatarUrl" :email="user.email" @log-out="signOut" />
       </ClientOnly>
     </div>
   </header>

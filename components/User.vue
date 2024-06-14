@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const props = defineProps<{
-    username?: string;
+    name: string,
+    avatarUrl: string,
     email: string;
-    userImageUrl: string;
 }>();
 const info = ref();
 const showInfo = ref(false);
@@ -15,7 +15,7 @@ onClickOutside(info, (e: Event) => {
 <template>
     <section class="container">
         <header @click="showInfo = true">
-            <NuxtImg class="img" :src="userImageUrl" height="40px" />
+            <NuxtImg class="img" :src="props.avatarUrl" height="40px" />
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <g fill="none" fill-rule="evenodd">
                     <path
@@ -27,7 +27,7 @@ onClickOutside(info, (e: Event) => {
         </header>
         <section v-if="showInfo" ref="info" class="info">
             <h5>
-                {{ props.username?.split(' ')[0] }}
+                {{ props.name?.split(' ')[0] }}
             </h5>
             <h6>
                 {{ props.email }}
