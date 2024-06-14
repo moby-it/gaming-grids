@@ -1,8 +1,7 @@
 <script setup>
-const { user, fetchUser } = useAuth();
-await fetchUser();
+const { user } = useAuth();
 if (user.value) {
-    await navigateTo('/')
+    await navigateTo('/');
 }
 </script>
 <template>

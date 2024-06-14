@@ -1,39 +1,37 @@
+import { User } from "#imports";
+import { safeParse } from 'valibot';
 
 export const useAuth = () => {
     const supabase = useSupabaseClient();
     const session = useSupabaseSession();
-    const user = ref();
+    const user = computed(() => {
+        if (!session.value?.user) return null;
+        const { output, success } = safeParse(User, session.value.user);
+        if (!success) {
+            console.log('failed to parse user');
+            return null;
+        }
+        return output;
+    });
     const loading = ref(true);
-    supabase.auth.onAuthStateChange((event, session) => {
-        setTimeout(async () => {
-            await fetchUser()
-        }, 0)
-    })
-
-    async function fetchUser() {
-        user.value = session?.value?.user || null;
-        loading.value = false;
-    }
 
     async function signInWithGoogle(): Promise<void> {
         loading.value = true;
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google'
-        })
-        if (error) console.log(error); else await fetchUser();
+        });
+        if (error) console.log(error);
     }
 
     async function signOut() {
         loading.value = true;
         const { error } = await supabase.auth.signOut();
-        if (error) user.value = null;
-
+        if (error) console.log(error);
     }
     return {
-        user: computed(() => user.value),
-        loading: computed(() => loading.value),
+        user,
+        loading,
         signInWithGoogle,
         signOut,
-        fetchUser,
-    }
-}
+    };
+};
