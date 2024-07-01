@@ -2,6 +2,7 @@
 const props = defineProps<{
   text: string;
 }>();
+const restriction = props.text.split(' ');
 </script>
 
 <template>
@@ -19,8 +20,9 @@ const props = defineProps<{
   font-weight: 600;
   display: flex;
   justify-content: center;
-  text-align: baseline;
+  text-align: center;
   align-items: center;
+  align-content: baseline;
   color: var(--accent-200);
 
   &:hover {

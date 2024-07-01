@@ -1,15 +1,17 @@
 <script setup lang="ts">
+import { SupabaseClient } from '@supabase/supabase-js';
+
+import { usePuzzle } from '@/composables/UsePuzzle';
 import { type Cell } from '~/utils/cells';
 const selectedCell = ref<Cell>({
     x: -1,
     y: -1,
-    value: ''
+    value: '',
+    answers: 0
 });
-
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 const searchBar = ref(null);
-const { name, cells, restrictions, guesses } = await useGame();
-
+const { name, cells, restrictions, guesses, cellAnswers } = await usePuzzle();
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
     const target = e.target as HTMLTextAreaElement
@@ -17,28 +19,40 @@ onClickOutside(searchBar, (e: Event) => {
         e.stopPropagation();
     }
 });
-
-function handlePlayerChosen(playerName: string): void {
+async function handlePlayerChosen(playerName: string): Promise<void> {
     if (guesses.value > 0) {
-        cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
-        --guesses.value;
+        const supabase: SupabaseClient = useSupabaseClient();
+        const { user } = useAuth();
+        if (user.value?.id) {
+            const { data, error: e } = await supabase.from('user_puzzle').select('id,puzzle_id').eq('user_id', user.value.id);
+            if (e) throw new Error(e.message);
+            const answerIsCorrect = await checkAnswer(supabase, playerName, { x: selectedCell.value.x, y: selectedCell.value.y }, data[0].puzzle_id)
+            if (answerIsCorrect) {
+                await updateCells(supabase, playerName, selectedCell.value, user.value?.id);
+                cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = playerName;
+            }
+            await supabase.from('user_puzzle').update({ guesses: --guesses.value }).eq('id', data[0].id)
+        }
     }
     resetSelectedCell(selectedCell.value);
 }
 </script>
 
 <template>
-    <section id="game" class="game">
-        <main>
-            <section class="search-container">
-                <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
-                    :selectedCell="selectedCell" />
-            </section>
-            <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
-                :guesses="guesses" />
-        </main>
-        <Guesses class="guesses" :guesses="guesses" />
-    </section>
+    <ClientOnly>
+
+        <section id="game" class="game">
+            <main>
+                <section class="search-container">
+                    <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
+                        :selectedCell="selectedCell" />
+                </section>
+                <Grid :name="name" :cells="cells" :answers="cellAnswers" :restrictions="restrictions"
+                    :selectedCell="selectedCell" :guesses="guesses" />
+            </main>
+            <Guesses class="guesses" :guesses="guesses" />
+        </section>
+    </ClientOnly>
 
 </template>
 

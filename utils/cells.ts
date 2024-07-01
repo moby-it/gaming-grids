@@ -2,11 +2,13 @@ export type Cell = {
   x: number;
   y: number;
   value?: string;
+  answers?: number
 };
 export function resetSelectedCell(selectedCell: Cell) {
   selectedCell.value = '';
   selectedCell.x = -1;
   selectedCell.y = -1;
+  selectedCell.answers = 0;
 }
 export function checkActive(guesses: number, selectedCell: Cell,
   cell: { x: number, y: number; }):
@@ -14,11 +16,12 @@ export function checkActive(guesses: number, selectedCell: Cell,
   if (!guesses) return false;
   return (selectedCell.x === cell.x && selectedCell.y === cell.y);
 }
-export function selectCell(cellValue: string, selectedCell: Cell, cellCoordinates: Cell) {
+export function selectCell(cellValue: string, selectedCell: Cell, cellCoordinates: Cell, cellAnswers: number) {
   if (!cellValue) {
     selectedCell.x = cellCoordinates.x;
     selectedCell.y = cellCoordinates.y;
     selectedCell.value = '';
+    selectedCell.answers = cellAnswers;
     setTimeout(() => {
       document.getElementById("search-player")?.focus();
     }, 0);
