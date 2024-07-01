@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { SupabaseClient } from '@supabase/supabase-js';
-
+import { getCellAnswerPercent } from "../utils/cells"
 import { usePuzzle } from '@/composables/UsePuzzle';
 import { type Cell } from '~/utils/cells';
+const { user } = useAuth();
+await getCellAnswerPercent(user.value?.id, 'Annie');
 const selectedCell = ref<Cell>({
     x: -1,
     y: -1,
     value: '',
-    answers: 0
+    possibleAnswers: 0
 });
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 const searchBar = ref(null);
@@ -22,7 +24,6 @@ onClickOutside(searchBar, (e: Event) => {
 async function handlePlayerChosen(playerName: string): Promise<void> {
     if (guesses.value > 0) {
         const supabase: SupabaseClient = useSupabaseClient();
-        const { user } = useAuth();
         if (user.value?.id) {
             const { data, error: e } = await supabase.from('user_puzzle').select('id,puzzle_id').eq('user_id', user.value.id);
             if (e) throw new Error(e.message);
@@ -47,7 +48,7 @@ async function handlePlayerChosen(playerName: string): Promise<void> {
                     <Search @player-chosen="handlePlayerChosen" v-if="showSearch" ref="searchBar"
                         :selectedCell="selectedCell" />
                 </section>
-                <Grid :name="name" :cells="cells" :answers="cellAnswers" :restrictions="restrictions"
+                <Grid :name="name" :cells="cells" :possibleAnswers="cellAnswers" :restrictions="restrictions"
                     :selectedCell="selectedCell" :guesses="guesses" />
             </main>
             <Guesses class="guesses" :guesses="guesses" />

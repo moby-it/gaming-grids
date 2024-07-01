@@ -1,14 +1,15 @@
+import { SupabaseClient } from '@supabase/supabase-js';
 export type Cell = {
   x: number;
   y: number;
   value?: string;
-  answers?: number
+  possibleAnswers?: number
 };
 export function resetSelectedCell(selectedCell: Cell) {
   selectedCell.value = '';
   selectedCell.x = -1;
   selectedCell.y = -1;
-  selectedCell.answers = 0;
+  selectedCell.possibleAnswers = 0;
 }
 export function checkActive(guesses: number, selectedCell: Cell,
   cell: { x: number, y: number; }):
@@ -21,7 +22,7 @@ export function selectCell(cellValue: string, selectedCell: Cell, cellCoordinate
     selectedCell.x = cellCoordinates.x;
     selectedCell.y = cellCoordinates.y;
     selectedCell.value = '';
-    selectedCell.answers = cellAnswers;
+    selectedCell.possibleAnswers = cellAnswers;
     setTimeout(() => {
       document.getElementById("search-player")?.focus();
     }, 0);
@@ -47,4 +48,26 @@ export function getCellRadius(x: number, y: number): string {
     borderRadius = 'border-radius: 0 0 10px 0';
   }
   return borderRadius;
+}
+export async function getCellAnswerPercent(userId: string, champion: string | undefined) {
+  // : Promise<(number | null)[]>
+  const supabase = useSupabaseClient();
+
+  const { data, error } = await supabase.from('user_puzzle').select('cells').eq('user_id', userId);
+  if (!error) {
+    const { cells } = data[0]
+    console.log(cells);
+    // for (const cell of cells) {
+    //   console.log(cell)
+    // }
+    // if (!data.length) {
+    //   const puzzle = createUserPuzzle(userId, supabase);
+    //   return puzzle;
+    // }
+    // const { output: puzzle, success } = v.safeParse(UserPuzzle, data[0]);
+    // if (success) {
+    //   return puzzle;
+    // }
+  }
+  // return null;
 }

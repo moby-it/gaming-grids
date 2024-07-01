@@ -5,7 +5,7 @@ const props = defineProps<{
     selectedCell: Cell;
     restrictions: { column: string[], row: string[] };
     guesses: number;
-    answers: number[][]
+    possibleAnswers: number[][]
 }>();
 </script>
 
@@ -25,7 +25,7 @@ const props = defineProps<{
                 <Cell v-for="x in 3" :champion="props.cells[x - 1][y - 1]" :x="x" :y="y"
                     :selected="checkActive(props.guesses, props.selectedCell, { x, y })"
                     :answered="props.cells[x - 1][y - 1] ? true : false"
-                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, answers[x - 1][y - 1])" />
+                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, possibleAnswers[x - 1][y - 1])" />
             </section>
         </section>
     </section>
