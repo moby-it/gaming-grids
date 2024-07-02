@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { } from "../composables/UseGame"
 import { type Cell } from '~/utils/cells';
 const selectedCell = ref<Cell>({
     x: -1,
@@ -8,8 +9,7 @@ const selectedCell = ref<Cell>({
 
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 const searchBar = ref(null);
-const { name, cells, restrictions, guesses } = await useGame();
-
+const { name, cells, restrictions, guesses, cellAnswers } = await useGame();
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
     const target = e.target as HTMLTextAreaElement
@@ -35,7 +35,7 @@ function handlePlayerChosen(playerName: string): void {
                     :selectedCell="selectedCell" />
             </section>
             <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
-                :guesses="guesses" />
+                :guesses="guesses" :possible-answers="cellAnswers" />
         </main>
         <Guesses class="guesses" :guesses="guesses" />
     </section>

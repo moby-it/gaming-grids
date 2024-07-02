@@ -1,18 +1,15 @@
-import * as v from 'valibot';
-
+import { SupabaseClient } from '@supabase/supabase-js';
 export const useGame = async () => {
-  const { data } = await useFetch('/api/dailyQuestion');
-  const Restrictions = v.array(v.array(v.string()));
-  const Input = v.object({
-    restrictions: Restrictions,
-    name: v.string()
-  });
-  const { success, output } = v.safeParse(Input, data.value);
-  if (!success) throw createError('failed to parse restrictions');
-  const cells: Ref<string[][]> = ref([...Array(3)].map(() => Array(3).fill('')));
-  const columnRestrictions: string[] = output.restrictions[0];
-  const rowRestrictions: string[] = output.restrictions[1];
-  const name = output.name;
-  const guesses = ref(9);
-  return { name, cells, restrictions: { row: rowRestrictions, column: columnRestrictions }, guesses };
-};
+    const supabase: SupabaseClient = useSupabaseClient();
+
+    const { user } = useAuth();
+    const { name, restrictions } = await getPuzzleInfo(supabase);
+    const { cells, guesses } = await getPuzzleBody(user.value?.id, supabase);
+    const { data, error } = await supabase.from('puzzle').select('id')
+    if (error) throw new Error(error.message);
+    const cellAnswers = await getPuzzleAnswers(supabase, data[0].id);
+    return {
+        name, cells, restrictions, guesses, cellAnswers
+    };
+
+}

@@ -14,11 +14,12 @@ if (process.client) {
     }
   });
 }
+const placeholder = `${props.selectedCell.possibleAnswers} possible answers!`
 </script>
 
 <template>
   <section class="search">
-    <input autocomplete="off" id="search-player" v-model="model" placeholder="Type a player name">
+    <input autocomplete="off" id="search-player" v-model="model" :placeholder=placeholder>
     <SearchResults :input="model" @player-chosen="handlePlayerChosen" />
   </section>
 </template>

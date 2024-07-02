@@ -2,16 +2,23 @@
 const props = defineProps<{
   x: number;
   y: number;
-  text?: string;
+  champion?: string;
+  score?: number;
   index?: number;
   selected?: boolean;
   answered: boolean;
 }>();
+const source = computed(() => {
+  if (props.champion) {
+    return `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${props.champion}_0.jpg`;
+  }
+  return '';
+});
 </script>
 
 <template>
   <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected, answered }">
-    <p>{{ props.text }}</p>
+    <NuxtImg class="champions" v-if="champion" :src="source" />
   </section>
 
 </template>
@@ -25,7 +32,7 @@ const props = defineProps<{
   width: var(--cell);
   height: var(--cell);
   background-color: var(--primary-900);
-  border: 1px solid var(--accent-300);
+  border: 2px solid var(--accent-300);
   margin: -1px;
 
   &:hover {
@@ -41,5 +48,11 @@ const props = defineProps<{
     color: var(--accent-300);
     cursor: default;
   }
+
+}
+
+img {
+  width: var(--cell);
+  height: var(--cell);
 }
 </style>

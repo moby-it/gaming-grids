@@ -6,12 +6,14 @@ export const User = v.pipe(
     user_metadata: v.object({
       name: v.string(),
       avatar_url: v.string()
-    })
+    }),
+    id: v.string()
   }),
   v.transform(e => ({
     name: e.user_metadata.name,
     email: e.email,
-    avatarUrl: e.user_metadata.avatar_url
+    avatarUrl: e.user_metadata.avatar_url,
+    id: e.id
   }))
 );
 
