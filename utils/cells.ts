@@ -24,7 +24,7 @@ export function selectCell(cellValue: string, selectedCell: Cell, cellCoordinate
     selectedCell.possibleAnswers = cellAnswers;
     setTimeout(() => {
       document.getElementById("search-player")?.focus();
-    }, 0);//θα τσεκαρω να φυγει.
+    }, 0);
   }
 }
 export function getCellRadius(x: number, y: number): string {

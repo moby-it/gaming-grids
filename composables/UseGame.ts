@@ -1,13 +1,11 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-export const useGame = async () => {
+export const useGame = async (userId: string | undefined, puzzleId: string) => {
     const supabase: SupabaseClient = useSupabaseClient();
 
     const { user } = useAuth();
-    const { name, restrictions } = await getPuzzleInfo(supabase);
-    const { cells, guesses } = await getPuzzleBody(user.value?.id, supabase);
-    const { data, error } = await supabase.from('puzzle').select('id')
-    if (error) throw new Error(error.message);
-    const cellAnswers = await getPuzzleAnswers(supabase, data[0].id);
+    const { name, restrictions } = await getPuzzleInfo(supabase, puzzleId);
+    const { cells, guesses } = await getPuzzleBody(userId, supabase);
+    const cellAnswers = await getPuzzleAnswers(supabase, puzzleId);
     return {
         name, cells, restrictions, guesses, cellAnswers
     };

@@ -17,7 +17,7 @@ export const UserPuzzle = v.object({
 export type PuzzleInfo = v.InferOutput<typeof PuzzleInfo>;
 export type UserPuzzle = v.InferOutput<typeof UserPuzzle>;
 
-export async function getPuzzleInfo(supabase: SupabaseClient):
+export async function getPuzzleInfo(supabase: SupabaseClient, puzzleId: string):
     Promise<{
         name: Ref<string>,
         restrictions: Ref<{
@@ -25,10 +25,8 @@ export async function getPuzzleInfo(supabase: SupabaseClient):
             column: string[];
         }>
     }> {
-    const { data: puzzleId, error: e } = await supabase.from('puzzle').select('id');
-    if (e) throw new Error(e.message);
     const { data, error } = await supabase.rpc('get_puzzle_info', {
-        puzzle_id: puzzleId[0].id
+        puzzle_id: puzzleId
     })
     if (error) throw new Error(error.message);
     const { success, output: puzzleInfo } = v.safeParse(PuzzleInfo, data[0]);
@@ -93,6 +91,21 @@ async function createUserPuzzle(userId: string, supabase: SupabaseClient): Promi
         if (success) return output
     }
     return null;
+}
+export async function checkAnswer(supabase: SupabaseClient, champion: string, selectedCell: { x: number, y: number }, puzzleId: string): Promise<boolean> {
+    const { data: answer, error } = await supabase.rpc('check_answer', {
+        x: selectedCell.x, y: selectedCell.y, puzzle_id: puzzleId, champion_name: champion
+    });
+
+    return answer;
+}
+export async function updateCells(supabase: SupabaseClient, champion: string, cell: { x: number, y: number }, userId: string | undefined) {
+    const { data: user_puzzle_id, error: e } = await supabase.from('user_puzzle').select('id').eq('user_id', userId);
+    if (e) throw new Error(e.message);
+    const { error } = await supabase.rpc('update_puzzle', {
+        user_puzzle_id: user_puzzle_id[0].id, x: cell.x, y: cell.y, champion_name: champion
+    })
+    if (error) throw new Error(error.message);
 }
 export async function getPuzzleAnswers(supabase: SupabaseClient, puzzleId: string): Promise<Ref<number[][]>> {
     const { data } = await supabase.rpc('get_cell_possible_answers_count', { puzzle_id: puzzleId });

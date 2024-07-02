@@ -9,7 +9,9 @@ const selectedCell = ref<Cell>({
 
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 const searchBar = ref(null);
-const { name, cells, restrictions, guesses, cellAnswers } = await useGame();
+const { user } = useAuth();
+const puzzleId = await usePuzzle('2024-06-22');
+const { name, cells, restrictions, guesses, cellAnswers } = await useGame(user.value?.id, puzzleId.value);
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
     const target = e.target as HTMLTextAreaElement

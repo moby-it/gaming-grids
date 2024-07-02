@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type ListItem from './ListItem.vue';
-
+type ChosenChampion = {
+  name: string, id: string
+}
 const props = defineProps<{
   input: unknown
 }>()

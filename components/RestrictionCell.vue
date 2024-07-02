@@ -19,7 +19,7 @@ const props = defineProps<{
   font-weight: 600;
   display: flex;
   justify-content: center;
-  text-align: baseline;
+  text-align: center;
   align-items: center;
   color: var(--accent-200);
 
