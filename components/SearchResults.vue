@@ -9,9 +9,9 @@ const props = defineProps<{
 const results = ref<string[] | null>(null);
 const timeout = ref();
 const focusedChoice = ref<number | null>(null);
-const emits = defineEmits(['playerChosen']);
-const handlePlayerChosen = (playerName: string) => {
-  emits('playerChosen', playerName);
+const emits = defineEmits(['championChosen']);
+const handleChampionChosen = (playerName: string) => {
+  emits('championChosen', playerName);
 };
 const listItems = ref<InstanceType<typeof ListItem>[]>([]);
 onMounted(() => {
@@ -39,7 +39,7 @@ watchEffect(async () => {
   <ul class="results" v-if="results && results.length && input">
     <ListItem :text="result" ref="listItems" @mousemove="focusedChoice = index"
       :class="{ focused: focusedChoice === index }" v-for="(result, index) of results"
-      @player-chosen="handlePlayerChosen"></ListItem />
+      @champion-chosen="handleChampionChosen"></ListItem />
   </ul>
 </template>
 

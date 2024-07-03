@@ -2,7 +2,7 @@ export function navigateList(eventName: string,
   results: globalThis.Ref<string[] | null>,
   focusedChoice: globalThis.Ref<number | null>,
   focusedListItem: HTMLLIElement | null,
-  emits: (event: 'playerChosen', ...args: any[]) => void
+  emits: (event: 'championChosen', ...args: any[]) => void
 ): void {
 
   if (results.value?.length) {
@@ -21,7 +21,7 @@ export function navigateList(eventName: string,
       return;
     }
     if (eventName === 'Enter') {
-      emits('playerChosen', results.value[focusedChoice.value]);
+      emits('championChosen', results.value[focusedChoice.value]);
     };
   }
 }

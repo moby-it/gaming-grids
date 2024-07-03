@@ -2,10 +2,10 @@
 const props = defineProps<{
     text: string
 }>();
-const emits = defineEmits(['playerChosen']);
+const emits = defineEmits(['championChosen']);
 </script>
 <template>
-    <li @click="() => $emit('playerChosen', props.text)">
+    <li @click="() => $emit('championChosen', props.text)">
         <p>{{ props.text }}</p>
     </li>
 </template>

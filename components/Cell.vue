@@ -81,7 +81,7 @@ img {
 }
 
 .bottom-right {
-  border-radius: 0 0 0   var(--radius);
+  border-radius: 0 0 0 var(--radius);
 }
 
 .bottom-left {

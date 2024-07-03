@@ -3,9 +3,9 @@ const props = defineProps<{
   selectedCell: Cell;
 }>();
 const model = defineModel();
-const emits = defineEmits(['playerChosen']);
-const handlePlayerChosen = (playerName: string) => {
-  emits('playerChosen', playerName);
+const emits = defineEmits(['championChosen']);
+const handleChampionChosen = (playerName: string) => {
+  emits('championChosen', playerName);
 };
 if (process.client) {
   window.addEventListener('keyup', (e) => {
@@ -20,7 +20,7 @@ const placeholder = `${props.selectedCell.possibleAnswers} possible answers!`
 <template>
   <section class="search">
     <input autocomplete="off" id="search-player" v-model="model" :placeholder=placeholder>
-    <SearchResults :input="model" @player-chosen="handlePlayerChosen" />
+    <SearchResults :input="model" @champion-chosen="handleChampionChosen" />
   </section>
 </template>
 
