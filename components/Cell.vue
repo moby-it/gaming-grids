@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getImageRadius, getNameRadius, getScoreRadius } from '~/utils/cells';
-
 const props = defineProps<{
   x: number;
   y: number;
@@ -9,6 +8,7 @@ const props = defineProps<{
   selected?: boolean;
   answered: boolean;
   metadata: { id: string, rarityScore: number | null };
+  hovered: boolean;
 }>();
 const source = computed(() => {
   if (props.metadata.id) {
@@ -19,7 +19,7 @@ const source = computed(() => {
 </script>
 
 <template>
-  <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected, answered }">
+  <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected, answered, hovered }">
     <section v-if="props.metadata.id" class="metadata">
       <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
         <p>{{ props.metadata.rarityScore }}%</p>
@@ -43,9 +43,6 @@ const source = computed(() => {
   border: 2px solid var(--accent-300);
   margin: -1px;
 
-  &:hover {
-    background-color: var(--accent-200);
-  }
 
   &.selected {
     background-color: var(--accent-600);
@@ -56,8 +53,15 @@ const source = computed(() => {
     cursor: default;
   }
 
+
 }
 
+.hovered {
+  &:hover {
+    background-color: var(--accent-200);
+  }
+
+}
 
 img {
   width: var(--cell);
@@ -66,7 +70,6 @@ img {
 
 .name {
   background-color: var(--accent-200);
-  color: var(--primary-900);
   color: var(--primary-700);
   font-size: var(--font-size-m);
   margin-top: var(--gap-6);
@@ -75,18 +78,15 @@ img {
 
 .rarity-score {
   background-color: var(--accent-200);
-  color: var(--primary-900);
+  color: var(--primary-700);
+  font-size: var(--font-size-m);
   border-radius: 0 0 0 var(--radius);
   align-self: flex-end;
   margin-bottom: var(--gap-6);
   padding: 0 var(--gap-1);
-  color: var(--primary-700);
-  font-size: var(--font-size-m);
 }
 
-
 .metadata {
-
   position: absolute;
   width: inherit;
   display: flex;
@@ -94,5 +94,56 @@ img {
   align-items: center;
   text-align: center;
   height: inherit;
+}
+
+@media (max-width:992px) {
+  .name {
+    font-size: var(--font-size-m);
+    margin-top: var(--gap-6);
+  }
+
+  .rarity-score {
+    margin-bottom: var(--gap-5);
+    padding: 0 var(--gap-1);
+    font-size: var(--font-size-m);
+  }
+
+
+}
+
+@media (max-width:768px) {
+  .name {
+    font-size: var(--font-size-m);
+    margin-top: var(--gap-6);
+  }
+
+  .rarity-score {
+    margin-bottom: var(--gap-4);
+    padding: 0 var(--gap-1);
+    font-size: var(--font-size-m);
+  }
+}
+
+@media (max-width:576px) {
+  .name {
+    font-size: var(--font-size-s);
+    margin-top: var(--gap-6);
+  }
+
+  .rarity-score {
+    margin-bottom: var(--gap-3);
+    padding: 0 var(--gap-1);
+    font-size: var(--font-size-s);
+  }
+}
+
+@media (max-width:425px) {
+  .name {
+    margin-top: var(--gap-5);
+  }
+
+  .rarity-score {
+    padding: 0 var(--gap-1);
+  }
 }
 </style>

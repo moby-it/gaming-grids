@@ -14,7 +14,7 @@ const props = defineProps<{
 <style scoped>
 button {
   color: white;
-  padding: var(--gap-3);
+  padding: var(--gap-2) var(--gap-3);
   border-radius: var(--radius);
   outline: none;
   border: none;

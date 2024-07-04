@@ -1,4 +1,24 @@
 import type { Champion } from "./fetchResults";
+function focusList(focusedListItem: (HTMLLIElement | null), event: string): void {
+  if (event === 'ArrowUp') {
+    if (focusedListItem) {
+      focusedListItem?.
+        previousElementSibling?.
+        previousElementSibling?.
+        previousElementSibling?.
+        previousElementSibling?.
+        scrollIntoView();
+    }
+  } else {
+    if (focusedListItem) {
+      focusedListItem?.
+        previousElementSibling?.
+        previousElementSibling?.
+        previousElementSibling?.
+        scrollIntoView();
+    }
+  }
+};
 export function navigateList(eventName: string,
   results: globalThis.Ref<Champion[] | null>,
   focusedChoice: globalThis.Ref<number | null>,

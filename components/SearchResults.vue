@@ -1,35 +1,15 @@
 <script setup lang="ts">
-import type { Champion } from '~/utils/fetchResults';
 import type ListItem from './ListItem.vue';
-const props = defineProps<{
-  input: unknown
-}>()
-const results = ref<Champion[] | null>(null);
-const timeout = ref();
-const focusedChoice = ref<number | null>(null);
+const props = defineProps<{ input: unknown }>();
+const input = ref(props.input);
+const listItems = ref<InstanceType<typeof ListItem>[]>([]);
 const emits = defineEmits(['championChosen']);
+const { results, focusedChoice } = useNavigation(input, listItems, emits);
 const handleChampionChosen = (playerName: string) => {
   emits('championChosen', playerName);
 };
-const listItems = ref<InstanceType<typeof ListItem>[]>([]);
-onMounted(() => {
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      e.preventDefault();
-    }
-    const focusedListItem = listItems.value.find(li => li.$el.classList.contains('focused'))
-    navigateList(e.key, results, focusedChoice, focusedListItem?.$el as HTMLLIElement, emits);
-  }
-  );
-});
-watchEffect(async () => {
-  if (timeout.value) clearTimeout(timeout.value);
-  if (props.input) {
-    timeout.value = setTimeout(() => {
-      fetchResults(props.input, results);
-      focusedChoice.value = 0;
-    }, 0);
-  }
+watchEffect(() => {
+  input.value = props.input;
 });
 </script>
 
@@ -80,7 +60,6 @@ watchEffect(async () => {
 
 @media (max-width:425px) {
   .results {
-
     width: 15rem;
   }
 }
