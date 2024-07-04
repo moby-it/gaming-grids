@@ -6,15 +6,16 @@ export const useModal = () => {
   function hideHelpModal() {
     helpModal.value = false;
   }
-
-  if (import.meta.client) {
-    if (!localStorage.getItem('seenModal')) showHelpModal();
-    localStorage.setItem('seenModal', 'true');
+  onMounted(() => {
+    if (!localStorage.getItem('seenModal')) {
+      if (!localStorage.getItem('seenModal')) setTimeout(() => showHelpModal(), 0)
+      localStorage.setItem('seenModal', 'true');
+    }
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Escape') {
         hideHelpModal();
       }
     });
-  }
+  })
   return { helpModal, showHelpModal, hideHelpModal }
 }

@@ -6,10 +6,7 @@ onClickOutside(modal, (e: Event) => {
     hideHelpModal();
     e.stopPropagation();
 });
-const show: Ref<boolean> = ref(false);
-setTimeout(() => { show.value = true }, 0);
 </script>
-
 
 <template>
     <svg @click="showHelpModal" width="40px" height="40px" stroke-width="1.7" viewBox="0 0 24 24" fill="none"
@@ -41,10 +38,10 @@ setTimeout(() => { show.value = true }, 0);
                         <p> Select a champion for each cell that matches the restrictions in the respective row/column
                             combination.
                         </p>
-                        <p>You get one undo per day to help you correct an incorrect guess, or try to find a rarer
+                        <!-- <p>You get one undo per day to help you correct an incorrect guess, or try to find a rarer
                             selection
                             to
-                            improve your score.</p>
+                            improve your score.</p> -->
                         <p>Rarity scores are based on how unique your selections are in relation to the rest of the
                             contenders.
                             The
