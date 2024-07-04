@@ -1,9 +1,15 @@
 import * as v from 'valibot';
 import { SupabaseClient } from '@supabase/supabase-js';
-type CellMetadata = {
-    id: string;
-    rarityScore: number | null;
-}
+export const PuzzleMetadata = v.pipe(v.object({
+    champion_ids: v.array(v.array(v.nullable(v.string()))),
+    cell_possible_answers_count: v.array(v.array(v.number())),
+    champion_percentages: v.array(v.array(v.nullable(v.number())))
+}),
+    v.transform(m => ({
+        possibleAnswers: m.cell_possible_answers_count,
+        championIds: m.champion_ids,
+        rarityScore: m.champion_percentages
+    })))
 export const PuzzleInfo = v.object
     ({
         puzzle_name: v.string(),
@@ -18,6 +24,7 @@ export const UserPuzzle = v.object({
     cells: v.array(v.array(v.string())),
     score: v.nullable(v.number())
 })
+export type PuzzleMetadata = v.InferOutput<typeof PuzzleMetadata>;
 export type PuzzleInfo = v.InferOutput<typeof PuzzleInfo>;
 export type UserPuzzle = v.InferOutput<typeof UserPuzzle>;
 
@@ -92,34 +99,10 @@ async function createUserPuzzle(userId: string, puzzleId: string, supabase: Supa
     }
     return null;
 }
-export async function getPuzzleAnswers(supabase: SupabaseClient, puzzleId: string): Promise<Ref<number[][]>> {
-    const { data } = await supabase.rpc('get_cell_possible_answers_count', { puzzle_id: puzzleId });
-    const { output: answers, success } = v.safeParse(v.array(v.array(v.number())), data)
-    if (!success) throw new Error("Something went wrong with Fetching the answers array!");
-    return ref(answers);
-}
-export async function getCellInfo(cells: string[][], supabase: SupabaseClient, puzzleId: string): Promise<Ref<CellMetadata[][]>> {
-    const cellMetadata: CellMetadata[][] = Array(cells.length)
-        .fill(null)
-        .map(() => Array(cells[0].length).fill(null).map(() => ({ id: '', rarityScore: null, possibleAnswers: null })));
-    const promises: Promise<void>[] = [];
-    cells.forEach((row, i) => {
-        row.forEach((cell, j) => {
-            if (cell) {
-                const promise = supabase.rpc('get_cell_info', {
-                    p_id: puzzleId,
-                    champion_name: cell,
-                    x: i + 1,
-                    y: j + 1,
-                }).then(({ data, error }) => {
-
-                    if (error) throw new Error(error.message);
-                    cellMetadata[i][j] = { id: data[0].champion_id, rarityScore: data[0].rarity_score };
-                }) as Promise<void>;
-                promises.push(promise);
-            }
-        });
-    });
-    await Promise.all(promises);
-    return ref(cellMetadata);
+export async function getCellMetadata(cells: string[][], supabase: SupabaseClient, puzzleId: string): Promise<Ref<PuzzleMetadata>> {
+    const { data, error } = await supabase.rpc('get_puzzle_metadata', { p_id: puzzleId, champion_names: cells })
+    if (error) throw new Error(error.message);
+    const { output: metadata, success } = v.safeParse(PuzzleMetadata, data);
+    if (!success) throw new Error("Could not correctly parse metadata!");
+    return ref(metadata);
 }

@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import type { PuzzleMetadata } from '~/utils/puzzle';
 const props = defineProps<{
     name: string;
     cells: string[][];
     selectedCell: Cell;
     restrictions: { column: string[], row: string[] };
     guesses: number;
-    possibleAnswers: number[][];
-    cellInfo: { id: string, rarityScore: number | null }[][];
+    cellMetadata: PuzzleMetadata;
 }>();
 </script>
 <template>
@@ -24,8 +24,10 @@ const props = defineProps<{
             <section class="rows" v-for="y in 3">
                 <Cell v-for="x in 3" :champion="props.cells[x - 1][y - 1]" :x="x" :y="y"
                     :selected="checkActive(props.guesses, props.selectedCell, { x, y })" :hovered="props.guesses > 0"
-                    :metadata="props.cellInfo[x - 1][y - 1]" :answered="props.cells[x - 1][y - 1] ? true : false"
-                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, props.possibleAnswers[x - 1][y - 1])" />
+                    :championId="props.cellMetadata.championIds[x - 1][y - 1]"
+                    :rarityScore="props.cellMetadata.rarityScore[x - 1][y - 1]"
+                    :answered="props.cells[x - 1][y - 1] ? true : false"
+                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, props.cellMetadata.possibleAnswers[x - 1][y - 1])" />
             </section>
         </section>
     </section>

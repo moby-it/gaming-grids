@@ -2,7 +2,7 @@
 import type { Champion } from '~/utils/fetchResults';
 const puzzleId = await usePuzzle('2024-06-22');
 const { user } = useAuth();
-const { name, cells, restrictions, guesses, cellInfo, cellAnswers, selectedCell, handleChampionChosen } = await useGame(user.value?.id, puzzleId.value);
+const { name, cells, restrictions, guesses, cellMetadata, selectedCell, handleChampionChosen } = await useGame(user.value?.id, puzzleId.value);
 const searchBar = ref(null);
 const showSearch = computed(() => ((selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0));
 onClickOutside(searchBar, (e: Event) => {
@@ -22,8 +22,8 @@ onClickOutside(searchBar, (e: Event) => {
                     <Search @champion-chosen="handleChampionChosen" v-if="showSearch" ref="searchBar"
                         :selectedCell="selectedCell" />
                 </section>
-                <Grid :name="name" :cells="cells" :possibleAnswers="cellAnswers" :restrictions="restrictions"
-                    :selectedCell="selectedCell" :guesses="guesses" :cellInfo="cellInfo" />
+                <Grid :name="name" :cells="cells" :restrictions="restrictions" :selectedCell="selectedCell"
+                    :cellMetadata="cellMetadata" :guesses="guesses" />
             </main>
             <Guesses class="guesses" :guesses="guesses" />
         </section>

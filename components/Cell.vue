@@ -7,12 +7,13 @@ const props = defineProps<{
   index?: number;
   selected?: boolean;
   answered: boolean;
-  metadata: { id: string, rarityScore: number | null };
+  championId: string | null;
+  rarityScore: number | null;
   hovered: boolean;
 }>();
 const source = computed(() => {
-  if (props.metadata.id) {
-    return `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${props.metadata.id}_0.jpg`;
+  if (props.championId) {
+    return `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${props.championId}_0.jpg`;
   }
   return '';
 });
@@ -20,15 +21,15 @@ const source = computed(() => {
 
 <template>
   <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected, answered, hovered }">
-    <section v-if="props.metadata.id" class="metadata">
+    <section v-if="props.championId" class="metadata">
       <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
-        <p>{{ props.metadata.rarityScore }}%</p>
+        <p>{{ props.rarityScore }}%</p>
       </section>
       <section class="name" :style="getNameRadius(props.x, props.y)">
         <p>{{ props.champion }}</p>
       </section>
     </section class="champions">
-    <NuxtImg v-if="props.metadata.id" :style="getImageRadius(props.x, props.y)" :src="source" object-fit="contain"
+    <NuxtImg v-if="props.championId" :style="getImageRadius(props.x, props.y)" :src="source" object-fit="contain"
       layout="responsive" />
   </section>
 </template>
@@ -144,6 +145,5 @@ img {
 
   .rarity-score {
     padding: 0 var(--gap-1);
-  }
-}
+  }}
 </style>
