@@ -1,5 +1,6 @@
+import type { Champion } from "./fetchResults";
 export function navigateList(eventName: string,
-  results: globalThis.Ref<string[] | null>,
+  results: globalThis.Ref<Champion[] | null>,
   focusedChoice: globalThis.Ref<number | null>,
   focusedListItem: HTMLLIElement | null,
   emits: (event: 'championChosen', ...args: any[]) => void

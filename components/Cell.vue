@@ -1,32 +1,18 @@
 <script setup lang="ts">
+import { getImageRadius, getNameRadius, getScoreRadius } from '~/utils/cells';
+
 const props = defineProps<{
   x: number;
   y: number;
   champion?: string;
-  score?: number;
   index?: number;
   selected?: boolean;
   answered: boolean;
+  metadata: { id: string, rarityScore: number | null };
 }>();
-function getRadius() {
-  if (props.x === 1 && props.y === 1) {
-    return 'top-right';
-  }
-  if (props.x === 1 && props.y === 3) {
-    return 'top-left';
-  }
-  if (props.x === 3 && props.y === 1) {
-    return 'bottom-right';
-  }
-  if (props.x === 3 && props.y === 3) {
-    return 'bottom-left';
-  }
-  return ''
-}
-const radiusClass = getRadius();
 const source = computed(() => {
-  if (props.champion) {
-    return `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${props.champion}_0.jpg`;
+  if (props.metadata.id) {
+    return `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${props.metadata.id}_0.jpg`;
   }
   return '';
 });
@@ -34,16 +20,22 @@ const source = computed(() => {
 
 <template>
   <section :style="getCellRadius(props.x, props.y)" class="cell" :class="{ selected, answered }">
-    <NuxtImg :class="radiusClass" class="champions" v-if="champion" :src="source" />
+    <section v-if="props.metadata.id" class="metadata">
+      <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
+        <p>{{ props.metadata.rarityScore }}%</p>
+      </section>
+      <section class="name" :style="getNameRadius(props.x, props.y)">
+        <p>{{ props.champion }}</p>
+      </section>
+    </section class="champions">
+    <NuxtImg v-if="props.metadata.id" :style="getImageRadius(props.x, props.y)" :src="source" object-fit="contain"
+      layout="responsive" />
   </section>
-
 </template>
 
 <style scoped>
 .cell {
   display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
   width: var(--cell);
   height: var(--cell);
@@ -60,31 +52,47 @@ const source = computed(() => {
   }
 
   &.answered {
-    background-color: var(--primary-600);
     color: var(--accent-300);
     cursor: default;
   }
 
 }
 
+
 img {
   width: var(--cell);
   height: var(--cell);
 }
 
-.top-right {
-  border-radius: var(--radius) 0 0 0;
+.name {
+  background-color: var(--accent-200);
+  color: var(--primary-900);
+  color: var(--primary-700);
+  font-size: var(--font-size-m);
+  margin-top: var(--gap-6);
+  width: inherit;
 }
 
-.top-left {
-  border-radius: 0 var(--radius) 0 0;
-}
-
-.bottom-right {
+.rarity-score {
+  background-color: var(--accent-200);
+  color: var(--primary-900);
   border-radius: 0 0 0 var(--radius);
+  align-self: flex-end;
+  margin-bottom: var(--gap-6);
+  padding: 0 var(--gap-1);
+  color: var(--primary-700);
+  font-size: var(--font-size-m);
 }
 
-.bottom-left {
-  border-radius: 0 0 var(--radius) 0;
+
+.metadata {
+
+  position: absolute;
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: inherit;
 }
 </style>

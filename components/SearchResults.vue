@@ -1,12 +1,10 @@
 <script setup lang="ts">
+import type { Champion } from '~/utils/fetchResults';
 import type ListItem from './ListItem.vue';
-type ChosenChampion = {
-  name: string, id: string
-}
 const props = defineProps<{
   input: unknown
 }>()
-const results = ref<string[] | null>(null);
+const results = ref<Champion[] | null>(null);
 const timeout = ref();
 const focusedChoice = ref<number | null>(null);
 const emits = defineEmits(['championChosen']);
@@ -37,7 +35,7 @@ watchEffect(async () => {
 
 <template>
   <ul class="results" v-if="results && results.length && input">
-    <ListItem :text="result" ref="listItems" @mousemove="focusedChoice = index"
+    <ListItem :champion="result" ref="listItems" @mousemove="focusedChoice = index"
       :class="{ focused: focusedChoice === index }" v-for="(result, index) of results"
       @champion-chosen="handleChampionChosen"></ListItem />
   </ul>
@@ -56,6 +54,7 @@ watchEffect(async () => {
   border-radius: 0 0 var(--radius) var(--radius);
   background-color: var(--primary-600);
   box-shadow: 2px 2px 5px var(--primary-700);
+  z-index: 2;
 }
 
 @media (max-width:992px) {

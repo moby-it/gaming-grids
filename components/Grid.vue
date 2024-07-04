@@ -5,10 +5,10 @@ const props = defineProps<{
     selectedCell: Cell;
     restrictions: { column: string[], row: string[] };
     guesses: number;
-    possibleAnswers: number[][]
+    possibleAnswers: number[][];
+    cellInfo: { id: string, rarityScore: number | null }[][];
 }>();
 </script>
-
 <template>
     <section class="grid-container">
         <section class="grid-head">
@@ -24,8 +24,8 @@ const props = defineProps<{
             <section class="rows" v-for="y in 3">
                 <Cell v-for="x in 3" :champion="props.cells[x - 1][y - 1]" :x="x" :y="y"
                     :selected="checkActive(props.guesses, props.selectedCell, { x, y })"
-                    :answered="props.cells[x - 1][y - 1] ? true : false"
-                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, possibleAnswers[x - 1][y - 1])" />
+                    :metadata="props.cellInfo[x - 1][y - 1]" :answered="props.cells[x - 1][y - 1] ? true : false"
+                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, props.possibleAnswers[x - 1][y - 1])" />
             </section>
         </section>
     </section>
