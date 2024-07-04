@@ -54,7 +54,7 @@ watchEffect(async () => {
   border-radius: 0 0 var(--radius) var(--radius);
   background-color: var(--primary-600);
   box-shadow: 2px 2px 5px var(--primary-700);
-  z-index: 2;
+  z-index: 1;
 }
 
 @media (max-width:992px) {

@@ -7,7 +7,7 @@ const emits = defineEmits(['championChosen']);
 const handleChampionChosen = (playerName: string) => {
   emits('championChosen', playerName);
 };
-if (process.client) {
+if (import.meta.client) {
   window.addEventListener('keyup', (e) => {
     if (e.key === 'Escape') {
       resetSelectedCell(props.selectedCell);

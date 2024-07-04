@@ -70,6 +70,7 @@ setTimeout(() => { show.value = true }, 0);
     display: flex;
     justify-content: center;
     align-items: start;
+    z-index: 1;
 }
 
 .v-enter-active,

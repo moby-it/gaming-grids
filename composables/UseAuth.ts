@@ -27,6 +27,7 @@ export const useAuth = () => {
         loading.value = true;
         const { error } = await supabase.auth.signOut();
         if (error) console.log(error);
+        loading.value = false;
     }
     return {
         user,

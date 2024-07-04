@@ -7,7 +7,7 @@ export const useModal = () => {
     helpModal.value = false;
   }
 
-  if (process.client) {
+  if (import.meta.client) {
     if (!localStorage.getItem('seenModal')) showHelpModal();
     localStorage.setItem('seenModal', 'true');
     window.addEventListener('keyup', (e) => {
