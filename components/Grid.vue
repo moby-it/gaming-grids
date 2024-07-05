@@ -8,6 +8,9 @@ const props = defineProps<{
     guesses: number;
     cellMetadata: PuzzleMetadata;
 }>();
+function getChampion(x: number, y: number): string | undefined {
+    return props.cells?.[x - 1]?.[y - 1];
+}
 </script>
 <template>
     <section class="grid-container">
@@ -30,14 +33,13 @@ const props = defineProps<{
             <section class="rows" v-for="y in 3">
                 <Cell
                     v-for="x in 3"
-                    :champion="props.cells[x - 1][y - 1]"
+                    :champion="getChampion(x, y)"
                     :x="x"
                     :y="y"
                     :selected="checkActive(props.guesses, props.selectedCell, { x, y })"
                     :hovered="props.guesses > 0"
                     :championId="props.cellMetadata.championIds[x - 1][y - 1]"
                     :rarityScore="props.cellMetadata.rarityScore[x - 1][y - 1]"
-                    :answered="props.cells[x - 1][y - 1] ? true : false"
                     @click="
                         selectCell(
                             props.cells[x - 1][y - 1],

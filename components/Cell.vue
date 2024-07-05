@@ -6,7 +6,6 @@ const props = defineProps<{
     champion?: string;
     index?: number;
     selected?: boolean;
-    answered: boolean;
     championId: string | null;
     rarityScore: number | null;
     hovered: boolean;
@@ -23,7 +22,7 @@ const source = computed(() => {
     <section
         :style="getCellRadius(props.x, props.y)"
         class="cell"
-        :class="{ selected, answered, hovered }"
+        :class="{ selected, answered: !!champion, hovered }"
     >
         <section v-if="props.championId" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">

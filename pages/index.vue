@@ -1,6 +1,9 @@
 <script setup lang="ts">
-const supabase = useSupabaseClient();
-const puzzleId = await usePuzzle('2024-06-22');
+import type { Champion } from '#imports';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+const supabase: SupabaseClient = useSupabaseClient();
+const puzzleId = await fetchPuzzleId(supabase, '2024-06-22');
 const { user } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
 
@@ -29,6 +32,34 @@ supabase.auth.onAuthStateChange(async (event) => {
         guesses.value = puzzleBody.guesses;
     }
 });
+async function handleChampionChosen(champion: Champion, selectedCell: Cell): Promise<void> {
+    if (guesses.value <= 0) return;
+    const { data: score } = await supabase.rpc('champion_chosen', {
+        x: selectedCell.x,
+        y: selectedCell.y,
+        p_id: puzzleId,
+        champion_name: champion.name,
+        u_id: user.value?.id ?? null,
+    });
+    if (score > 0) {
+        cells.value[selectedCell.x - 1][selectedCell.y - 1] = champion.name;
+        cellsMetadata.value.championIds[selectedCell.x - 1][selectedCell.y - 1] = champion.id;
+        cellsMetadata.value.rarityScore[selectedCell.x - 1][selectedCell.y - 1] = score;
+    }
+    guesses.value--;
+
+    if (!user.value) {
+        localStorage.setItem(
+            'localGame',
+            JSON.stringify({
+                cells: cells.value,
+                guesses: guesses.value,
+            })
+        );
+    }
+
+    resetSelectedCell(selectedCell);
+}
 </script>
 
 <template>
@@ -36,7 +67,7 @@ supabase.auth.onAuthStateChange(async (event) => {
         <main>
             <section class="search-container">
                 <Search
-                    @champion-chosen="game.handleChampionChosen"
+                    @champion-chosen="handleChampionChosen"
                     v-if="showSearch"
                     ref="searchBar"
                     :selectedCell="selectedCell"

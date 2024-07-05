@@ -64,25 +64,23 @@ export async function getPuzzleBody(
     puzzleId: string,
     userId?: string
 ): Promise<PuzzleBody> {
-    let cells: string[][] = [];
-    let guesses = 0;
     if (userId) {
         const userPuzzle = await fetchUserPuzzle(supabase, puzzleId, userId);
         if (!userPuzzle) throw new Error('Something went wrong with fetching the puzzle');
         return { cells: userPuzzle.cells, guesses: userPuzzle.guesses };
-    }
-    if (import.meta.client) {
-        const cachedGame = localStorage.getItem('localGame');
-        if (cachedGame) {
-            const localGame = JSON.parse(cachedGame);
-            guesses = localGame.guesses;
-            cells = localGame.cells;
-        } else {
-            const puzzle = createNewPuzzle();
-            savePuzzleToLocalStorage(puzzle);
+    } else {
+        if (import.meta.client) {
+            const cachedGame = localStorage.getItem('localGame');
+            if (cachedGame) {
+                return JSON.parse(cachedGame);
+            } else {
+                const puzzle = createNewPuzzle();
+                savePuzzleToLocalStorage(puzzle);
+                return puzzle;
+            }
         }
+        return { cells: [], guesses: 0 };
     }
-    return { cells: cells, guesses: guesses };
 }
 
 async function fetchUserPuzzle(
@@ -154,4 +152,10 @@ function savePuzzleToLocalStorage({ cells, guesses }: PuzzleBody) {
             guesses: guesses,
         })
     );
+}
+export async function fetchPuzzleId(supabase: SupabaseClient, date = getCurrentDate()) {
+    const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
+    if (error) throw new Error(error.message);
+    const { id } = data[0];
+    return id;
 }
