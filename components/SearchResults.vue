@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type ListItem from './ListItem.vue';
-const props = defineProps<{ input: unknown }>();
+const props = defineProps<{ input: string | undefined }>();
 const input = ref(props.input);
 const listItems = ref<InstanceType<typeof ListItem>[]>([]);
 const emits = defineEmits(['championChosen']);
-const { results, focusedChoice } = useNavigation(input, listItems, emits);
+const { results, focusedChoice } = useArrowNavigation(input, listItems, emits);
 const handleChampionChosen = (playerName: string) => {
     emits('championChosen', playerName);
 };

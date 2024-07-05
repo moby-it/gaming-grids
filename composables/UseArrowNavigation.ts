@@ -1,8 +1,8 @@
-import type { Champion } from '~/utils/fetchResults';
+import type { Champion } from '~/utils/champion';
 import type ListItem from '../components/ListItem.vue';
 
-export const useNavigation = (
-    input: Ref<unknown>,
+export const useArrowNavigation = (
+    input: Ref<string | undefined>,
     listItems: Ref<InstanceType<typeof ListItem>[]>,
     emits: (event: 'championChosen', ...args: any[]) => void
 ) => {
@@ -33,9 +33,10 @@ export const useNavigation = (
     });
     watchEffect(() => {
         if (timeout.value) clearTimeout(timeout.value);
-        if (input.value) {
-            timeout.value = setTimeout(() => {
-                fetchResults(input.value, results);
+        const v = input.value;
+        if (v) {
+            timeout.value = setTimeout(async () => {
+                results.value = await searchChampionsByTerm(v);
                 focusedChoice.value = 0;
             }, 0);
         }

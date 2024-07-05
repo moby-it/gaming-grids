@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import type { Champion } from '~/utils/fetchResults';
+const supabase = useSupabaseClient();
 const puzzleId = await usePuzzle('2024-06-22');
 const { user } = useAuth();
-const { name, cells, restrictions, guesses, cellMetadata, selectedCell, handleChampionChosen } =
-    await useGame(user.value?.id, puzzleId.value);
+const game = await useGame(puzzleId, user.value?.id);
+
+const selectedCell = ref<Cell>({ x: -1, y: -1 });
+const guesses = ref(game.guesses);
+const cells = ref(game.cells);
+const cellsMetadata = ref(game.cellsMetadata);
 const searchBar = ref(null);
+
 const showSearch = computed(
     () => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0
 );
+
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
     const target = e.target as HTMLTextAreaElement;
@@ -15,32 +21,42 @@ onClickOutside(searchBar, (e: Event) => {
         e.stopPropagation();
     }
 });
+
+supabase.auth.onAuthStateChange(async (event) => {
+    if (event === 'SIGNED_OUT') {
+        const puzzleBody = await getPuzzleBody(supabase, puzzleId);
+        cells.value = puzzleBody.cells;
+        guesses.value = puzzleBody.guesses;
+    }
+});
 </script>
 
 <template>
-    <ClientOnly>
-        <section id="game" class="game">
-            <main>
-                <section class="search-container">
-                    <Search
-                        @champion-chosen="handleChampionChosen"
-                        v-if="showSearch"
-                        ref="searchBar"
-                        :selectedCell="selectedCell"
-                    />
-                </section>
-                <Grid
-                    :name="name"
-                    :cells="cells"
-                    :restrictions="restrictions"
+    <section class="game">
+        <main>
+            <section class="search-container">
+                <Search
+                    @champion-chosen="game.handleChampionChosen"
+                    v-if="showSearch"
+                    ref="searchBar"
                     :selectedCell="selectedCell"
-                    :cellMetadata="cellMetadata"
+                />
+            </section>
+            <ClientOnly>
+                <Grid
+                    :name="game.name"
+                    :cells="cells"
+                    :restrictions="game.restrictions"
+                    :selectedCell="selectedCell"
+                    :cellMetadata="cellsMetadata"
                     :guesses="guesses"
                 />
-            </main>
+            </ClientOnly>
+        </main>
+        <ClientOnly>
             <Guesses class="guesses" :guesses="guesses" />
-        </section>
-    </ClientOnly>
+        </ClientOnly>
+    </section>
 </template>
 
 <style scoped>

@@ -2,10 +2,10 @@
 const props = defineProps<{
     selectedCell: Cell;
 }>();
-const model = defineModel();
+const model = defineModel<string>();
 const emits = defineEmits(['championChosen']);
 const handleChampionChosen = (playerName: string) => {
-    emits('championChosen', playerName);
+    emits('championChosen', playerName, props.selectedCell);
 };
 if (import.meta.client) {
     window.addEventListener('keyup', (e) => {

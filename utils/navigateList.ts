@@ -1,4 +1,5 @@
-import type { Champion } from './fetchResults';
+import type { Champion } from './champion';
+
 function focusList(focusedListItem: HTMLLIElement | null, event: string): void {
     if (event === 'ArrowUp') {
         if (focusedListItem) {
