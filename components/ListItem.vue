@@ -2,7 +2,7 @@
 import type { Champion } from '~/utils/fetchResults';
 
 const props = defineProps<{
-    champion: Champion
+    champion: Champion;
 }>();
 const emits = defineEmits(['championChosen']);
 </script>

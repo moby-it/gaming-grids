@@ -6,8 +6,7 @@ export const usePuzzle = async (date?: string): Promise<Ref<string>> => {
         if (error) throw new Error(error.message);
         const { id } = data[0];
         return ref(id);
-    }
-    else {
+    } else {
         const today = new Date();
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -18,4 +17,4 @@ export const usePuzzle = async (date?: string): Promise<Ref<string>> => {
         const { id } = data[0];
         return ref(id);
     }
-}
+};
