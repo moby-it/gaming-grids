@@ -153,9 +153,11 @@ function savePuzzleToLocalStorage({ cells, guesses }: PuzzleBody) {
         })
     );
 }
-export async function fetchPuzzleId(supabase: SupabaseClient, date = getCurrentDate()) {
+export async function fetchPuzzleIdByDate(supabase: SupabaseClient, date?: string) {
+    if (!date) date = getCurrentDate();
     const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
     if (error) throw new Error(error.message);
+    if (data.length !== 1) throw new Error('invalid pzzle length');
     const { id } = data[0];
     return id;
 }

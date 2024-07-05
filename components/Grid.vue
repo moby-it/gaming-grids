@@ -3,13 +3,26 @@ import type { PuzzleMetadata } from '~/utils/puzzle';
 const props = defineProps<{
     name: string;
     cells: string[][];
-    selectedCell: Cell;
     restrictions: { column: string[]; row: string[] };
-    guesses: number;
-    cellMetadata: PuzzleMetadata;
 }>();
+
+const cellsMetadata = inject<Ref<PuzzleMetadata>>('cellsMetadata');
+const selectedCell = inject<Ref<Cell>>('selectedCell');
+
 function getChampion(x: number, y: number): string | undefined {
     return props.cells?.[x - 1]?.[y - 1];
+}
+
+function onCellClick(x: number, y: number) {
+    if (!selectedCell?.value) return;
+    selectedCell.value = {
+        x,
+        y,
+        possibleAnswers: cellsMetadata?.value.possibleAnswers[x - 1][y - 1],
+    };
+    setTimeout(() => {
+        document.getElementById('search-player')?.focus();
+    }, 0);
 }
 </script>
 <template>
@@ -36,18 +49,7 @@ function getChampion(x: number, y: number): string | undefined {
                     :champion="getChampion(x, y)"
                     :x="x"
                     :y="y"
-                    :selected="checkActive(props.guesses, props.selectedCell, { x, y })"
-                    :hovered="props.guesses > 0"
-                    :championId="props.cellMetadata.championIds[x - 1][y - 1]"
-                    :rarityScore="props.cellMetadata.rarityScore[x - 1][y - 1]"
-                    @click="
-                        selectCell(
-                            props.cells[x - 1][y - 1],
-                            props.selectedCell,
-                            { x, y },
-                            props.cellMetadata.possibleAnswers[x - 1][y - 1]
-                        )
-                    "
+                    @click="onCellClick(x, y)"
                 />
             </section>
         </section>

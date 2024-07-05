@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Champion } from '#imports';
+import type { Champion, GameStatus, fetchPuzzleIdByDate } from '#imports';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const supabase: SupabaseClient = useSupabaseClient();
-const puzzleId = await fetchPuzzleId(supabase, '2024-06-22');
+const puzzleId = await fetchPuzzleIdByDate(supabase, '2024-06-22');
 const { user } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
 
@@ -13,9 +13,23 @@ const cells = ref(game.cells);
 const cellsMetadata = ref(game.cellsMetadata);
 const searchBar = ref(null);
 
+const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
+
+provide('status', status);
+provide('cellsMetadata', cellsMetadata);
+provide('selectedCell', selectedCell);
+
 const showSearch = computed(
-    () => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && guesses.value > 0
+    () => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && status.value === 'in progress'
 );
+
+supabase.auth.onAuthStateChange(async (event) => {
+    if (event === 'SIGNED_OUT') {
+        const puzzleBody = await getPuzzleBody(supabase, puzzleId);
+        cells.value = puzzleBody.cells;
+        guesses.value = puzzleBody.guesses;
+    }
+});
 
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell.value);
@@ -25,26 +39,20 @@ onClickOutside(searchBar, (e: Event) => {
     }
 });
 
-supabase.auth.onAuthStateChange(async (event) => {
-    if (event === 'SIGNED_OUT') {
-        const puzzleBody = await getPuzzleBody(supabase, puzzleId);
-        cells.value = puzzleBody.cells;
-        guesses.value = puzzleBody.guesses;
-    }
-});
-async function handleChampionChosen(champion: Champion, selectedCell: Cell): Promise<void> {
+async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;
     const { data: score } = await supabase.rpc('champion_chosen', {
-        x: selectedCell.x,
-        y: selectedCell.y,
+        x: selectedCell.value.x,
+        y: selectedCell.value.y,
         p_id: puzzleId,
         champion_name: champion.name,
         u_id: user.value?.id ?? null,
     });
     if (score > 0) {
-        cells.value[selectedCell.x - 1][selectedCell.y - 1] = champion.name;
-        cellsMetadata.value.championIds[selectedCell.x - 1][selectedCell.y - 1] = champion.id;
-        cellsMetadata.value.rarityScore[selectedCell.x - 1][selectedCell.y - 1] = score;
+        cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = champion.name;
+        cellsMetadata.value.championIds[selectedCell.value.x - 1][selectedCell.value.y - 1] =
+            champion.id;
+        cellsMetadata.value.rarityScore[selectedCell.value.x - 1][selectedCell.value.y - 1] = score;
     }
     guesses.value--;
 
@@ -57,8 +65,7 @@ async function handleChampionChosen(champion: Champion, selectedCell: Cell): Pro
             })
         );
     }
-
-    resetSelectedCell(selectedCell);
+    resetSelectedCell(selectedCell.value);
 }
 </script>
 
@@ -66,22 +73,10 @@ async function handleChampionChosen(champion: Champion, selectedCell: Cell): Pro
     <section class="game">
         <main>
             <section class="search-container">
-                <Search
-                    @champion-chosen="handleChampionChosen"
-                    v-if="showSearch"
-                    ref="searchBar"
-                    :selectedCell="selectedCell"
-                />
+                <Search @champion-chosen="handleChampionChosen" v-if="showSearch" ref="searchBar" />
             </section>
             <ClientOnly>
-                <Grid
-                    :name="game.name"
-                    :cells="cells"
-                    :restrictions="game.restrictions"
-                    :selectedCell="selectedCell"
-                    :cellMetadata="cellsMetadata"
-                    :guesses="guesses"
-                />
+                <Grid :name="game.name" :cells="cells" :restrictions="game.restrictions" />
             </ClientOnly>
         </main>
         <ClientOnly>

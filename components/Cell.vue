@@ -1,39 +1,47 @@
 <script setup lang="ts">
 import { getImageRadius, getNameRadius, getScoreRadius } from '~/utils/cells';
+import type { PuzzleMetadata } from '#imports';
+
 const props = defineProps<{
     x: number;
     y: number;
     champion?: string;
-    index?: number;
-    selected?: boolean;
-    championId: string | null;
-    rarityScore: number | null;
-    hovered: boolean;
 }>();
-const source = computed(() => {
-    if (props.championId) {
-        return `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${props.championId}_0.jpg`;
-    }
-    return '';
-});
+const cellsMetadata = inject<Ref<PuzzleMetadata>>('cellsMetadata');
+const status = inject<Ref<GameStatus>>('status');
+const selectedCell = inject<Ref<Cell>>('selectedCell');
+
+const championId = computed(() => cellsMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
+const rarityScore = computed(() => cellsMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
+const source = computed(() =>
+    championId.value
+        ? `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${championId.value}_0.jpg`
+        : ''
+);
+const isSelected = computed(
+    () =>
+        status?.value === 'in progress' &&
+        selectedCell?.value.x === props.x &&
+        selectedCell.value.y === props.y
+);
 </script>
 
 <template>
     <section
         :style="getCellRadius(props.x, props.y)"
         class="cell"
-        :class="{ selected, answered: !!champion, hovered }"
+        :class="{ selected: isSelected, answered: !!champion, hovered: status === 'in progress' }"
     >
-        <section v-if="props.championId" class="metadata">
+        <section v-if="championId" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
-                <p>{{ props.rarityScore }}%</p>
+                <p>{{ rarityScore?.toFixed(2) }}%</p>
             </section>
             <section class="name" :style="getNameRadius(props.x, props.y)">
                 <p>{{ props.champion }}</p>
             </section>
         </section>
         <NuxtImg
-            v-if="props.championId"
+            v-if="championId"
             :style="getImageRadius(props.x, props.y)"
             :src="source"
             object-fit="contain"

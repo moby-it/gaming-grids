@@ -7,12 +7,7 @@ export function resetSelectedCell(selectedCell: Cell) {
     selectedCell.x = -1;
     selectedCell.y = -1;
 }
-export function checkActive(
-    guesses: number,
-    selectedCell: Cell,
-    cell: { x: number; y: number }
-): boolean {
-    if (!guesses) return false;
+export function checkActive(selectedCell: Cell, cell: { x: number; y: number }): boolean {
     return selectedCell.x === cell.x && selectedCell.y === cell.y;
 }
 export function selectCell(

@@ -1,20 +1,19 @@
 <script setup lang="ts">
-const props = defineProps<{
-    selectedCell: Cell;
-}>();
+const selectedCell = inject<Ref<Cell>>('selectedCell');
+
 const model = defineModel<string>();
 const emits = defineEmits(['championChosen']);
 const handleChampionChosen = (playerName: string) => {
-    emits('championChosen', playerName, props.selectedCell);
+    emits('championChosen', playerName);
 };
 if (import.meta.client) {
     window.addEventListener('keyup', (e) => {
-        if (e.key === 'Escape') {
-            resetSelectedCell(props.selectedCell);
+        if (e.key === 'Escape' && selectedCell?.value) {
+            resetSelectedCell(selectedCell?.value);
         }
     });
 }
-const placeholder = `${props.selectedCell.possibleAnswers} possible answers!`;
+const placeholder = `${selectedCell?.value.possibleAnswers} possible answers!`;
 </script>
 
 <template>
