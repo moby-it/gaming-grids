@@ -153,11 +153,14 @@ function savePuzzleToLocalStorage({ cells, guesses }: PuzzleBody) {
         })
     );
 }
-export async function fetchPuzzleIdByDate(supabase: SupabaseClient, date?: string) {
+export async function fetchPuzzleIdByDate(
+    supabase: SupabaseClient,
+    date?: string
+): Promise<string | null> {
     if (!date) date = getCurrentDate();
     const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
-    if (error) throw new Error(error.message);
-    if (data.length !== 1) throw new Error('invalid pzzle length');
-    const { id } = data[0];
-    return id;
+    if (data && data.length === 1) return data[0].id as string;
+    if (error) console.error(error);
+    if (data && data.length > 1) console.error('more than one puzzles found');
+    return null;
 }

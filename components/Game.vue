@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { Champion, GameStatus, fetchPuzzleIdByDate } from '#imports';
+import type { Champion, GameStatus } from '#imports';
 import { SupabaseClient } from '@supabase/supabase-js';
 
+const props = defineProps<{ puzzleId: string }>();
+const puzzleId = props.puzzleId;
+
 const supabase: SupabaseClient = useSupabaseClient();
-const puzzleId = await fetchPuzzleIdByDate(supabase, '2024-06-22');
 const { user } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
 
