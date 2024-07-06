@@ -33,7 +33,7 @@ export const PuzzleInfo = v.pipe(
 );
 export type PuzzleInfo = v.InferOutput<typeof PuzzleInfo>;
 
-export const ActivePuzzle = v.object({
+export const UserPuzzle = v.object({
     id: v.string(),
     user_id: v.string(),
     puzzle_id: v.string(),
@@ -42,7 +42,7 @@ export const ActivePuzzle = v.object({
     score: v.nullable(v.number()),
 });
 
-export type UserPuzzle = v.InferOutput<typeof ActivePuzzle>;
+export type UserPuzzle = v.InferOutput<typeof UserPuzzle>;
 
 export async function getPuzzleInfo(
     supabase: SupabaseClient,
@@ -98,7 +98,7 @@ async function fetchUserPuzzle(
         const puzzle = await createUserPuzzle(supabase, puzzleId, userId);
         return puzzle;
     }
-    const { output: puzzle, success } = v.safeParse(ActivePuzzle, data[0]);
+    const { output: puzzle, success } = v.safeParse(UserPuzzle, data[0]);
     if (success) return puzzle;
     return null;
 }
@@ -113,13 +113,13 @@ async function createUserPuzzle(
         .insert({ user_id: userId, puzzle_id: puzzleId })
         .select();
     if (!error) {
-        const { output, success } = v.safeParse(ActivePuzzle, data[0]);
+        const { output, success } = v.safeParse(UserPuzzle, data[0]);
         if (success) return output;
     }
     return null;
 }
 
-export async function getCellsMetadata(
+export async function getpuzzleMetadata(
     supabase: SupabaseClient,
     cells: string[][],
     puzzleId: string

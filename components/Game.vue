@@ -2,23 +2,23 @@
 import type { Champion, GameStatus } from '#imports';
 import { SupabaseClient } from '@supabase/supabase-js';
 
+const supabase: SupabaseClient = useSupabaseClient();
 const props = defineProps<{ puzzleId: string }>();
 const puzzleId = props.puzzleId;
 
-const supabase: SupabaseClient = useSupabaseClient();
 const { user } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
 
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const guesses = ref(game.guesses);
 const cells = ref(game.cells);
-const cellsMetadata = ref(game.cellsMetadata);
+const puzzleMetadata = ref(game.puzzleMetadata);
 const searchBar = ref(null);
 
 const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 
 provide('status', status);
-provide('cellsMetadata', cellsMetadata);
+provide('puzzleMetadata', puzzleMetadata);
 provide('selectedCell', selectedCell);
 
 const showSearch = computed(
@@ -52,9 +52,10 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     });
     if (score > 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = champion.name;
-        cellsMetadata.value.championIds[selectedCell.value.x - 1][selectedCell.value.y - 1] =
+        puzzleMetadata.value.championIds[selectedCell.value.x - 1][selectedCell.value.y - 1] =
             champion.id;
-        cellsMetadata.value.rarityScore[selectedCell.value.x - 1][selectedCell.value.y - 1] = score;
+        puzzleMetadata.value.rarityScore[selectedCell.value.x - 1][selectedCell.value.y - 1] =
+            score;
     }
     guesses.value--;
 

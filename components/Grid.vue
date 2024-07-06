@@ -5,8 +5,7 @@ const props = defineProps<{
     cells: string[][];
     restrictions: { column: string[]; row: string[] };
 }>();
-
-const cellsMetadata = inject<Ref<PuzzleMetadata>>('cellsMetadata');
+const puzzleMetadata = inject<Ref<PuzzleMetadata>>('puzzleMetadata');
 const selectedCell = inject<Ref<Cell>>('selectedCell');
 
 function getChampion(x: number, y: number): string | undefined {
@@ -18,7 +17,7 @@ function onCellClick(x: number, y: number) {
     selectedCell.value = {
         x,
         y,
-        possibleAnswers: cellsMetadata?.value.possibleAnswers[x - 1][y - 1],
+        possibleAnswers: puzzleMetadata?.value.possibleAnswers[x - 1][y - 1],
     };
     setTimeout(() => {
         document.getElementById('search-player')?.focus();

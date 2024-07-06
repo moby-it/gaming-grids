@@ -7,12 +7,12 @@ const props = defineProps<{
     y: number;
     champion?: string;
 }>();
-const cellsMetadata = inject<Ref<PuzzleMetadata>>('cellsMetadata');
+const puzzleMetadata = inject<Ref<PuzzleMetadata>>('puzzleMetadata');
 const status = inject<Ref<GameStatus>>('status');
 const selectedCell = inject<Ref<Cell>>('selectedCell');
 
-const championId = computed(() => cellsMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
-const rarityScore = computed(() => cellsMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
+const championId = computed(() => puzzleMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
+const rarityScore = computed(() => puzzleMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
 const source = computed(() =>
     championId.value
         ? `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${championId.value}_0.jpg`

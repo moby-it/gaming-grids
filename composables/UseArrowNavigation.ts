@@ -38,7 +38,7 @@ export const useArrowNavigation = (
             timeout.value = setTimeout(async () => {
                 results.value = await searchChampionsByTerm(v);
                 focusedChoice.value = 0;
-            }, 0);
+            }, 500);
         }
     });
     return { results, focusedChoice, listItems };
