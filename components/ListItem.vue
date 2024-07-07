@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Champion } from '~/utils/fetchResults';
+import type { Champion } from '~/utils/champion';
 
 const props = defineProps<{
-    champion: Champion
+    champion: Champion;
 }>();
 const emits = defineEmits(['championChosen']);
 </script>

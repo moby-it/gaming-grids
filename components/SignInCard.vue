@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { signInWithGoogle } = useAuth();
-
 </script>
 <template>
     <Transition>
@@ -26,7 +25,6 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: start;
-
 }
 
 .sign-in {
@@ -40,7 +38,7 @@ header {
 
 h1 {
     border-bottom: 2px solid var(--accent-300);
-    margin-bottom: var(--gap-4)
+    margin-bottom: var(--gap-4);
 }
 
 Button {
@@ -52,6 +50,5 @@ Button {
 .card {
     padding: var(--gap-4) var(--gap-5);
     flex-direction: row;
-
 }
 </style>

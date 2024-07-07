@@ -3,31 +3,53 @@ import type { PuzzleMetadata } from '~/utils/puzzle';
 const props = defineProps<{
     name: string;
     cells: string[][];
-    selectedCell: Cell;
-    restrictions: { column: string[], row: string[] };
-    guesses: number;
-    cellMetadata: PuzzleMetadata;
+    restrictions: { column: string[]; row: string[] };
 }>();
+const puzzleMetadata = inject<Ref<PuzzleMetadata>>('puzzleMetadata');
+const selectedCell = inject<Ref<Cell>>('selectedCell');
+
+function getChampion(x: number, y: number): string | undefined {
+    return props.cells?.[x - 1]?.[y - 1];
+}
+
+function onCellClick(x: number, y: number) {
+    if (!selectedCell?.value) return;
+    selectedCell.value = {
+        x,
+        y,
+        possibleAnswers: puzzleMetadata?.value.possibleAnswers[x - 1][y - 1],
+    };
+    setTimeout(() => {
+        document.getElementById('search-player')?.focus();
+    }, 0);
+}
 </script>
 <template>
     <section class="grid-container">
         <section class="grid-head">
             <RestrictionCell :text="props.name" />
             <section class="column-restrictions">
-                <RestrictionCell v-for="       restriction in props.restrictions.column       " :text="restriction" />
+                <RestrictionCell
+                    v-for="restriction in props.restrictions.column"
+                    :text="restriction"
+                />
             </section>
         </section>
         <section class="grid-body">
             <section class="row-restrictions">
-                <RestrictionCell v-for="       restriction in props.restrictions.row     " :text="restriction" />
+                <RestrictionCell
+                    v-for="restriction in props.restrictions.row"
+                    :text="restriction"
+                />
             </section>
             <section class="rows" v-for="y in 3">
-                <Cell v-for="x in 3" :champion="props.cells[x - 1][y - 1]" :x="x" :y="y"
-                    :selected="checkActive(props.guesses, props.selectedCell, { x, y })" :hovered="props.guesses > 0"
-                    :championId="props.cellMetadata.championIds[x - 1][y - 1]"
-                    :rarityScore="props.cellMetadata.rarityScore[x - 1][y - 1]"
-                    :answered="props.cells[x - 1][y - 1] ? true : false"
-                    @click="selectCell(props.cells[x - 1][y - 1], props.selectedCell, { x, y }, props.cellMetadata.possibleAnswers[x - 1][y - 1])" />
+                <Cell
+                    v-for="x in 3"
+                    :champion="getChampion(x, y)"
+                    :x="x"
+                    :y="y"
+                    @click="onCellClick(x, y)"
+                />
             </section>
         </section>
     </section>

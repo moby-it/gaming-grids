@@ -1,89 +1,89 @@
 /* IBM Plex Serif - for headings */
 @font-face {
-  font-family: 'IBM Plex Serif';
-  src: url('/fonts/IBMPlexSerif-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'IBM Plex Serif';
+    src: url('/fonts/IBMPlexSerif-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'IBM Plex Serif bold';
-  src: url('/fonts/IBMPlexSerif-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+    font-family: 'IBM Plex Serif bold';
+    src: url('/fonts/IBMPlexSerif-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'IBM Plex Serif italic';
-  src: url('/fonts/IBMPlexSerif-Italic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: italic;
+    font-family: 'IBM Plex Serif italic';
+    src: url('/fonts/IBMPlexSerif-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
 }
 
 /* IBM Plex Sans - for body text */
 @font-face {
-  font-family: 'Beaufort';
-  src: url('/fonts/BeaufortforLOL-Regular.ttf') format('truetype');
+    font-family: 'Beaufort';
+    src: url('/fonts/BeaufortforLOL-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'Beaufort Bold';
-  src: url('/fonts/BeaufortforLOL-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
+    font-family: 'Beaufort Bold';
+    src: url('/fonts/BeaufortforLOL-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Beaufort Italic';
-  src: url('/fonts/BeaufortforLOL-Italic.ttf') format('truetype');
-  font-style: italic;
-  font-weight: normal;
+    font-family: 'Beaufort Italic';
+    src: url('/fonts/BeaufortforLOL-Italic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Beaufort Bold Italic';
-  src: url('/fonts/BeaufortforLOL-BoldItalic.ttf') format('truetype');
-  font-weight: bold;
-  font-style: italic;
+    font-family: 'Beaufort Bold Italic';
+    src: url('/fonts/BeaufortforLOL-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
 }
 
 @font-face {
-  font-family: 'Spiegel';
-  src: url('/fonts/Spiegel_TT_Regular.ttf');
+    font-family: 'Spiegel';
+    src: url('/fonts/Spiegel_TT_Regular.ttf');
 }
 
 @font-face {
-  font-family: 'Spiegel Bold';
-  src: url('/fonts/Spiegel_TT_Bold.ttf');
-  font-weight: bold
+    font-family: 'Spiegel Bold';
+    src: url('/fonts/Spiegel_TT_Bold.ttf');
+    font-weight: bold;
 }
 
 @font-face {
-  font-family: 'Spiegel Italic';
-  src: url('/fonts/Spiegel_TT_Regular_Italic.ttf');
-  font-style: italic;
+    font-family: 'Spiegel Italic';
+    src: url('/fonts/Spiegel_TT_Regular_Italic.ttf');
+    font-style: italic;
 }
 
 @font-face {
-  font-family: 'Spiegel Bold Italic';
-  src: url('/fonts/Spiegel_TT_Bold_Italic.ttf');
-  font-weight: bold;
-  font-style: italic;
+    font-family: 'Spiegel Bold Italic';
+    src: url('/fonts/Spiegel_TT_Bold_Italic.ttf');
+    font-weight: bold;
+    font-style: italic;
 }
 
 :root {
-  --font-size-xs: 12px;
-  --font-size-s: 14px;
-  --font-size-m: 16px;
-  --font-size-l: 20px;
-  --font-size-xl: 30px;
+    --font-size-xs: 12px;
+    --font-size-s: 14px;
+    --font-size-m: 16px;
+    --font-size-l: 20px;
+    --font-size-xl: 30px;
 }
 
 body {
-  font-family: 'Beaufort';
-  font-size: var(--font-size-l);
-  line-height: 1.5;
-  letter-spacing: 0.1rem;
+    font-family: 'Beaufort';
+    font-size: var(--font-size-l);
+    line-height: 1.5;
+    letter-spacing: 0.1rem;
 }
 
 h1,
@@ -92,69 +92,63 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Beaufort', sans-serif;
+    font-family: 'Beaufort', sans-serif;
 }
 
 h1 {
-  font-size: 2.5rem;
+    font-size: 2.5rem;
 }
 
 h2 {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 h3 {
-  font-size: 1.75rem;
+    font-size: 1.75rem;
 }
 
 h4 {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 h5 {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 }
 
 h6 {
-  font-size: 1rem;
+    font-size: 1rem;
 }
 
 strong,
 em {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .italic {
-  font-style: italic;
+    font-style: italic;
 }
 
-@media (max-width:992px) {
-  :root {
-    --font-size-l: 16px;
-    --font-size-s: 13px;
-  }
+@media (max-width: 992px) {
+    :root {
+        --font-size-l: 16px;
+        --font-size-s: 13px;
+    }
 }
 
-@media (max-width:768px) {
-
-  :root {
-
-    --font-size-s: 12px;
-
-  }
-
-
+@media (max-width: 768px) {
+    :root {
+        --font-size-s: 12px;
+    }
 }
 
-@media (max-width:576px) {
-
-  :root {
-    --font-size-s: 12px;
-  }
+@media (max-width: 576px) {
+    :root {
+        --font-size-s: 12px;
+    }
 }
 
-@media (max-width:425px) {
-  :root {
-    --font-size-xl: 20px;
-  }
+@media (max-width: 425px) {
+    :root {
+        --font-size-xl: 20px;
+    }
 }

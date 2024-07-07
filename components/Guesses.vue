@@ -1,14 +1,12 @@
 <script setup lang="ts">
 const props = defineProps<{
-    guesses: number
+    guesses: number;
 }>();
 </script>
 
 <template>
     <footer>
-        <p>
-            guesses left:
-        </p>
+        <p>guesses left:</p>
         <span> {{ props.guesses }} </span>
     </footer>
 </template>
@@ -20,7 +18,7 @@ footer {
     color: var(--accent-200);
 }
 
-@media (max-width:768px) {
+@media (max-width: 768px) {
     footer {
         font-size: var(--font-size-xl);
     }
