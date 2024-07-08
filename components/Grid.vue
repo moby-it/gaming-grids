@@ -4,8 +4,7 @@ const props = defineProps<{
     name: string;
     cells: string[][];
     restrictions: { column: string[]; row: string[] };
-    guesses:number;
-   
+    guesses: number;
 }>();
 const puzzleMetadata = inject<Ref<PuzzleMetadata>>('puzzleMetadata');
 const selectedCell = inject<Ref<Cell>>('selectedCell');
@@ -15,7 +14,7 @@ function getChampion(x: number, y: number): string | undefined {
 }
 
 function onCellClick(x: number, y: number) {
-    if (!selectedCell?.value||!props.guesses) return;
+    if (!selectedCell?.value || !props.guesses) return;
     selectedCell.value = {
         x,
         y,
@@ -47,7 +46,7 @@ function onCellClick(x: number, y: number) {
             <section class="rows" v-for="y in 3">
                 <Cell
                     v-for="x in 3"
-                    :champion="getChampion(x,y)"
+                    :champion="getChampion(x, y)"
                     :x="x"
                     :y="y"
                     @click="onCellClick(x, y)"

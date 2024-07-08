@@ -7,7 +7,8 @@
         "dev": "nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "postinstall": "nuxt prepare"
+        "postinstall": "nuxt prepare",
+        "format:all": "prettier --write ."
     },
     "dependencies": {
         "@nuxtjs/supabase": "^1.2.2",
