@@ -31,12 +31,10 @@ supabase.auth.onAuthStateChange(async (event) => {
     // see https://github.com/nuxt-modules/supabase/issues/273
     setTimeout(async () => {
         if (event === 'SIGNED_OUT') {
-            console.log('logged out');
             const puzzleBody = getPuzzleBodyFromLocalStorage();
-            console.log('puzzle body', puzzleBody);
+            puzzleMetadata.value = await getPuzzleMetadata(supabase, puzzleBody.cells, puzzleId);
             cells.value = puzzleBody.cells;
             guesses.value = puzzleBody.guesses;
-            puzzleMetadata.value = await getPuzzleMetadata(supabase, puzzleBody.cells, puzzleId);
         }
     }, 0);
 });
@@ -58,7 +56,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
         champion_name: champion.name,
         u_id: user.value?.id ?? null,
     });
-    if (score > 0) {
+    if (score >= 0) {
         cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = champion.name;
         puzzleMetadata.value.championIds[selectedCell.value.x - 1][selectedCell.value.y - 1] =
             champion.id;
@@ -87,7 +85,12 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
                 <Search @champion-chosen="handleChampionChosen" v-if="showSearch" ref="searchBar" />
             </section>
             <ClientOnly>
-                <Grid :name="game.name" :cells="cells" :restrictions="game.restrictions" />
+                <Grid
+                    :name="game.name"
+                    :cells="cells"
+                    :restrictions="game.restrictions"
+                    :guesses="guesses"
+                />
             </ClientOnly>
         </main>
         <ClientOnly>

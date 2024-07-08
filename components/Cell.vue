@@ -7,17 +7,22 @@ const props = defineProps<{
     y: number;
     champion?: string;
 }>();
+const { BUCKET_URL } = useRuntimeConfig().public;
 const puzzleMetadata = inject<Ref<PuzzleMetadata>>('puzzleMetadata');
 const status = inject<Ref<GameStatus>>('status');
 const selectedCell = inject<Ref<Cell>>('selectedCell');
-
 const championId = computed(() => puzzleMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
 const rarityScore = computed(() => puzzleMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
-const source = computed(() =>
-    championId.value
-        ? `https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions/${championId.value}_0.jpg`
-        : ''
-);
+const score = computed(() => {
+    if (
+        rarityScore.value === 0 ||
+        (rarityScore.value && rarityScore.value === +rarityScore.value?.toFixed(1)!)
+    ) {
+        return rarityScore.value?.toFixed(0);
+    }
+    return rarityScore.value?.toFixed(1);
+});
+const source = computed(() => (championId.value ? `${BUCKET_URL}${championId.value}_0.jpg` : ''));
 const isSelected = computed(
     () =>
         status?.value === 'in progress' &&
@@ -34,7 +39,7 @@ const isSelected = computed(
     >
         <section v-if="championId" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
-                <p>{{ rarityScore?.toFixed(2) }}%</p>
+                <p>{{ score }}%</p>
             </section>
             <section class="name" :style="getNameRadius(props.x, props.y)">
                 <p>{{ props.champion }}</p>
