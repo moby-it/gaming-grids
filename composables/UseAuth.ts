@@ -1,4 +1,4 @@
-import { User } from "#imports";
+import { User } from '#imports';
 import { safeParse } from 'valibot';
 
 export const useAuth = () => {
@@ -18,15 +18,17 @@ export const useAuth = () => {
     async function signInWithGoogle(): Promise<void> {
         loading.value = true;
         const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google'
+            provider: 'google',
         });
         if (error) console.log(error);
+        loading.value = false;
     }
 
     async function signOut() {
         loading.value = true;
         const { error } = await supabase.auth.signOut();
         if (error) console.log(error);
+        loading.value = false;
     }
     return {
         user,

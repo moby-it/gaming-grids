@@ -1,28 +1,28 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress
-  namespace: gaming-grids
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    acme.cert-manager.io/http01-edit-in-place: "true"
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    cert-manager.io/issuer: "letsencrypt-prod"
+    name: ingress
+    namespace: gaming-grids
+    annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+        acme.cert-manager.io/http01-edit-in-place: 'true'
+        # nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+        cert-manager.io/issuer: 'letsencrypt-prod'
 
 spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
-        - league.mobyplaygrounds.com
-      secretName: league-mobyplaygrounds-tls
-  rules:
-    - host: league.mobyplaygrounds.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: gaming-grids-client
-                port:
-                  number: 80
+    ingressClassName: nginx
+    tls:
+        - hosts:
+              - league.mobyplaygrounds.com
+          secretName: league-mobyplaygrounds-tls
+    rules:
+        - host: league.mobyplaygrounds.com
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: gaming-grids-client
+                            port:
+                                number: 80

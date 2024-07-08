@@ -1,30 +1,32 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "dependencies": {
-    "@nuxtjs/supabase": "^1.2.2",
-    "@vueuse/core": "^10.11.0",
-    "@vueuse/nuxt": "^10.11.0",
-    "pnpm": "^9.3.0",
-    "valibot": "^0.31.1",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.3"
-  },
-  "devDependencies": {
-    "@nuxt/image": "^1.7.0",
-    "nuxt": "^3.12.1"
-  },
-  "engines": {
-    "node": ">=20",
-    "pnpm": ">=9"
-  },
-  "packageManager": "pnpm@9.0.4"
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "format:all": "prettier --write ."
+    },
+    "dependencies": {
+        "@nuxtjs/supabase": "^1.2.2",
+        "@vueuse/core": "^10.11.0",
+        "@vueuse/nuxt": "^10.11.0",
+        "pnpm": "^9.3.0",
+        "valibot": "^0.31.1",
+        "vue": "^3.4.27",
+        "vue-router": "^4.3.3"
+    },
+    "devDependencies": {
+        "@nuxt/image": "^1.7.0",
+        "nuxt": "^3.12.1",
+        "prettier": "^3.3.2"
+    },
+    "engines": {
+        "node": ">=20",
+        "pnpm": ">=9"
+    },
+    "packageManager": "pnpm@9.0.4"
 }
