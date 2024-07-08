@@ -69,16 +69,7 @@ export async function getPuzzleBody(
         if (!userPuzzle) throw new Error('Something went wrong with fetching the puzzle');
         return { cells: userPuzzle.cells, guesses: userPuzzle.guesses };
     } else {
-        if (import.meta.client) {
-            const cachedGame = localStorage.getItem('localGame');
-            if (cachedGame) {
-                return JSON.parse(cachedGame);
-            } else {
-                const puzzle = createNewPuzzle();
-                savePuzzleToLocalStorage(puzzle);
-                return puzzle;
-            }
-        }
+        if (import.meta.client) return getPuzzleBodyFromLocalStorage();
         return { cells: [], guesses: 0 };
     }
 }
@@ -119,7 +110,7 @@ async function createUserPuzzle(
     return null;
 }
 
-export async function getpuzzleMetadata(
+export async function getPuzzleMetadata(
     supabase: SupabaseClient,
     cells: string[][],
     puzzleId: string
@@ -163,4 +154,15 @@ export async function fetchPuzzleIdByDate(
     if (error) console.error(error);
     if (data && data.length > 1) console.error('more than one puzzles found');
     return null;
+}
+
+export function getPuzzleBodyFromLocalStorage(): PuzzleBody {
+    const cachedGame = localStorage.getItem('localGame');
+    if (cachedGame) {
+        return JSON.parse(cachedGame);
+    } else {
+        const puzzle = createNewPuzzle();
+        savePuzzleToLocalStorage(puzzle);
+        return puzzle;
+    }
 }

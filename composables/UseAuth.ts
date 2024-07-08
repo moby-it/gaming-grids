@@ -21,6 +21,7 @@ export const useAuth = () => {
             provider: 'google',
         });
         if (error) console.log(error);
+        loading.value = false;
     }
 
     async function signOut() {

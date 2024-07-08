@@ -6,7 +6,7 @@ const supabase: SupabaseClient = useSupabaseClient();
 const props = defineProps<{ puzzleId: string }>();
 const puzzleId = props.puzzleId;
 
-const { user } = useAuth();
+const { user, loading } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
 
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
@@ -26,11 +26,19 @@ const showSearch = computed(
 );
 
 supabase.auth.onAuthStateChange(async (event) => {
-    if (event === 'SIGNED_OUT') {
-        const puzzleBody = await getPuzzleBody(supabase, puzzleId);
-        cells.value = puzzleBody.cells;
-        guesses.value = puzzleBody.guesses;
-    }
+    // onAuthStateChange cannot handle async requests
+    // see https://github.com/supabase/auth-js/issues/762
+    // see https://github.com/nuxt-modules/supabase/issues/273
+    setTimeout(async () => {
+        if (event === 'SIGNED_OUT') {
+            console.log('logged out');
+            const puzzleBody = getPuzzleBodyFromLocalStorage();
+            console.log('puzzle body', puzzleBody);
+            cells.value = puzzleBody.cells;
+            guesses.value = puzzleBody.guesses;
+            puzzleMetadata.value = await getPuzzleMetadata(supabase, puzzleBody.cells, puzzleId);
+        }
+    }, 0);
 });
 
 onClickOutside(searchBar, (e: Event) => {
