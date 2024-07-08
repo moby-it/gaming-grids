@@ -13,8 +13,8 @@ const status = inject<Ref<GameStatus>>('status');
 const selectedCell = inject<Ref<Cell>>('selectedCell');
 const championId = computed(() => puzzleMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
 const rarityScore = computed(() => puzzleMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
-const score = computed(() => rarityScore.value?.toFixed());
-const source = computed(() => (championId.value ? `${BUCKET_URL}${championId.value}_0.jpg` : ''));
+const score = computed(() => Number.isInteger(rarityScore.value) ? rarityScore.value : rarityScore.value?.toFixed(2));
+const imageSrc = computed(() => (championId.value ? `${BUCKET_URL}/${championId.value}_0.jpg` : ''));
 const isSelected = computed(
     () =>
         status?.value === 'in progress' &&
@@ -24,11 +24,8 @@ const isSelected = computed(
 </script>
 
 <template>
-    <section
-        :style="getCellRadius(props.x, props.y)"
-        class="cell"
-        :class="{ selected: isSelected, answered: !!champion, hovered: status === 'in progress' }"
-    >
+    <section :style="getCellRadius(props.x, props.y)" class="cell"
+        :class="{ selected: isSelected, answered: !!champion, hovered: status === 'in progress' }">
         <section v-if="championId" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
                 <p>{{ score }}%</p>
@@ -37,13 +34,8 @@ const isSelected = computed(
                 <p>{{ props.champion }}</p>
             </section>
         </section>
-        <NuxtImg
-            v-if="championId"
-            :style="getImageRadius(props.x, props.y)"
-            :src="source"
-            object-fit="contain"
-            layout="responsive"
-        />
+        <NuxtImg v-if="championId" :style="getImageRadius(props.x, props.y)" :src="imageSrc" object-fit="contain"
+            layout="responsive" />
     </section>
 </template>
 
