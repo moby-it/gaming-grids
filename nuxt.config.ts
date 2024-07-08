@@ -5,7 +5,7 @@ export default defineNuxtConfig({
             BUCKET_URL: process.env.BUCKET_URL,
         },
     },
-    modules: ['@vueuse/nuxt', '@nuxt/image', '@nuxtjs/supabase'],
+    modules: ['@vueuse/nuxt', '@nuxt/image', '@nuxtjs/supabase', '@nuxt/test-utils/module'],
     devtools: { enabled: true },
     supabase: {
         url: 'https://znvtpipzflqwytxrtatb.supabase.co',

@@ -13,15 +13,7 @@ const status = inject<Ref<GameStatus>>('status');
 const selectedCell = inject<Ref<Cell>>('selectedCell');
 const championId = computed(() => puzzleMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
 const rarityScore = computed(() => puzzleMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
-const score = computed(() => {
-    if (
-        rarityScore.value === 0 ||
-        (rarityScore.value && rarityScore.value === +rarityScore.value?.toFixed(1)!)
-    ) {
-        return rarityScore.value?.toFixed(0);
-    }
-    return rarityScore.value?.toFixed(1);
-});
+const score = computed(() => rarityScore.value?.toFixed());
 const source = computed(() => (championId.value ? `${BUCKET_URL}${championId.value}_0.jpg` : ''));
 const isSelected = computed(
     () =>
