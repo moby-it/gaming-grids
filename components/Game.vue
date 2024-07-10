@@ -14,6 +14,7 @@ const puzzleMetadata = ref(game.puzzleMetadata);
 const searchBar = ref(null);
 const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 const { showScoreModal, scoreModal, hideScoreModal } = useScoreModal();
+const score = computed<number>(() => +getScore(puzzleMetadata.value.rarityScore).toFixed(2));
 provide('status', status);
 provide('puzzleMetadata', puzzleMetadata);
 provide('selectedCell', selectedCell);
@@ -93,13 +94,18 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             <section class="options">
                 <ScoreModal
                     :name="game.name"
+                    :score="score"
                     :rarity-scores="puzzleMetadata.rarityScore"
                     :status="status"
                     :score-modal="scoreModal"
                     @show-modal="showScoreModal"
                     @hide-modal="hideScoreModal"
                 />
-                <Guesses class="guesses" :guesses="guesses" />
+                <section v-if="status === 'completed'">
+                    <p>Rarity score</p>
+                    <h1>{{ score }}</h1>
+                </section>
+                <Guesses v-if="status === 'in progress'" class="guesses" :guesses="guesses" />
             </section>
         </ClientOnly>
     </section>
@@ -119,6 +125,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: center;
 }
 
 main {

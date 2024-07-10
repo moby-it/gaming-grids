@@ -17,4 +17,14 @@ export const User = v.pipe(
     }))
 );
 
+export function getScore(rarityScores: (number | null)[][]): number {
+    let sum = 0;
+    for (const rows of rarityScores) {
+        for (const cell of rows) {
+            sum += cell || 100;
+        }
+    }
+    return sum;
+}
+
 export type User = v.InferOutput<typeof User>;

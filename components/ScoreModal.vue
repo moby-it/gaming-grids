@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
     rarityScores: (number | null)[][];
+    score: number;
     name: string;
     status: 'in progress' | 'completed';
     scoreModal: boolean;
@@ -10,15 +11,7 @@ const emits = defineEmits(['showModal', 'hideModal']);
 const getCellScore = (x: number, y: number) => {
     return props.rarityScores[x - 1][y - 1];
 };
-const getRarityScore = () => {
-    let sum = 0;
-    for (const rows of props.rarityScores) {
-        for (const cell of rows) {
-            sum += cell || 100;
-        }
-    }
-    return sum;
-};
+
 const modal = ref(null);
 const info = ref(null);
 const showInfo = ref(false);
@@ -28,10 +21,7 @@ onClickOutside(modal, (e: Event) => {
     e.stopPropagation();
 });
 onClickOutside(info, (e: Event) => {
-    if (showInfo.value) {
-        showInfo.value = false;
-        e.stopPropagation();
-    }
+    showInfo.value = false;
 });
 </script>
 
@@ -75,7 +65,7 @@ onClickOutside(info, (e: Event) => {
                                         :rarity-score="getCellScore(x, y)"
                                     />
                                 </section>
-                                <section class="info" v-if="showInfo">
+                                <section ref="info" class="info" v-if="showInfo">
                                     <p>
                                         Rarity score is calculated as the sum of the percentages for
                                         each correct cell, plus 100 for each empty cell. A lower
@@ -89,7 +79,6 @@ onClickOutside(info, (e: Event) => {
                             <h2>
                                 Rarity score
                                 <svg
-                                    ref="info"
                                     @click="() => (showInfo = true)"
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="1rem"
@@ -102,7 +91,7 @@ onClickOutside(info, (e: Event) => {
                                     />
                                 </svg>
                             </h2>
-                            <p>{{ getRarityScore().toFixed(2) }}</p>
+                            <p>{{ props.score }}</p>
                         </footer>
                     </section>
                 </section>
