@@ -106,7 +106,7 @@ svg {
     margin-top: var(--cell);
     border-radius: var(--radius);
     width: 600px;
-    background-color: hsla(225, 57%, 17%, 0.9);
+    background-color: hsla(225, 57%, 17%, 0.99);
     box-shadow: 3px 3px 10px var(--primary-600);
 
     p,

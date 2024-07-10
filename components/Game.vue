@@ -5,7 +5,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 const supabase: SupabaseClient = useSupabaseClient();
 const props = defineProps<{ puzzleId: string }>();
 const puzzleId = props.puzzleId;
-const { user, loading } = useAuth();
+const { user } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const guesses = ref(game.guesses);
