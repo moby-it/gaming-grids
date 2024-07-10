@@ -92,7 +92,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
         </main>
         <ClientOnly>
             <section class="options">
-                <ScoreModal
+                <Summary
                     :name="game.name"
                     :score="score"
                     :rarity-scores="puzzleMetadata.rarityScore"
@@ -112,26 +112,12 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 </template>
 
 <style scoped>
-.game {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .options {
-    margin-left: var(--gap-4);
-    margin-top: var(--cell);
-    min-height: var(--cell);
+    margin-top: var(--gap-4);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-align: center;
-}
-
-main {
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
 }
 
 .search-container {
@@ -140,15 +126,9 @@ main {
     margin-left: var(--cell);
 }
 
-@media (max-width: 768px) {
-    .game {
-        flex-direction: column;
-    }
-
+@media (width <= 768px) {
     .options {
-        margin-top: var(--gap-4);
         align-items: center;
-        margin-left: var(--cell);
     }
 }
 </style>

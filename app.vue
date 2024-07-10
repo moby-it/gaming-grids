@@ -10,8 +10,8 @@ useHead({
 </script>
 <template>
     <Header />
+    <section id="modal"></section>
     <main>
-        <section id="modal"></section>
         <NuxtPage />
     </main>
 </template>
