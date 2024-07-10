@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const emits = defineEmits(['closeModal']);
 const modal = ref(null);
-const { helpModal, showHelpModal, hideHelpModal } = useModal();
+const { helpModal, showHelpModal, hideHelpModal } = useHelpModal();
 onClickOutside(modal, (e: Event) => {
     hideHelpModal();
     e.stopPropagation();
@@ -42,25 +42,13 @@ onClickOutside(modal, (e: Event) => {
         ></path>
     </svg>
     <ClientOnly>
-        <Teleport to="#help-modal">
+        <Teleport to="#modal">
             <Transition>
                 <section class="modal-container" v-if="helpModal">
                     <section ref="modal" class="help-modal">
                         <header>
                             <h4>How to play LeagueGrid.</h4>
-                            <svg
-                                class="exit"
-                                @click="hideHelpModal"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1.5rem"
-                                height="1.5rem"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    fill="currentColor"
-                                    d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"
-                                />
-                            </svg>
+                            <Exit @click="hideHelpModal" />
                         </header>
                         <p>You have nine guesses to fill-put the grid.</p>
                         <p>
@@ -118,14 +106,14 @@ svg {
     margin-top: var(--cell);
     border-radius: var(--radius);
     width: 600px;
-    background-color: hsla(225, 57%, 17%, 0.9);
+    background-color: hsla(225, 57%, 17%, 0.99);
     box-shadow: 3px 3px 10px var(--primary-600);
 
     p,
     h4 {
         font-family: 'Spiegel';
-        color: var(--accent-300);
-        font-weight: 600;
+        color: var(--accent-200);
+        font-weight: 400;
         padding: var(--gap-4);
     }
 
@@ -135,17 +123,6 @@ svg {
 
     h4 {
         font-size: var(--font-size-l);
-    }
-}
-
-.exit {
-    cursor: pointer;
-    border-radius: 0 var(--radius) 0 0;
-    padding: var(--gap-4);
-    color: var(--accent-300);
-
-    &:hover {
-        background-color: var(--primary-600);
     }
 }
 
