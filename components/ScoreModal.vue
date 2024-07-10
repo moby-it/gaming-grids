@@ -48,11 +48,13 @@ onClickOutside(info, (e: Event) => {
             <Transition>
                 <section class="modal-container" v-if="scoreModal">
                     <section class="modal" ref="modal">
-                        <Exit class="exit" @click="emits('hideModal')" />
                         <header>
                             <section class="heading">
                                 <h1>Summary</h1>
                                 <h2>{{ props.name }}</h2>
+                            </section>
+                            <section>
+                                <Exit class="exit" @click="emits('hideModal')" />
                             </section>
                         </header>
                         <section class="grid-container">
@@ -64,14 +66,6 @@ onClickOutside(info, (e: Event) => {
                                         :y="y"
                                         :rarity-score="getCellScore(x, y)"
                                     />
-                                </section>
-                                <section ref="info" class="info" v-if="showInfo">
-                                    <p>
-                                        Rarity score is calculated as the sum of the percentages for
-                                        each correct cell, plus 100 for each empty cell. A lower
-                                        score means your answers are more rare. This score will
-                                        change throughout the day as more games are completed.
-                                    </p>
                                 </section>
                             </section>
                         </section>
@@ -91,8 +85,30 @@ onClickOutside(info, (e: Event) => {
                                     />
                                 </svg>
                             </h2>
-                            <p>{{ props.score }}</p>
+
+                            <h1>{{ props.score }}</h1>
                         </footer>
+                        <section ref="info" class="info" v-if="showInfo">
+                            <p>
+                                Rarity score is calculated as the sum of the percentages for each
+                                correct cell, plus 100 for each empty cell. A lower score means your
+                                answers are more rare. This score will change throughout the day as
+                                more games are completed.
+                            </p>
+                            <svg
+                                v-if="showInfo"
+                                class="bubble"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="0.7rem"
+                                height="0.7rem"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    fill="black"
+                                    d="M20.118 3H3.893A2.914 2.914 0 0 0 1.39 7.371L9.506 20.92a2.917 2.917 0 0 0 4.987.005l8.11-13.539A2.914 2.914 0 0 0 20.117 3z"
+                                />
+                            </svg>
+                        </section>
                     </section>
                 </section>
             </Transition>
@@ -104,6 +120,7 @@ onClickOutside(info, (e: Event) => {
 .score-modal {
     display: flex;
     justify-content: center;
+    text-align: center;
 }
 .modal-container {
     position: absolute;
@@ -128,75 +145,92 @@ onClickOutside(info, (e: Event) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     cursor: default;
     border-top: 1px solid var(--primary-600);
     border-left: 1px solid var(--primary-600);
     text-align: center;
     margin-top: var(--cell);
     border-radius: var(--radius);
-    width: 30rem;
+    width: 400px;
     background-color: hsla(225, 57%, 17%, 0.9);
     box-shadow: 3px 3px 10px var(--primary-600);
 
     h1 {
         font-family: 'Spiegel';
         color: var(--accent-300);
-        text-decoration: underline;
-        font-weight: 600;
+        /* text-decoration: underline; */
 
         font-size: var(--font-size-xl);
     }
 
     h2 {
-        font-size: var(--font-size-l);
+        font-size: var(--font-size-m);
     }
-}
-.exit {
-    align-self: flex-end;
-}
-
-.grid-container {
-    margin: var(--gap-2) 0;
 }
 
 .grid-body {
     display: flex;
+    margin: var(--gap-2) 0;
 }
-
 footer {
     margin: var(--gap-4) 0;
 }
 .info {
     position: absolute;
-    line-height: 1.5rem;
+    top: 26rem;
     padding: var(--gap-1) var(--gap-2);
     background-color: black;
-    margin-top: var(--cell);
     width: 14rem;
     & p {
         font-size: var(--font-size-xs);
     }
 }
-@media (max-width: 768px) {
-    .modal {
-        margin-left: 0;
+.exit {
+    align-self: flex-end;
+}
+.bubble {
+    margin-left: 3rem;
+    position: absolute;
+}
+.heading {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: var(--gap-5);
+    margin-bottom: var(--gap-4);
+}
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+@media (max-width: 992px) {
+    .info {
+        top: 25rem;
     }
-    .grid-container {
-        margin: var(--gap-1) 0;
+}
+@media (max-width: 768px) {
+    .info {
+        top: 24rem;
+    }
+    .modal {
+        margin-left: var(--cell);
     }
 }
 @media (max-width: 576px) {
     .modal {
-        width: 25rem;
-        height: 25rem;
+        margin-left: 0;
     }
+    .info {
+        top: 23rem;
+    }
+}
 
-    .heading {
-        margin-left: 8rem;
-    }
-    .exit {
-        margin-left: var(--cell);
+@media (max-width: 425px) {
+    .info {
+        top: 21rem;
     }
 }
 </style>

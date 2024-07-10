@@ -112,8 +112,8 @@ svg {
     p,
     h4 {
         font-family: 'Spiegel';
-        color: var(--accent-300);
-        font-weight: 600;
+        color: var(--accent-200);
+        font-weight: 400;
         padding: var(--gap-4);
     }
 
