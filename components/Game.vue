@@ -5,18 +5,15 @@ import { SupabaseClient } from '@supabase/supabase-js';
 const supabase: SupabaseClient = useSupabaseClient();
 const props = defineProps<{ puzzleId: string }>();
 const puzzleId = props.puzzleId;
-
 const { user, loading } = useAuth();
 const game = await useGame(puzzleId, user.value?.id);
-
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const guesses = ref(game.guesses);
 const cells = ref(game.cells);
 const puzzleMetadata = ref(game.puzzleMetadata);
 const searchBar = ref(null);
-
 const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
-
+const { showScoreModal, scoreModal, hideScoreModal } = useScoreModal();
 provide('status', status);
 provide('puzzleMetadata', puzzleMetadata);
 provide('selectedCell', selectedCell);
@@ -46,7 +43,6 @@ onClickOutside(searchBar, (e: Event) => {
         e.stopPropagation();
     }
 });
-
 async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;
     const { data: score } = await supabase.rpc('champion_chosen', {
@@ -63,8 +59,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
         puzzleMetadata.value.rarityScore[selectedCell.value.x - 1][selectedCell.value.y - 1] =
             score;
     }
-    guesses.value--;
-
+    --guesses.value;
     if (!user.value) {
         localStorage.setItem(
             'localGame',
@@ -75,6 +70,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
         );
     }
     resetSelectedCell(selectedCell.value);
+    if (status.value === 'completed') showScoreModal();
 }
 </script>
 
@@ -94,7 +90,17 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             </ClientOnly>
         </main>
         <ClientOnly>
-            <Guesses class="guesses" :guesses="guesses" />
+            <section class="options">
+                <ScoreModal
+                    :name="game.name"
+                    :rarity-scores="puzzleMetadata.rarityScore"
+                    :status="status"
+                    :score-modal="scoreModal"
+                    @show-modal="showScoreModal"
+                    @hide-modal="hideScoreModal"
+                />
+                <Guesses class="guesses" :guesses="guesses" />
+            </section>
         </ClientOnly>
     </section>
 </template>
@@ -106,9 +112,13 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     align-items: center;
 }
 
-.guesses {
-    margin-left: var(--gap-6);
+.options {
+    margin-left: var(--gap-4);
     margin-top: var(--cell);
+    min-height: var(--cell);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 main {
@@ -128,8 +138,9 @@ main {
         flex-direction: column;
     }
 
-    .guesses {
-        margin-top: var(--gap-5);
+    .options {
+        margin-top: var(--gap-4);
+        align-items: center;
         margin-left: var(--cell);
     }
 }

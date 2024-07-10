@@ -1,4 +1,4 @@
-export const useModal = () => {
+export const useHelpModal = () => {
     const helpModal: Ref<boolean> = ref(false);
     function showHelpModal() {
         helpModal.value = true;
