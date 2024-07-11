@@ -12,6 +12,8 @@ const selectedCell = inject<Ref<Cell>>('selectedCell');
 function getChampion(x: number, y: number): string | undefined {
     return props.cells?.[x - 1]?.[y - 1];
 }
+const getX = (n: number) => Math.ceil(n / 3);
+const getY = (n: number) => (n % 3 === 0 ? 3 : n % 3);
 
 function onCellClick(x: number, y: number) {
     if (!selectedCell?.value || !props.guesses) return;
@@ -27,67 +29,41 @@ function onCellClick(x: number, y: number) {
 </script>
 <template>
     <section class="grid-container">
-        <section class="grid-head">
-            <RestrictionCell :text="props.name" />
-            <section class="column-restrictions">
-                <RestrictionCell
-                    v-for="restriction in props.restrictions.column"
-                    :text="restriction"
-                />
-            </section>
-        </section>
-        <section class="grid-body">
-            <section class="row-restrictions">
-                <RestrictionCell
-                    v-for="restriction in props.restrictions.row"
-                    :text="restriction"
-                />
-            </section>
-            <section class="rows" v-for="y in 3">
-                <Cell
-                    v-for="x in 3"
-                    :champion="getChampion(x, y)"
-                    :x="x"
-                    :y="y"
-                    @click="onCellClick(x, y)"
-                />
-            </section>
-        </section>
+        <RestrictionCell style="grid-area: title; color: var(--accent-300)" :text="props.name" />
+        <RestrictionCell
+            :style="{ 'grid-area': 'col-restriction-' + (index + 1) }"
+            v-for="(restriction, index) in props.restrictions.column"
+            :text="restriction"
+        />
+        <RestrictionCell
+            :style="{ 'grid-area': 'row-restriction-' + (index + 1) }"
+            v-for="(restriction, index) in props.restrictions.row"
+            :text="restriction"
+        />
+        <Cell
+            v-for="n in 9"
+            :champion="getChampion(getX(n), getY(n))"
+            :x="getX(n)"
+            :y="getY(n)"
+            @click="onCellClick(getX(n), getY(n))"
+        />
     </section>
 </template>
 
-<style scoped>
+<style>
+main {
+    display: flex;
+    justify-content: center;
+}
 .grid-container {
-    display: flex;
-    flex-direction: column;
-    margin-left: 1px;
-}
-
-.grid-head {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.column-restrictions {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-.row-restrictions {
-    display: flex;
-    flex-direction: column;
-    align-content: space-around;
-}
-
-.rows {
-    flex-direction: column;
-}
-
-.grid-body {
-    display: flex;
+    max-width: fit-content;
+    padding: var(--gap-4);
+    gap: 0;
+    display: grid;
+    grid-template-areas:
+        'title col-restriction-1 col-restriction-2 col-restriction-3'
+        'row-restriction-1 champion-cell champion-cell champion-cell'
+        'row-restriction-2 champion-cell champion-cell champion-cell'
+        'row-restriction-3 champion-cell champion-cell champion-cell';
 }
 </style>

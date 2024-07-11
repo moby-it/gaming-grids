@@ -83,7 +83,6 @@ body {
     font-family: 'Beaufort';
     font-size: var(--font-size-l);
     line-height: 1.5;
-    letter-spacing: 0.1rem;
 }
 
 h1,
@@ -141,14 +140,16 @@ em {
     }
 }
 
-@media (max-width: 576px) {
+@media (width<=576px) {
     :root {
         --font-size-s: 12px;
     }
 }
 
-@media (max-width: 425px) {
+@media (width<=426px) {
     :root {
         --font-size-xl: 20px;
+        --font-size-s: 13px;
+        --font-size-xs: 10px;
     }
 }

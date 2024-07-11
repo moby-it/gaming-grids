@@ -26,7 +26,12 @@ onClickOutside(info, (e: Event) => {
 </script>
 
 <template>
-    <Button @click="emits('showModal')" v-if="status === 'completed'" button-class="primary">
+    <Button
+        style="align-self: center"
+        @click="emits('showModal')"
+        v-if="status === 'completed'"
+        button-class="primary"
+    >
         <section class="score-modal">
             <svg
                 style="margin-right: 10px"
@@ -40,7 +45,7 @@ onClickOutside(info, (e: Event) => {
                     d="M16 11V3H8v6H2v12h20V11zm-6-6h4v14h-4zm-6 6h4v8H4zm16 8h-4v-6h4z"
                 />
             </svg>
-            <p>Summary</p>
+            Summary
         </section>
     </Button>
     <Teleport to="#modal">
@@ -120,16 +125,7 @@ onClickOutside(info, (e: Event) => {
     justify-content: center;
     text-align: center;
 }
-.modal-container {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    z-index: 1;
-}
+
 .v-enter-active,
 .v-leave-active {
     transition: opacity 0.5s ease-in;
@@ -195,7 +191,8 @@ footer {
     align-self: flex-end;
 }
 .bubble {
-    margin-left: 3rem;
+    right: 7rem;
+    bottom: -8px;
     position: absolute;
 }
 .heading {

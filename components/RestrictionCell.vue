@@ -17,7 +17,6 @@ const props = defineProps<{
     font-family: 'Spiegel';
     font-weight: 600;
     display: flex;
-    justify-content: center;
     text-align: center;
     align-items: center;
     color: var(--accent-200);
@@ -27,7 +26,7 @@ const props = defineProps<{
     }
 }
 
-@media (max-width: 425px) {
+@media (width<= 426px) {
     .restriction {
         font-size: var(--font-size-s);
     }

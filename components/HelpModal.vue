@@ -74,17 +74,6 @@ onClickOutside(modal, (e: Event) => {
 </template>
 
 <style scoped>
-.modal-container {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: start;
-    z-index: 1;
-}
-
 .v-enter-active,
 .v-leave-active {
     transition: opacity 0.5s ease-in;

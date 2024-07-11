@@ -5,7 +5,7 @@ const { signOut, user } = useAuth();
 <template>
     <header>
         <h2 class="logo" @click="async () => navigateTo('/')">
-            <NuxtImg src="/LoL_Icon_Flat_GOLD.png" />eague Grid
+            <NuxtImg src="/LoL_Icon_Flat_GOLD.png" />eagueGrid
         </h2>
         <div>
             <svg
@@ -74,8 +74,8 @@ img {
 
 header {
     display: flex;
-    padding: var(--gap-2);
-    justify-content: space-evenly;
+    padding: var(--gap-3);
+    justify-content: space-between;
     color: var(--accent-300);
     border-bottom: 1px solid var(--accent-300);
 }
@@ -94,19 +94,14 @@ hgroup {
     cursor: pointer;
 }
 
-@media (max-width: 576px) {
-    img {
-        height: var(--gap-5);
-    }
-
+@media (width <= 576px) {
     h2 {
-        font-size: 1rem;
+        font-size: var(--font-size-xl);
     }
-
-    svg {
-        height: var(--gap-5);
+    img {
+        width: 2rem;
+        height: 2rem;
     }
-
     header div {
         gap: var(--gap-2);
     }
@@ -115,7 +110,6 @@ hgroup {
 @media (max-width: 425px) {
     header {
         display: flex;
-        padding: var(--gap-1);
         color: var(--accent-300);
         border-bottom: 1px solid var(--accent-300);
     }
