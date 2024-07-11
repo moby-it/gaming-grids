@@ -122,8 +122,6 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 
 .search-container {
     position: absolute;
-    margin-top: var(--margin-sm);
-    margin-left: var(--cell);
 }
 
 @media (width <= 768px) {

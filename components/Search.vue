@@ -34,7 +34,7 @@ const placeholder = `${selectedCell?.value.possibleAnswers} possible answers!`;
         background-color: var(--primary-600);
         padding-left: var(--gap-4);
         flex: 1;
-        border-radius: var(--radius) var(--radius) 0 0;
+        border-radius: var(--radius);
         color: var(--accent-300);
     }
 
