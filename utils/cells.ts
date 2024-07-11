@@ -3,9 +3,9 @@ export type Cell = {
     y: number;
     possibleAnswers?: number | null;
 };
-export function resetSelectedCell(selectedCell: Cell) {
-    selectedCell.x = -1;
-    selectedCell.y = -1;
+export function resetSelectedCell(selectedCell: Ref<Cell>) {
+    selectedCell.value.x = -1;
+    selectedCell.value.y = -1;
 }
 export function checkActive(selectedCell: Cell, cell: { x: number; y: number }): boolean {
     return selectedCell.x === cell.x && selectedCell.y === cell.y;

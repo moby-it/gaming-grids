@@ -9,7 +9,7 @@ const handleChampionChosen = (playerName: string) => {
 if (import.meta.client) {
     window.addEventListener('keyup', (e) => {
         if (e.key === 'Escape' && selectedCell?.value) {
-            resetSelectedCell(selectedCell?.value);
+            resetSelectedCell(selectedCell);
         }
     });
 }

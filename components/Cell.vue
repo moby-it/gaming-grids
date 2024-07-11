@@ -31,7 +31,7 @@ const isSelected = computed(
     <section
         :style="getCellRadius(props.x, props.y)"
         class="cell"
-        :class="{ selected: isSelected, answered: !!champion, hovered: status === 'in progress' }"
+        :class="{ selected: isSelected, answered: !!champion, hoverable: status === 'in progress' }"
     >
         <section v-if="championId" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
@@ -55,8 +55,8 @@ const isSelected = computed(
 .cell {
     display: flex;
     cursor: pointer;
-    background-color: var(--primary-900);
-    border: 2px solid var(--accent-300);
+    background-color: var(--primary-700);
+    border: 2px solid var(--accent-200);
     margin: -1px;
     width: var(--cell);
     height: var(--cell);
@@ -70,7 +70,7 @@ const isSelected = computed(
     }
 }
 
-.hovered {
+.hoverable {
     &:hover {
         background-color: var(--accent-200);
     }
@@ -82,7 +82,7 @@ img {
 }
 
 .name {
-    background-color: var(--accent-200);
+    background-color: var(--accent-100);
     color: var(--primary-700);
     font-size: var(--font-size-m);
     margin-top: var(--gap-6);
@@ -90,8 +90,8 @@ img {
 }
 
 .rarity-score {
-    background-color: var(--accent-200);
-    color: var(--primary-700);
+    background-color: var(--accent-900);
+    color: var(--primary-100);
     font-size: var(--font-size-m);
     border-radius: 0 0 0 var(--radius);
     align-self: flex-end;

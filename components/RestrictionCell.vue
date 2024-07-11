@@ -13,17 +13,14 @@ const props = defineProps<{
 <style scoped>
 .restriction {
     width: var(--cell);
-    height: var(--cell);
     font-family: 'Spiegel';
     font-weight: 600;
     display: flex;
     text-align: center;
     align-items: center;
     color: var(--accent-200);
-
-    &:hover {
-        color: var(--accent-600);
-    }
+    cursor: default;
+    justify-content: center;
 }
 
 @media (width<= 426px) {

@@ -61,16 +61,14 @@ onClickOutside(info, (e: Event) => {
                             <Exit class="exit" @click="emits('hideModal')" />
                         </section>
                     </header>
-                    <section class="grid-container">
-                        <section class="grid-body">
-                            <section class="rows" v-for="y in 3">
-                                <ModalCell
-                                    v-for="x in 3"
-                                    :x="x"
-                                    :y="y"
-                                    :rarity-score="getCellScore(x, y)"
-                                />
-                            </section>
+                    <section class="grid-body">
+                        <section class="rows" v-for="y in 3">
+                            <ModalCell
+                                v-for="x in 3"
+                                :x="x"
+                                :y="y"
+                                :rarity-score="getCellScore(x, y)"
+                            />
                         </section>
                     </section>
                     <footer>
@@ -140,20 +138,12 @@ onClickOutside(info, (e: Event) => {
     flex-direction: column;
     align-items: center;
     cursor: default;
-    border-top: 1px solid var(--primary-600);
-    border-left: 1px solid var(--primary-600);
     text-align: center;
-    margin-top: var(--cell);
-    border-radius: var(--radius);
-    width: 30rem;
-    background-color: hsla(225, 57%, 17%, 0.99);
     box-shadow: 3px 3px 10px var(--primary-600);
 
     h1 {
         font-family: 'Spiegel';
         color: var(--accent-300);
-        /* text-decoration: underline; */
-
         font-size: var(--font-size-xl);
     }
 
@@ -218,14 +208,8 @@ header {
     .info {
         top: 24rem;
     }
-    .modal {
-        margin-left: var(--cell);
-    }
 }
 @media (max-width: 576px) {
-    .modal {
-        margin-left: 0;
-    }
     .info {
         top: 23rem;
     }

@@ -38,7 +38,7 @@ supabase.auth.onAuthStateChange(async (event) => {
 });
 
 onClickOutside(searchBar, (e: Event) => {
-    resetSelectedCell(selectedCell.value);
+    resetSelectedCell(selectedCell);
     const target = e.target as HTMLTextAreaElement;
     if (target.classList[0] !== 'cell') {
         e.stopPropagation();
@@ -70,7 +70,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             })
         );
     }
-    resetSelectedCell(selectedCell.value);
+    resetSelectedCell(selectedCell);
     if (status.value === 'completed') showScoreModal();
 }
 </script>
@@ -79,7 +79,13 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     <section class="game">
         <main>
             <section class="search-container">
-                <Search @champion-chosen="handleChampionChosen" v-if="showSearch" ref="searchBar" />
+                <Transition>
+                    <Search
+                        @champion-chosen="handleChampionChosen"
+                        v-if="showSearch"
+                        ref="searchBar"
+                    />
+                </Transition>
             </section>
             <ClientOnly>
                 <Grid

@@ -45,7 +45,7 @@ onClickOutside(modal, (e: Event) => {
         <Teleport to="#modal">
             <Transition>
                 <section class="modal-container" v-if="helpModal">
-                    <section ref="modal" class="help-modal">
+                    <section ref="modal" class="modal">
                         <header>
                             <h4>How to play LeagueGrid.</h4>
                             <Exit @click="hideHelpModal" />
@@ -88,16 +88,7 @@ svg {
     cursor: pointer;
 }
 
-.help-modal {
-    cursor: default;
-    border-top: 1px solid var(--primary-600);
-    border-left: 1px solid var(--primary-600);
-    margin-top: var(--cell);
-    border-radius: var(--radius);
-    width: 600px;
-    background-color: hsla(225, 57%, 17%, 0.99);
-    box-shadow: 3px 3px 10px var(--primary-600);
-
+.modal {
     p,
     h4 {
         font-family: 'Spiegel';
@@ -122,9 +113,7 @@ header {
 }
 
 @media (max-width: 992px) {
-    .help-modal {
-        width: 550px;
-
+    .modal {
         p,
         h4 {
             padding: var(--gap-3) var(--gap-4);
@@ -133,19 +122,11 @@ header {
 }
 
 @media (max-width: 576px) {
-    .help-modal {
-        width: 450px;
-
+    .modal {
         p,
         h4 {
             padding: var(--gap-3) var(--gap-4);
         }
-    }
-}
-
-@media (max-width: 425px) {
-    .help-modal {
-        width: 350px;
     }
 }
 </style>
