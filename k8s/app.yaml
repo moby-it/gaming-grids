@@ -22,7 +22,8 @@ spec:
                 app.kubernetes.io/part-of: gaming-grids
         spec:
             containers:
-                - image: ghcr.io/moby-it/gaming-grids:stable
+                - image: ghcr.io/moby-it/gaming-grids:develop
+                  imagePullPolicy: Always
                   name: gaming-grids-app
                   livenessProbe:
                       httpGet:
@@ -40,7 +41,6 @@ spec:
                       limits:
                           memory: '256Mi'
                           cpu: '500m'
-                  imagePullPolicy: Always
             imagePullSecrets:
                 - name: regcred
 ---

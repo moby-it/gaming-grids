@@ -26,7 +26,7 @@ jobs:
                   push: true
                   build-args: |
                       GIT_SHA=${{ github.sha }}
-                  tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:stable , ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
+                  tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:develop , ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
     deploy:
         needs: [build]
         runs-on: ubuntu-22.04
@@ -48,6 +48,7 @@ jobs:
               with:
                   name: kubernetes
                   namespace: gaming-grids
+                  images: ghcr.io/moby-it/gaming-grids:${{ github.sha }}
                   action: deploy
                   manifests: |
                       k8s/app.yaml
