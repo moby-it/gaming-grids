@@ -78,15 +78,9 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 <template>
     <section class="game">
         <main>
-            <section class="search-container">
-                <Transition>
-                    <Search
-                        @champion-chosen="handleChampionChosen"
-                        v-if="showSearch"
-                        ref="searchBar"
-                    />
-                </Transition>
-            </section>
+            <Modal :show="showSearch">
+                <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
+            </Modal>
             <ClientOnly>
                 <Grid
                     :name="game.name"
@@ -124,10 +118,6 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     flex-direction: column;
     justify-content: space-between;
     text-align: center;
-}
-
-.search-container {
-    position: absolute;
 }
 
 @media (width <= 768px) {

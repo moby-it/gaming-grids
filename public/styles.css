@@ -2,9 +2,11 @@
 @import '/styles/typography.css';
 @import '/styles/spacing.css';
 @import '/styles/colors.css';
+@import '/styles/tooltip.css';
 
 body {
-    background: var(--neutral-900);
+    background: url(/summoners-rift.webp);
+    background-size: cover;
     color: var(--light);
     scrollbar-gutter: stable;
     height: 100vh;
@@ -46,7 +48,7 @@ textarea {
     justify-content: center;
     align-items: start;
     z-index: 1;
-    background-color: hsla(0, 0%, 0%, 0.8);
+    background-color: hsla(0, 0%, 0%, 0.65);
 }
 
 .modal {
@@ -59,11 +61,13 @@ textarea {
     background-color: hsla(225, 57%, 17%, 0.99);
     box-shadow: 3px 3px 10px var(--primary-600);
 }
+
 @media (max-width: 992px) {
     .modal {
         width: 550px;
     }
 }
+
 @media (max-width: 576px) {
     .modal {
         width: 450px;

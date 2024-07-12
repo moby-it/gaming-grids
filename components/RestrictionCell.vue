@@ -13,8 +13,10 @@ const props = defineProps<{
 <style scoped>
 .restriction {
     width: var(--cell);
+    min-height: 50px;
     font-family: 'Spiegel';
     font-weight: 600;
+    font-size: var(--font-size-m);
     display: flex;
     text-align: center;
     align-items: center;
