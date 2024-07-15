@@ -1,28 +1,40 @@
 <script setup lang="ts">
-import type ListItem from './ListItem.vue';
-const props = defineProps<{ input: string | undefined }>();
+import { getFocusedChoice } from '~/utils/navigateList';
 
-const input = toRef(props, 'input');
+const props = defineProps<{ listItems: string[] }>();
+const listItems = ref<HTMLElement[]>([]);
 
-const listItems = ref<InstanceType<typeof ListItem>[]>([]);
+const focusedChoice = ref<number>(-1);
 
 const emits = defineEmits(['championChosen']);
-const { results, focusedChoice } = useArrowNavigation(input, listItems, emits);
-const handleChampionChosen = (playerName: string) => {
-    emits('championChosen', playerName);
-};
+onMounted(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') return emits('championChosen', props.listItems[focusedChoice.value]);
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
+        const focusedListItem = listItems.value.find((li) =>
+            li.classList.contains('focused')
+        ) as HTMLLIElement;
+        focusedChoice.value = getFocusedChoice(e.key, props.listItems, focusedChoice.value);
+        focusListItem(focusedListItem, e.key);
+    };
+    window.addEventListener('keydown', handleKeydown);
+    return () => {
+        window.removeEventListener('keydown', handleKeydown);
+    };
+});
 </script>
 
 <template>
-    <ul class="results" v-if="results && results.length && input">
-        <ListItem
-            :champion="result"
+    <ul class="results" v-if="props.listItems.length">
+        <li
             ref="listItems"
-            @mousemove="focusedChoice = index"
+            @click="$emit('championChosen', result)"
             :class="{ focused: focusedChoice === index }"
-            v-for="(result, index) of results"
-            @champion-chosen="handleChampionChosen"
-        ></ListItem>
+            v-for="(result, index) of props.listItems"
+            @mousemove="focusedChoice = index"
+        >
+            <p>{{ result }}</p>
+        </li>
     </ul>
 </template>
 
@@ -33,39 +45,21 @@ const handleChampionChosen = (playerName: string) => {
     position: absolute;
     margin-top: var(--gap-6);
     cursor: pointer;
-    width: 27rem;
+    width: calc(var(--cell) * 3);
     max-height: 14rem;
     overflow-y: auto;
     border-radius: 0 0 var(--radius) var(--radius);
     background-color: var(--primary-600);
-    box-shadow: 2px 2px 5px var(--primary-700);
     z-index: 1;
 }
+li {
+    text-align: start;
+    color: var(--accent-300);
+    font-weight: bold;
+    padding: var(--gap-2);
 
-@media (max-width: 992px) {
-    .results {
-        width: 24rem;
-        max-height: 12rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .results {
-        margin-top: var(--gap-5);
-        width: 21rem;
-        max-height: 12rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .results {
-        width: 18rem;
-    }
-}
-
-@media (max-width: 425px) {
-    .results {
-        width: 15rem;
+    &.focused {
+        background-color: var(--primary-700);
     }
 }
 </style>

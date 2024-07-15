@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
     runtimeConfig: {
         public: {
-            BUCKET_URL: 'https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions',
+            BUCKET_URL:
+                'https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions',
         },
     },
     modules: ['@vueuse/nuxt', '@nuxt/image', '@nuxtjs/supabase', '@nuxt/test-utils/module'],

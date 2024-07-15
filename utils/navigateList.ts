@@ -1,40 +1,19 @@
-import type { Champion } from './champion';
-
-function focusList(focusedListItem: HTMLLIElement | null, event: string): void {
+export function focusListItem(focusedListItem: HTMLLIElement, event: string): void {
     if (event === 'ArrowUp') {
-        if (focusedListItem) {
-            focusedListItem?.previousElementSibling?.previousElementSibling?.previousElementSibling?.previousElementSibling?.scrollIntoView();
-        }
+        focusedListItem?.previousElementSibling?.previousElementSibling?.previousElementSibling?.previousElementSibling?.scrollIntoView();
     } else {
-        if (focusedListItem) {
-            focusedListItem?.previousElementSibling?.previousElementSibling?.previousElementSibling?.scrollIntoView();
-        }
+        focusedListItem?.previousElementSibling?.previousElementSibling?.previousElementSibling?.scrollIntoView();
     }
 }
-export function navigateList(
+export function getFocusedChoice(
     eventName: string,
-    results: globalThis.Ref<Champion[] | null>,
-    focusedChoice: globalThis.Ref<number | null>,
-    focusedListItem: HTMLLIElement | null,
-    emits: (event: 'championChosen', ...args: any[]) => void
-): void {
-    if (results.value?.length) {
-        if (focusedChoice.value === null) {
-            focusedChoice.value = 0;
-            return;
-        }
-        if (eventName === 'ArrowUp' && focusedChoice.value > 0) {
-            focusList(focusedListItem as HTMLLIElement, eventName);
-            --focusedChoice.value;
-            return;
-        }
-        if (eventName === 'ArrowDown' && focusedChoice.value < results.value.length - 1) {
-            focusList(focusedListItem as HTMLLIElement, eventName);
-            ++focusedChoice.value;
-            return;
-        }
-        if (eventName === 'Enter') {
-            emits('championChosen', results.value[focusedChoice.value]);
-        }
-    }
+    results: string[],
+    focusedChoice: number
+): number {
+    if (!results.length) return -1;
+    if (focusedChoice < 0) return 0;
+    if (focusedChoice === 0 && eventName === 'ArrowUp') return 0;
+    if (eventName === 'ArrowDown' && focusedChoice < results.length - 1) return ++focusedChoice;
+    if (focusedChoice > 0 && eventName === 'ArrowUp') return --focusedChoice;
+    return -1;
 }

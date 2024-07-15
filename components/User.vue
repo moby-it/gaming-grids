@@ -93,7 +93,7 @@ header {
     border: 1px solid var(--accent-300);
     border-radius: var(--radius);
     box-shadow: 3px 3px 8px var(--accent-900);
-
+    z-index: 10;
     & h5,
     h6 {
         padding: var(--gap-2) var(--gap-3);

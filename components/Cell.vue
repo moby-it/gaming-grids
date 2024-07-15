@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getImageRadius, getNameRadius, getScoreRadius } from '~/utils/cells';
 import type { PuzzleMetadata } from '#imports';
+import type { StyleValue } from 'vue';
 
 const props = defineProps<{
     x: number;
@@ -25,13 +26,23 @@ const isSelected = computed(
         selectedCell?.value.x === props.x &&
         selectedCell.value.y === props.y
 );
+const styles = computed(() => {
+    const s: StyleValue = {
+        borderRadius: getCellRadius(props.x, props.y),
+    };
+    if (imageSrc.value) {
+        s.backgroundImage = `url(${imageSrc.value})`;
+        s.backgroundSize = 'contain';
+    }
+    return s;
+});
 </script>
 
 <template>
     <section
-        :style="getCellRadius(props.x, props.y)"
+        :style="styles"
         class="cell"
-        :class="{ selected: isSelected, answered: !!champion, hovered: status === 'in progress' }"
+        :class="{ selected: isSelected, answered: !!champion, hoverable: status === 'in progress' }"
     >
         <section v-if="championId" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
@@ -41,13 +52,6 @@ const isSelected = computed(
                 <p>{{ props.champion }}</p>
             </section>
         </section>
-        <NuxtImg
-            v-if="championId"
-            :style="getImageRadius(props.x, props.y)"
-            :src="imageSrc"
-            object-fit="contain"
-            layout="responsive"
-        />
     </section>
 </template>
 
@@ -55,8 +59,8 @@ const isSelected = computed(
 .cell {
     display: flex;
     cursor: pointer;
-    background-color: var(--primary-900);
-    border: 2px solid var(--accent-300);
+    background-color: var(--primary-700);
+    border: 2px solid var(--accent-200);
     margin: -1px;
     width: var(--cell);
     height: var(--cell);
@@ -68,93 +72,36 @@ const isSelected = computed(
         color: var(--accent-300);
         cursor: default;
     }
-}
-
-.hovered {
-    &:hover {
-        background-color: var(--accent-200);
+    & .hoverable {
+        &:hover {
+            background-color: var(--accent-200);
+        }
     }
-}
-
-img {
-    width: var(--cell);
-    height: var(--cell);
 }
 
 .name {
-    background-color: var(--accent-200);
-    color: var(--primary-700);
-    font-size: var(--font-size-m);
-    margin-top: var(--gap-6);
     width: inherit;
+    background-color: var(--neutral-800);
+    color: var(--primary-100);
+    font-size: var(--font-size-s);
+    font-family: 'IBM Plex Serif';
 }
 
 .rarity-score {
-    background-color: var(--accent-200);
-    color: var(--primary-700);
+    background-color: var(--primary-900);
+    color: var(--neutral-100);
     font-size: var(--font-size-m);
     border-radius: 0 0 0 var(--radius);
     align-self: flex-end;
-    margin-bottom: var(--gap-6);
-    padding: 0 var(--gap-1);
+    padding: 0 var(--gap-2);
 }
 
 .metadata {
-    position: absolute;
     width: inherit;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
     text-align: center;
     height: inherit;
-}
-
-@media (max-width: 992px) {
-    .name {
-        font-size: var(--font-size-m);
-        margin-top: var(--gap-6);
-    }
-
-    .rarity-score {
-        margin-bottom: var(--gap-5);
-        padding: 0 var(--gap-1);
-        font-size: var(--font-size-m);
-    }
-}
-
-@media (max-width: 768px) {
-    .name {
-        font-size: var(--font-size-m);
-        margin-top: var(--gap-6);
-    }
-
-    .rarity-score {
-        margin-bottom: var(--gap-4);
-        padding: 0 var(--gap-1);
-        font-size: var(--font-size-m);
-    }
-}
-
-@media (max-width: 576px) {
-    .name {
-        font-size: var(--font-size-s);
-        margin-top: var(--gap-6);
-    }
-
-    .rarity-score {
-        margin-bottom: var(--gap-3);
-        padding: 0 var(--gap-1);
-        font-size: var(--font-size-s);
-    }
-}
-
-@media (max-width: 425px) {
-    .name {
-        margin-top: var(--gap-5);
-    }
-
-    .rarity-score {
-        padding: 0 var(--gap-1);
-    }
 }
 </style>

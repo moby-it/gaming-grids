@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import type { Champion } from '#imports';
+
 const selectedCell = inject<Ref<Cell>>('selectedCell');
 
 const model = defineModel<string>();
+const champions = ref<Champion[]>([]);
+const timeout = ref<ReturnType<typeof setTimeout> | null>(null);
+
 const emits = defineEmits(['championChosen']);
 const handleChampionChosen = (playerName: string) => {
     emits('championChosen', playerName);
@@ -9,24 +14,37 @@ const handleChampionChosen = (playerName: string) => {
 if (import.meta.client) {
     window.addEventListener('keyup', (e) => {
         if (e.key === 'Escape' && selectedCell?.value) {
-            resetSelectedCell(selectedCell?.value);
+            resetSelectedCell(selectedCell);
         }
     });
 }
 const placeholder = `${selectedCell?.value.possibleAnswers} possible answers!`;
+watchEffect(() => {
+    if (timeout.value) clearTimeout(timeout.value);
+    const v = model.value;
+    if (v) {
+        timeout.value = setTimeout(async () => {
+            champions.value = await searchChampionsByTerm(v);
+        }, 500);
+    }
+});
 </script>
 
 <template>
     <section class="search">
         <input autocomplete="off" id="search-player" v-model="model" :placeholder="placeholder" />
-        <SearchResults :input="model" @champion-chosen="handleChampionChosen" />
+        <SearchResults
+            :list-items="champions.map((c) => c.name)"
+            @champion-chosen="handleChampionChosen"
+        />
     </section>
 </template>
 
 <style scoped>
 .search {
+    margin-top: var(--gap-4);
     display: flex;
-    width: 27rem;
+    width: calc(var(--cell) * 3);
     height: var(--gap-6);
     flex-direction: column;
 
@@ -34,37 +52,12 @@ const placeholder = `${selectedCell?.value.possibleAnswers} possible answers!`;
         background-color: var(--primary-600);
         padding-left: var(--gap-4);
         flex: 1;
-        border-radius: var(--radius) var(--radius) 0 0;
+        border-radius: var(--radius);
         color: var(--accent-300);
     }
 
     & input:focus {
         outline: none;
-    }
-}
-
-@media (max-width: 992px) {
-    .search {
-        width: 24rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .search {
-        width: 21rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .search {
-        width: 18rem;
-    }
-}
-
-@media (max-width: 425px) {
-    .search {
-        height: var(--gap-5);
-        width: 15rem;
     }
 }
 </style>

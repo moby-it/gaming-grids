@@ -9,6 +9,7 @@
     --cell: 9rem;
 }
 
+
 @media (width <=992px) {
     :root {
         --cell: 8rem;

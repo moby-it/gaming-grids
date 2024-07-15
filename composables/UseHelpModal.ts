@@ -1,5 +1,5 @@
+const helpModal: Ref<boolean> = ref(false);
 export const useHelpModal = () => {
-    const helpModal: Ref<boolean> = ref(false);
     function showHelpModal() {
         helpModal.value = true;
     }

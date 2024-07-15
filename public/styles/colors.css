@@ -8,11 +8,11 @@
 
     --accent-100: hsl(40, 50%, 88%);
     --accent-200: hsl(40, 45%, 61%);
-    --accent-300: hsl(41, 56%, 51%);
-    --accent-600: hsl(38, 50%, 31%);
-    --accent-900: hsl(42, 56%, 18%);
+    --accent-300: hsl(40, 56%, 51%);
+    --accent-600: hsl(40, 50%, 31%);
+    --accent-900: hsl(40, 56%, 18%);
 
-    --neutral-100: hsl(48, 3%, 35%);
+    --neutral-100: hsl(45, 10%, 59%);
     --neutral-200: hsl(240, 4%, 25%);
     --neutral-600: hsl(210, 14%, 14%);
     --neutral-800: hsl(200, 20%, 15%);
@@ -20,4 +20,6 @@
 
     --dark: linear-gradient(#091428, #0a1428);
     --light: hsl(41, 51%, 88%);
+
+    --popper-theme-background-color: var(--neutral-900);
 }

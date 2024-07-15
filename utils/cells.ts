@@ -3,9 +3,9 @@ export type Cell = {
     y: number;
     possibleAnswers?: number | null;
 };
-export function resetSelectedCell(selectedCell: Cell) {
-    selectedCell.x = -1;
-    selectedCell.y = -1;
+export function resetSelectedCell(selectedCell: Ref<Cell>) {
+    selectedCell.value.x = -1;
+    selectedCell.value.y = -1;
 }
 export function checkActive(selectedCell: Cell, cell: { x: number; y: number }): boolean {
     return selectedCell.x === cell.x && selectedCell.y === cell.y;
@@ -28,19 +28,19 @@ export function selectCell(
 export function getCellRadius(x: number, y: number): string {
     let borderRadius = '';
     if (x === 1 && y === 1) {
-        borderRadius = 'border-radius: var(--radius) 0 0 0';
+        borderRadius = 'var(--radius) 0 0 0';
     }
 
     if (x === 1 && y === 3) {
-        borderRadius = 'border-radius: 0  var(--radius) 0 0';
+        borderRadius = '0  var(--radius) 0 0';
     }
 
     if (x === 3 && y === 1) {
-        borderRadius = 'border-radius: 0 0 0  var(--radius)';
+        borderRadius = '0 0 0  var(--radius)';
     }
 
     if (x === 3 && y === 3) {
-        borderRadius = 'border-radius: 0 0  var(--radius) 0';
+        borderRadius = '0 0  var(--radius) 0';
     }
     return borderRadius;
 }

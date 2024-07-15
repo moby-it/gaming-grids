@@ -1,8 +1,6 @@
 <script setup lang="ts">
-type buttonClass = 'sign-in' | 'primary' | 'accent';
-const props = defineProps<{
-    buttonClass: buttonClass;
-}>();
+type ButtonClass = 'primary' | 'accent' | 'neutral';
+const props = withDefaults(defineProps<{ buttonClass: ButtonClass }>(), { buttonClass: 'neutral' });
 </script>
 
 <template>
@@ -28,18 +26,18 @@ button {
     }
 }
 
+button.neutral {
+    color: var(--primary-100);
+    background: linear-gradient(0.25turn, var(--neutral-200), var(--neutral-200));
+}
+
 button.primary {
+    background: linear-gradient(0.25turn, var(--primary-300), var(--primary-600));
+}
+button.accent {
+    color: var(--primary-100);
     background: linear-gradient(0.25turn, var(--accent-300), var(--accent-600));
 }
-
-button.sign-in {
-    background: var(--accent-300);
-    flex-direction: row;
-    width: 14rem;
-    display: flex;
-    justify-content: space-evenly;
-}
-
 button:disabled {
     cursor: default;
 }
