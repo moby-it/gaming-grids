@@ -34,8 +34,9 @@ watchEffect(() => {
     <section class="search">
         <input autocomplete="off" id="search-player" v-model="model" :placeholder="placeholder" />
         <SearchResults
-            :list-items="champions.map((c) => c.name)"
+            :list-items="champions"
             @champion-chosen="handleChampionChosen"
+            v-if="model"
         />
     </section>
 </template>

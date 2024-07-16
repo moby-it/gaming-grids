@@ -7,7 +7,7 @@ export function focusListItem(focusedListItem: HTMLLIElement, event: string): vo
 }
 export function getFocusedChoice(
     eventName: string,
-    results: string[],
+    results: { name: string; id: string }[],
     focusedChoice: number
 ): number {
     if (!results.length) return -1;
@@ -15,5 +15,5 @@ export function getFocusedChoice(
     if (focusedChoice === 0 && eventName === 'ArrowUp') return 0;
     if (eventName === 'ArrowDown' && focusedChoice < results.length - 1) return ++focusedChoice;
     if (focusedChoice > 0 && eventName === 'ArrowUp') return --focusedChoice;
-    return -1;
+    return focusedChoice;
 }

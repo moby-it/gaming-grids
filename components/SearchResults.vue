@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { getFocusedChoice } from '~/utils/navigateList';
 
-const props = defineProps<{ listItems: string[] }>();
+const props = defineProps<{ listItems: { name: string; id: string }[] }>();
 const listItems = ref<HTMLElement[]>([]);
 
-const focusedChoice = ref<number>(-1);
+const focusedChoice = ref<number>(0);
 
 const emits = defineEmits(['championChosen']);
 onMounted(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') return emits('championChosen', props.listItems[focusedChoice.value]);
+        if (e.key === 'Enter' && focusedChoice.value >= 0)
+            return emits('championChosen', props.listItems[focusedChoice.value]);
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
         const focusedListItem = listItems.value.find((li) =>
             li.classList.contains('focused')
@@ -33,7 +34,7 @@ onMounted(() => {
             v-for="(result, index) of props.listItems"
             @mousemove="focusedChoice = index"
         >
-            <p>{{ result }}</p>
+            <p>{{ result.name }}</p>
         </li>
     </ul>
 </template>

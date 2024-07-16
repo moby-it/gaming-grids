@@ -16,7 +16,7 @@ const getX = (n: number) => Math.ceil(n / 3);
 const getY = (n: number) => (n % 3 === 0 ? 3 : n % 3);
 
 function onCellClick(x: number, y: number) {
-    if (!selectedCell?.value || !props.guesses) return;
+    if (!selectedCell?.value || !props.guesses || getChampion(x, y)) return;
     selectedCell.value = {
         x,
         y,
