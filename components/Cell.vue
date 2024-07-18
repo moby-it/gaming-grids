@@ -72,7 +72,7 @@ const styles = computed(() => {
         color: var(--accent-300);
         cursor: default;
     }
-    & .hoverable {
+    &.hoverable {
         &:hover {
             background-color: var(--accent-200);
         }
