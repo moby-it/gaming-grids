@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import type { Champion } from '#imports';
 import { getFocusedChoice } from '~/utils/navigateList';
 
-const props = defineProps<{ listItems: { name: string; id: string }[] }>();
+const props = defineProps<{ listItems: string[] }>();
 const listItems = ref<HTMLElement[]>([]);
 
 const focusedChoice = ref<number>(0);
 
-const emits = defineEmits(['championChosen']);
+const emits = defineEmits<{
+    championChosen: [value: string];
+}>();
 onMounted(() => {
     const handleKeydown = (e: KeyboardEvent) => {
         if (e.key === 'Enter' && focusedChoice.value >= 0)
@@ -15,7 +18,7 @@ onMounted(() => {
         const focusedListItem = listItems.value.find((li) =>
             li.classList.contains('focused')
         ) as HTMLLIElement;
-        focusedChoice.value = getFocusedChoice(e.key, props.listItems, focusedChoice.value);
+        focusedChoice.value = getFocusedChoice(e.key, props.listItems.length, focusedChoice.value);
         focusListItem(focusedListItem, e.key);
     };
     window.addEventListener('keydown', handleKeydown);
@@ -34,7 +37,7 @@ onMounted(() => {
             v-for="(result, index) of props.listItems"
             @mousemove="focusedChoice = index"
         >
-            <p>{{ result.name }}</p>
+            <p>{{ result }}</p>
         </li>
     </ul>
 </template>

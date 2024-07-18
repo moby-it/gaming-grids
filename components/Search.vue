@@ -7,9 +7,12 @@ const model = defineModel<string>();
 const champions = ref<Champion[]>([]);
 const timeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
-const emits = defineEmits(['championChosen']);
-const handleChampionChosen = (playerName: string) => {
-    emits('championChosen', playerName);
+const emits = defineEmits<{
+    championChosen: [value: Champion];
+}>();
+const handleChampionChosen = (championName: string) => {
+    const champion = champions.value.find((c) => c.name === championName);
+    if (champion) emits('championChosen', champion);
 };
 if (import.meta.client) {
     window.addEventListener('keyup', (e) => {
@@ -34,7 +37,7 @@ watchEffect(() => {
     <section class="search">
         <input autocomplete="off" id="search-player" v-model="model" :placeholder="placeholder" />
         <SearchResults
-            :list-items="champions"
+            :list-items="champions.map((c) => c.name)"
             @champion-chosen="handleChampionChosen"
             v-if="model"
         />
