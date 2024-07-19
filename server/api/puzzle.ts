@@ -26,12 +26,11 @@ export default defineEventHandler(async (event) => {
     const puzzleId = getQuery(event).puzzleId as string;
     if (!puzzleId) throw new Error('Puzzle Id not found!');
     const userId = event.context.userId;
-    const puzzleInfo: PuzzleInfo = await getPuzzleInfo(supabase, puzzleId); // puzzleId has ! to indicate not null, might have to change it later.
+    const puzzleInfo: PuzzleInfo = await getPuzzleInfo(supabase, puzzleId);
     if (userId) {
-        const puzzleBody = await getPuzzleBody(supabase, puzzleId, userId); // puzzleId has ! to indicate not null, might have to change it later.
-        guesses = puzzleBody.guesses;
+        const puzzleBody = await getPuzzleBody(supabase, puzzleId, userId);
         cells = puzzleBody.cells;
-        puzzleMetadata = await getPuzzleMetadata(supabase, cells, puzzleId); // puzzleId has ! to indicate not null, might have to change it later.
+        puzzleMetadata = await getPuzzleMetadata(supabase, cells, puzzleId);
     }
     name = puzzleInfo.name;
     restrictions = puzzleInfo.restrictions;

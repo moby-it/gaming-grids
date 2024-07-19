@@ -1,16 +1,26 @@
 <script setup lang="ts">
 import type { Champion, GameStatus } from '#imports';
 import { SupabaseClient } from '@supabase/supabase-js';
-
-const supabase: SupabaseClient = useSupabaseClient();
 const props = defineProps<{ puzzleId: string }>();
-const puzzleId = props.puzzleId;
 const { user } = useAuth();
-const game = await useGame(puzzleId, user.value?.id);
+const puzzleId = props.puzzleId;
+const puzzleStore = usePuzzleStore();
+await puzzleStore.loadPuzzle(puzzleId);
+const { name, restrictions, cells, guesses, puzzleMetadata } = storeToRefs(puzzleStore);
+const supabase: SupabaseClient = useSupabaseClient();
+onMounted(async () => {
+    if (!user.value) {
+        const puzzleBody = getPuzzleBodyFromLocalStorage();
+        cells.value = puzzleBody.cells;
+        guesses.value = puzzleBody.guesses;
+        const { metadata } = await $fetch(`/api/metadata/`, {
+            method: 'POST',
+            body: JSON.stringify({ cells: cells.value, puzzleId: puzzleId }),
+        });
+        puzzleMetadata.value = metadata;
+    }
+});
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
-const guesses = ref(game.guesses);
-const cells = ref(game.cells);
-const puzzleMetadata = ref(game.puzzleMetadata);
 const searchBar = ref(null);
 const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 const { showScoreModal, scoreModal, hideScoreModal } = useScoreModal();
@@ -77,23 +87,19 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 
 <template>
     <section class="game">
+        <NavBar :puzzleId="puzzleId" />
         <main>
             <Modal :show="showSearch">
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
             </Modal>
             <ClientOnly>
-                <Grid
-                    :name="game.name"
-                    :cells="cells"
-                    :restrictions="game.restrictions"
-                    :guesses="guesses"
-                />
+                <Grid :name="name" :cells="cells" :restrictions="restrictions" :guesses="guesses" />
             </ClientOnly>
         </main>
         <ClientOnly>
             <section class="options">
                 <Summary
-                    :name="game.name"
+                    :name="name"
                     :score="score"
                     :rarity-scores="puzzleMetadata.rarityScore"
                     :status="status"
@@ -119,7 +125,11 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     justify-content: space-between;
     text-align: center;
 }
-
+.game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 @media (width <= 768px) {
     .options {
         align-items: center;
