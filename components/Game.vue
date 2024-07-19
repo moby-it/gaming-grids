@@ -6,15 +6,17 @@ const { user } = useAuth();
 const puzzleId = props.puzzleId;
 const puzzleStore = usePuzzleStore();
 await puzzleStore.loadPuzzle(puzzleId);
-const { name, restrictions, cells, guesses, puzzleMetadata } = storeToRefs(puzzleStore);
+const { name, restrictions, cells, guesses, puzzleMetadata, loading } = storeToRefs(puzzleStore);
 const supabase: SupabaseClient = useSupabaseClient();
 onMounted(async () => {
     if (!user.value) {
+        loading.value = true;
         const puzzle = await getLocalPuzzle(puzzleId);
         puzzleStore.$patch(() => {
             cells.value = puzzle.cells;
             guesses.value = puzzle.guesses;
             puzzleMetadata.value = puzzle.metadata;
+            loading.value = false;
         });
     }
 });
@@ -36,11 +38,13 @@ supabase.auth.onAuthStateChange(async (event) => {
     // see https://github.com/nuxt-modules/supabase/issues/273
     setTimeout(async () => {
         if (event === 'SIGNED_OUT') {
+            loading.value = true;
             const puzzle = await getLocalPuzzle(puzzleId);
             puzzleStore.$patch(() => {
                 cells.value = puzzle.cells;
                 guesses.value = puzzle.guesses;
                 puzzleMetadata.value = puzzle.metadata;
+                loading.value = false;
             });
         }
     }, 0);
@@ -53,6 +57,26 @@ onClickOutside(searchBar, (e: Event) => {
         e.stopPropagation();
     }
 });
+async function giveUp() {
+    guesses.value = 0;
+    showScoreModal();
+    if (user.value) {
+        await $fetch(`/api/giveUp/`, {
+            method: 'POST',
+            body: JSON.stringify({
+                puzzleId: puzzleId,
+            }),
+        });
+    } else {
+        localStorage.setItem(
+            'localGame',
+            JSON.stringify({
+                cells: cells.value,
+                guesses: guesses.value,
+            })
+        );
+    }
+}
 async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;
     const { score } = await $fetch(`/api/submitChampion/`, {
@@ -92,7 +116,10 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 </script>
 
 <template>
-    <section class="game">
+    <section class="loading" v-if="loading">
+        <h1>Loading...</h1>
+    </section>
+    <section v-else class="game">
         <NavBar :puzzleId="puzzleId" />
         <main>
             <Modal :show="showSearch">
@@ -117,6 +144,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
                     <p>Rarity score</p>
                     <h1>{{ score }}</h1>
                 </section>
+                <GiveUp v-if="status === 'in progress'" @give-up="giveUp" />
                 <Guesses v-if="status === 'in progress'" class="guesses" :guesses="guesses" />
             </section>
         </ClientOnly>
@@ -135,6 +163,13 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+main {
+    flex-direction: column;
+    align-items: center;
+}
+.loading {
+    margin-top: var(--cell);
 }
 @media (width <= 768px) {
     .options {

@@ -182,7 +182,7 @@ export async function getLocalPuzzle(
     const { cells, guesses } = puzzleBody;
     return { cells, guesses, metadata };
 }
-export async function getScore(
+export async function getAnswerScore(
     supabase: SupabaseClient,
     puzzleId: string,
     x: number,
@@ -198,4 +198,16 @@ export async function getScore(
         u_id: userId ?? null,
     });
     return data;
+}
+export async function giveUp(
+    supabase: SupabaseClient,
+    puzzleId: string,
+    userId: string
+): Promise<void> {
+    const { data, error } = await supabase
+        .from('user_puzzle')
+        .update({ guesses: 0 })
+        .eq('user_id', userId)
+        .eq('puzzle_id', puzzleId);
+    if (error) console.error('There was an error trying to give up!', error);
 }

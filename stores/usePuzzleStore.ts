@@ -1,6 +1,7 @@
 import type { PuzzleMetadata } from '#imports';
 import { defineStore } from 'pinia';
 export const usePuzzleStore = defineStore('puzzle', () => {
+    const loading = ref<boolean>(true);
     const guesses = ref<number>(0);
     const cells = ref<string[][]>([
         ['', '', ''],
@@ -17,14 +18,17 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     const headers = useRequestHeaders(['cookie']);
 
     async function loadPuzzle(puzzleId: string) {
+        loading.value = true;
         const data = await $fetch(`/api/puzzle/?puzzleId=${puzzleId}`, { headers });
         name.value = data.name;
         restrictions.value = data.restrictions;
         guesses.value = data.guesses;
         cells.value = data.cells;
         puzzleMetadata.value = data.puzzleMetadata;
+        loading.value = false;
     }
     return {
+        loading,
         name,
         cells,
         restrictions,
