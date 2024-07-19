@@ -24,6 +24,7 @@ export const useMostPopularStore = defineStore('most-popular', () => {
     async function loadMostPopular(puzzleId: string) {
         loading.value = true;
         const data = await $fetch(`/api/most-popular/?puzzleId=${puzzleId}`, { headers });
+        if (!data) throw new Error('Wrong method was used for most-popular endpoint');
         cells.value = data.mostPopularChampions;
         championIds.value = data.championIds;
         rarityScore.value = data.rarityScore;

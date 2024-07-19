@@ -209,5 +209,6 @@ export async function giveUp(
         .update({ guesses: 0 })
         .eq('user_id', userId)
         .eq('puzzle_id', puzzleId);
-    if (error) console.error('There was an error trying to give up!', error);
+    if (error) throw new Error(error.message);
+    return;
 }
