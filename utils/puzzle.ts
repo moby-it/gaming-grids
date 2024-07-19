@@ -156,7 +156,7 @@ export async function fetchPuzzleIdByDate(
     return null;
 }
 
-export function getPuzzleBodyFromLocalStorage(): PuzzleBody {
+function getPuzzleBodyFromLocalStorage(): PuzzleBody {
     const cachedGame = localStorage.getItem('localGame');
     if (cachedGame) {
         return JSON.parse(cachedGame);
@@ -165,4 +165,37 @@ export function getPuzzleBodyFromLocalStorage(): PuzzleBody {
         savePuzzleToLocalStorage(puzzle);
         return puzzle;
     }
+}
+async function getLocalMetadata(cells: string[][], puzzleId: string): Promise<PuzzleMetadata> {
+    const { metadata } = await $fetch(`/api/metadata/`, {
+        method: 'POST',
+        body: JSON.stringify({ cells: cells, puzzleId: puzzleId }),
+    });
+    return metadata;
+}
+
+export async function getLocalPuzzle(
+    puzzleId: string
+): Promise<{ cells: string[][]; guesses: number; metadata: PuzzleMetadata }> {
+    const puzzleBody = getPuzzleBodyFromLocalStorage();
+    const metadata = await getLocalMetadata(puzzleBody.cells, puzzleId);
+    const { cells, guesses } = puzzleBody;
+    return { cells, guesses, metadata };
+}
+export async function getScore(
+    supabase: SupabaseClient,
+    puzzleId: string,
+    x: number,
+    y: number,
+    champion: string,
+    userId?: string
+): Promise<number> {
+    const { data } = await supabase.rpc('champion_chosen', {
+        x: x,
+        y: y,
+        p_id: puzzleId,
+        champion_name: champion,
+        u_id: userId ?? null,
+    });
+    return data;
 }

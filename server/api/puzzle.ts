@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
     if (userId) {
         const puzzleBody = await getPuzzleBody(supabase, puzzleId, userId);
         cells = puzzleBody.cells;
+        guesses = puzzleBody.guesses;
         puzzleMetadata = await getPuzzleMetadata(supabase, cells, puzzleId);
     }
     name = puzzleInfo.name;
