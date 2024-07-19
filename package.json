@@ -13,8 +13,11 @@
     },
     "dependencies": {
         "@nuxtjs/supabase": "^1.2.2",
+        "@pinia/nuxt": "^0.5.1",
         "@vueuse/core": "^10.11.0",
         "@vueuse/nuxt": "^10.11.0",
+        "jsonwebtoken": "^9.0.2",
+        "pinia": "^2.1.7",
         "pnpm": "^9.3.0",
         "valibot": "^0.31.1",
         "vue": "^3.4.27"

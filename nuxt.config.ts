@@ -6,7 +6,16 @@ export default defineNuxtConfig({
                 'https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions',
         },
     },
-    modules: ['@vueuse/nuxt', '@nuxt/image', '@nuxtjs/supabase', '@nuxt/test-utils/module'],
+    modules: [
+        '@vueuse/nuxt',
+        '@nuxt/image',
+        '@nuxtjs/supabase',
+        '@nuxt/test-utils/module',
+        '@pinia/nuxt',
+    ],
+    pinia: {
+        storesDirs: ['./stores/**'],
+    },
     devtools: { enabled: true },
     supabase: {
         url: 'https://znvtpipzflqwytxrtatb.supabase.co',
