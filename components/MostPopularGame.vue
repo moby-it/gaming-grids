@@ -34,7 +34,6 @@ supabase.auth.onAuthStateChange(async (event) => {
 
 <template>
     <section class="game">
-        <NavBar />
         <main>
             <section v-if="loading" class="message">
                 <h1>Loading...</h1>

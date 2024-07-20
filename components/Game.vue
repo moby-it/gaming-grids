@@ -120,7 +120,6 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
         <h1>Loading...</h1>
     </section>
     <section v-else class="game">
-        <NavBar :puzzleId="puzzleId" />
         <main>
             <Modal :show="showSearch">
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
