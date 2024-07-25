@@ -1,32 +1,28 @@
 <script setup lang="ts">
-import type { Champion, GameStatus } from '#imports';
+import type { Champion } from '#imports';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { savePuzzleToLocalStorage } from '../utils/puzzle';
 const props = defineProps<{ puzzleId: string }>();
 const { user } = useAuth();
 const puzzleId = props.puzzleId;
 const puzzleStore = usePuzzleStore();
 await puzzleStore.loadPuzzle(puzzleId);
-const { name, restrictions, cells, guesses, puzzleMetadata, loading } = storeToRefs(puzzleStore);
+const { name, guesses, loading, championNames, championIds, rarityScores, status } =
+    storeToRefs(puzzleStore);
 const supabase: SupabaseClient = useSupabaseClient();
 onMounted(async () => {
     if (!user.value) {
         loading.value = true;
         const puzzle = await getLocalPuzzle(puzzleId);
-        puzzleStore.$patch(() => {
-            cells.value = puzzle.cells;
-            guesses.value = puzzle.guesses;
-            puzzleMetadata.value = puzzle.metadata;
-            loading.value = false;
-        });
+        puzzleStore.storeLocalPuzzle(puzzle);
     }
+    loading.value = false;
 });
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const searchBar = ref(null);
-const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 const { showScoreModal, scoreModal, hideScoreModal } = useScoreModal();
-const score = computed<number>(() => +getScore(puzzleMetadata.value.rarityScore).toFixed(2));
+const score = computed<number>(() => +getScore(rarityScores.value).toFixed(2));
 provide('status', status);
-provide('puzzleMetadata', puzzleMetadata);
 provide('selectedCell', selectedCell);
 
 const showSearch = computed(
@@ -40,12 +36,8 @@ supabase.auth.onAuthStateChange(async (event) => {
         if (event === 'SIGNED_OUT') {
             loading.value = true;
             const puzzle = await getLocalPuzzle(puzzleId);
-            puzzleStore.$patch(() => {
-                cells.value = puzzle.cells;
-                guesses.value = puzzle.guesses;
-                puzzleMetadata.value = puzzle.metadata;
-                loading.value = false;
-            });
+            puzzleStore.storeLocalPuzzle(puzzle);
+            loading.value = false;
         }
     }, 0);
 });
@@ -62,53 +54,31 @@ async function giveUp() {
     showScoreModal();
     if (user.value) {
         await $fetch(`/api/giveUp/`, {
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify({
                 puzzleId: puzzleId,
             }),
         });
     } else {
-        localStorage.setItem(
-            'localGame',
-            JSON.stringify({
-                cells: cells.value,
-                guesses: guesses.value,
-            })
-        );
+        savePuzzleToLocalStorage(championIds.value, championNames.value, 0);
     }
 }
 async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;
-    const { score } = await $fetch(`/api/submitChampion/`, {
+    const { score } = await $fetch(`/api/submit-champion/`, {
         method: 'POST',
         body: JSON.stringify({
             x: selectedCell.value.x,
             y: selectedCell.value.y,
             puzzleId: puzzleId,
-            champion: champion.name,
+            champion: champion.id,
             userId: user.value?.id ?? null,
         }),
     });
-    if (score >= 0) {
-        puzzleStore.$patch(() => {
-            puzzleStore.cells[selectedCell.value.x - 1][selectedCell.value.y - 1] = champion.name;
-            puzzleStore.puzzleMetadata.championIds[selectedCell.value.x - 1][
-                selectedCell.value.y - 1
-            ] = champion.id;
-            puzzleStore.puzzleMetadata.rarityScore[selectedCell.value.x - 1][
-                selectedCell.value.y - 1
-            ] = score;
-        });
-    }
-    --guesses.value;
+
+    puzzleStore.updatePuzzle(selectedCell.value.x, selectedCell.value.y, champion, score);
     if (!user.value) {
-        localStorage.setItem(
-            'localGame',
-            JSON.stringify({
-                cells: cells.value,
-                guesses: guesses.value,
-            })
-        );
+        savePuzzleToLocalStorage(championIds.value, championNames.value, guesses.value);
     }
     resetSelectedCell(selectedCell);
     if (status.value === 'completed') showScoreModal();
@@ -125,7 +95,11 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
             </Modal>
             <ClientOnly>
-                <Grid :name="name" :cells="cells" :restrictions="restrictions" :guesses="guesses" />
+                <Grid
+                    :champion-ids="championIds"
+                    :champion-names="championNames"
+                    :rarity-scores="rarityScores"
+                />
             </ClientOnly>
         </main>
         <ClientOnly>
@@ -133,7 +107,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
                 <Summary
                     :name="name"
                     :score="score"
-                    :rarity-scores="puzzleMetadata.rarityScore"
+                    :rarity-scores="rarityScores"
                     :status="status"
                     :score-modal="scoreModal"
                     @show-modal="showScoreModal"
@@ -169,6 +143,7 @@ main {
 }
 .loading {
     margin-top: var(--cell);
+    color: var(--accent-300);
 }
 @media (width <= 768px) {
     .options {

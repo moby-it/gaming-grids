@@ -1,39 +1,65 @@
 import { serverSupabaseClient } from '#supabase/server';
-import {
-    getPuzzleBody,
-    getPuzzleInfo,
-    getPuzzleMetadata,
-    PuzzleInfo,
-    PuzzleMetadata,
-} from '~/utils/puzzle';
+import { getPuzzleBody, getPuzzleInfo, PuzzleInfo } from '~/utils/puzzle';
 import getUserId from '../middleware/getUserId';
 export default defineEventHandler(async (event) => {
-    await getUserId(event);
-    let cells: string[][] = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', ''],
-    ];
-    let guesses = 0;
-    let name = '';
-    let restrictions = { row: [''], column: [''] };
-    let puzzleMetadata: PuzzleMetadata = {
-        championIds: [['']],
-        rarityScore: [[null]],
-        possibleAnswers: [[0]],
-    };
-    const supabase = await serverSupabaseClient(event);
-    const puzzleId = getQuery(event).puzzleId as string;
-    if (!puzzleId) throw new Error('Puzzle Id not found!');
-    const userId = event.context.userId;
-    const puzzleInfo: PuzzleInfo = await getPuzzleInfo(supabase, puzzleId);
-    if (userId) {
-        const puzzleBody = await getPuzzleBody(supabase, puzzleId, userId);
-        cells = puzzleBody.cells;
-        guesses = puzzleBody.guesses;
-        puzzleMetadata = await getPuzzleMetadata(supabase, cells, puzzleId);
+    if (event.method === 'GET') {
+        await getUserId(event);
+        let championNames: string[][] = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+        ];
+        let championIds: string[][] = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+        ];
+        let rarityScores: number[][] = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
+        let guesses = 9;
+        let name = '';
+        let restrictions = { row: ['', '', ''], column: ['', '', ''] };
+        let possibleAnswers: number[][] = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
+
+        const supabase = await serverSupabaseClient(event);
+        const puzzleId = getQuery(event).puzzleId as string;
+        if (!puzzleId)
+            throw createError({
+                statusCode: 404,
+                statusMessage: 'Puzzle Id not found',
+            });
+        const userId = event.context.userId;
+        const puzzleInfo: PuzzleInfo = await getPuzzleInfo(supabase, puzzleId);
+        if (userId) {
+            const puzzleBody = await getPuzzleBody(supabase, puzzleId, userId);
+            championNames = puzzleBody.championNames;
+            championIds = puzzleBody.championIds;
+            rarityScores = puzzleBody.rarityScores;
+            guesses = puzzleBody.guesses;
+        }
+        name = puzzleInfo.name;
+        restrictions = puzzleInfo.restrictions;
+        possibleAnswers = puzzleInfo.possibleAnswers;
+        return {
+            name,
+            restrictions,
+            guesses,
+            puzzleId,
+            possibleAnswers,
+            championIds,
+            championNames,
+            rarityScores,
+        };
     }
-    name = puzzleInfo.name;
-    restrictions = puzzleInfo.restrictions;
-    return { name, restrictions, cells, guesses, puzzleMetadata, puzzleId };
+    throw createError({
+        statusCode: 405,
+        statusMessage: 'Method not supported for /puzzle',
+    });
 });

@@ -1,24 +1,23 @@
 <script setup lang="ts">
-import { getImageRadius, getNameRadius, getScoreRadius } from '~/utils/cells';
-import type { PuzzleMetadata } from '#imports';
+import { getNameRadius, getScoreRadius } from '~/utils/cells';
 import type { StyleValue } from 'vue';
 
 const props = defineProps<{
     x: number;
     y: number;
-    champion?: string;
+    champion?: { name: string; id: string; rarityScore: number };
 }>();
 const { BUCKET_URL } = useRuntimeConfig().public;
-const puzzleMetadata = inject<Ref<PuzzleMetadata>>('puzzleMetadata');
-const status = inject<Ref<GameStatus>>('status');
+const store = usePuzzleStore();
+const { status } = storeToRefs(store);
 const selectedCell = inject<Ref<Cell>>('selectedCell');
-const championId = computed(() => puzzleMetadata?.value.championIds?.[props.x - 1]?.[props.y - 1]);
-const rarityScore = computed(() => puzzleMetadata?.value.rarityScore?.[props.x - 1]?.[props.y - 1]);
 const score = computed(() =>
-    Number.isInteger(rarityScore.value) ? rarityScore.value : rarityScore.value?.toFixed(2)
+    Number.isInteger(props.champion?.rarityScore)
+        ? props.champion?.rarityScore
+        : props.champion?.rarityScore.toFixed(2)
 );
 const imageSrc = computed(() =>
-    championId.value ? `${BUCKET_URL}/${championId.value}_0.jpg` : ''
+    props.champion?.id ? `${BUCKET_URL}/${props.champion?.id}_0.jpg` : ''
 );
 const isSelected = computed(
     () =>
@@ -44,12 +43,12 @@ const styles = computed(() => {
         class="cell"
         :class="{ selected: isSelected, answered: !!champion, hoverable: status === 'in progress' }"
     >
-        <section v-if="championId" class="metadata">
+        <section v-if="props.champion?.id" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
                 <p>{{ score }}%</p>
             </section>
             <section class="name" :style="getNameRadius(props.x, props.y)">
-                <p>{{ props.champion }}</p>
+                <p>{{ props.champion.name }}</p>
             </section>
         </section>
     </section>

@@ -10,5 +10,8 @@ export default defineEventHandler(async (event) => {
         const score = await getAnswerScore(supabase, puzzleId, x, y, champion, userId);
         return { score };
     }
-    throw new Error('Wrong method for specific endpoint');
+    throw createError({
+        statusCode: 405,
+        statusMessage: 'Method not supported for /submit-champion',
+    });
 });

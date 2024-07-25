@@ -1,42 +1,38 @@
 import { defineStore } from 'pinia';
 
 export const useMostPopularStore = defineStore('most-popular', () => {
-    const loading = ref<boolean>(true);
-    const cells = ref<string[][]>([
+    const championIds = ref<string[][]>([
         ['', '', ''],
         ['', '', ''],
         ['', '', ''],
     ]);
-    const championIds = ref<(string | null)[][]>([
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
+    const championNames = ref<string[][]>([
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', ''],
     ]);
-    const rarityScore = ref<(number | null)[][]>([
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
+    const rarityScores = ref<number[][]>([
+        [100, 100, 100],
+        [100, 100, 100],
+        [100, 100, 100],
     ]);
     const puzzleStore = usePuzzleStore();
+    const { loading } = storeToRefs(puzzleStore);
 
-    const { guesses, name, restrictions } = storeToRefs(puzzleStore);
     const headers = useRequestHeaders(['cookie']);
     async function loadMostPopular(puzzleId: string) {
+        await puzzleStore.loadPuzzle(puzzleId!);
         loading.value = true;
         const data = await $fetch(`/api/most-popular/?puzzleId=${puzzleId}`, { headers });
-        if (!data) throw new Error('Wrong method was used for most-popular endpoint');
-        cells.value = data.mostPopularChampions;
         championIds.value = data.championIds;
-        rarityScore.value = data.rarityScore;
+        championNames.value = data.championNames;
+        rarityScores.value = data.rarityScores;
     }
 
     return {
-        name,
-        guesses,
-        restrictions,
-        cells,
+        championNames,
         championIds,
-        rarityScore,
+        rarityScores,
         loading,
         loadMostPopular,
     };

@@ -7,6 +7,10 @@ export default defineEventHandler(async (event) => {
         .from('champion')
         .select('name,champion_id')
         .ilike('name', `%${term}%`);
-    if (error) throw new Error(`Could not fetch results, ${error.message}`);
+    if (error)
+        throw createError({
+            statusCode: 500,
+            statusMessage: error.message,
+        });
     return data;
 });
