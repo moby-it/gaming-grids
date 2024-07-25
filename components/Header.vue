@@ -4,10 +4,7 @@ import User from './User.vue';
 const { signOut, user } = useAuth();
 const { showHelpModal } = useHelpModal();
 const { width } = useWindowSize();
-const isMobile = computed(() => width.value <= 468);
-watchEffect(() => {
-    console.log(width.value);
-});
+const isMobile = computed(() => width.value <= 425);
 </script>
 <template>
     <header>
