@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 export const usePuzzleStore = defineStore('puzzle', () => {
-    const puzzleIdStore = usePuzzleIdStore();
-    const { loading } = storeToRefs(puzzleIdStore);
+    const loading = ref(true);
     const guesses = ref<number>(9);
+    const isAnonPuzzle = ref(true);
     const championNames: Ref<string[][]> = ref([
         ['', '', ''],
         ['', '', ''],
@@ -46,23 +46,43 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         }
         --guesses.value;
     }
-    async function loadPuzzle(puzzleId: string) {
-        if (name.value) return;
+    async function loadPuzzleClient(puzzleId: string) {
         loading.value = true;
         const headers = useRequestHeaders(['cookie']);
-        const data = await $fetch(`/api/puzzle/?puzzleId=${puzzleId}`, { headers });
-        name.value = data.name;
-        championIds.value = data.championIds;
-        championNames.value = data.championNames;
-        rarityScores.value = data.rarityScores;
-        restrictions.value = data.restrictions;
-        possibleAnswers.value = data.possibleAnswers;
-        guesses.value = data.guesses;
+        const puzzleBody = await $fetch(`/api/puzzle/?puzzleId=${puzzleId}`, {
+            headers,
+        });
+        if (!puzzleBody) throw createError('failed to get puzzle body');
+        name.value = puzzleBody.name;
+        championIds.value = puzzleBody.championIds;
+        championNames.value = puzzleBody.championNames;
+        rarityScores.value = puzzleBody.rarityScores;
+        restrictions.value = puzzleBody.restrictions;
+        possibleAnswers.value = puzzleBody.possibleAnswers;
+        guesses.value = puzzleBody.guesses;
+        loading.value = false;
+    }
+    async function loadPuzzle(puzzleId: string) {
+        loading.value = true;
+        const headers = useRequestHeaders(['cookie']);
+        const { data: puzzleBody } = await useFetch(`/api/puzzle/?puzzleId=${puzzleId}`, {
+            headers,
+        });
+        if (!puzzleBody.value) throw createError('failed to get puzzle body');
+        name.value = puzzleBody.value.name;
+        championIds.value = puzzleBody.value.championIds;
+        championNames.value = puzzleBody.value.championNames;
+        rarityScores.value = puzzleBody.value.rarityScores;
+        restrictions.value = puzzleBody.value.restrictions;
+        possibleAnswers.value = puzzleBody.value.possibleAnswers;
+        guesses.value = puzzleBody.value.guesses;
+        if (headers.cookie) isAnonPuzzle.value = false;
         loading.value = false;
     }
     return {
         loading,
         name,
+        isAnonPuzzle,
         championIds,
         championNames,
         rarityScores,
@@ -71,6 +91,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         possibleAnswers,
         status,
         loadPuzzle,
+        loadPuzzleClient,
         updatePuzzle,
         storeLocalPuzzle,
     };

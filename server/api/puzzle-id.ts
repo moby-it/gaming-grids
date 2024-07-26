@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
     let puzzleDate = getQuery(event).puzzleDate ? (getQuery(event).puzzleDate as string) : '';
     console.log(puzzleDate);
     if (!puzzleDate) {
-        console.log('running');
         puzzleDate = getCurrentDate();
     }
     const puzzleId = await fetchPuzzleIdByDate(supabase, puzzleDate);

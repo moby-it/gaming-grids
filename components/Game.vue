@@ -2,21 +2,26 @@
 import type { Champion } from '#imports';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { savePuzzleToLocalStorage } from '../utils/puzzle';
+
 const props = defineProps<{ puzzleId: string }>();
-const { user } = useAuth();
 const puzzleId = props.puzzleId;
-const puzzleStore = usePuzzleStore();
-await puzzleStore.loadPuzzle(puzzleId);
-const { name, guesses, loading, championNames, championIds, rarityScores, status } =
-    storeToRefs(puzzleStore);
+
 const supabase: SupabaseClient = useSupabaseClient();
+
+const { user } = useAuth();
+const puzzleStore = usePuzzleStore();
+const { name, guesses, loading, isAnonPuzzle, championNames, championIds, rarityScores, status } =
+    storeToRefs(puzzleStore);
+
+await puzzleStore.loadPuzzle(puzzleId);
+
 onMounted(async () => {
-    loading.value = true;
     if (!user.value) {
         const puzzle = await getLocalPuzzle(puzzleId);
         puzzleStore.storeLocalPuzzle(puzzle);
+    } else if (isAnonPuzzle.value) {
+        await puzzleStore.loadPuzzleClient(puzzleId);
     }
-    loading.value = false;
 });
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const searchBar = ref(null);

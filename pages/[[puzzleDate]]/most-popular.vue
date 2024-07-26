@@ -3,11 +3,10 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 const supabase: SupabaseClient = useSupabaseClient();
 const route = useRoute();
-const puzzleDate = route.query.puzzleDate ? (route.query.puzzleDate as string) : '';
-const puzzleIdStore = usePuzzleIdStore();
-const { puzzleId } = storeToRefs(puzzleIdStore);
+const puzzleDate = (route.query.puzzleDate as string) ?? '';
+const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
+if (!puzzleId.value) throw createError('failed to fetch puzzle');
 const { user } = useAuth();
-puzzleIdStore.getPuzzleId(puzzleDate);
 const puzzleStore = usePuzzleStore();
 const { guesses, status } = storeToRefs(puzzleStore);
 const mostPopularStore = useMostPopularStore();
@@ -15,7 +14,7 @@ const { championNames, championIds, rarityScores, loading } = storeToRefs(mostPo
 await mostPopularStore.loadMostPopular(puzzleId.value);
 onMounted(async () => {
     loading.value = true;
-    if (!user.value && puzzleId) {
+    if (!user.value && puzzleId.value) {
         const puzzle = await getLocalPuzzle(puzzleId.value);
         guesses.value = puzzle.guesses;
     }
@@ -30,7 +29,7 @@ supabase.auth.onAuthStateChange(async (event) => {
     // see https://github.com/supabase/auth-js/issues/762
     // see https://github.com/nuxt-modules/supabase/issues/273
     setTimeout(async () => {
-        if (event === 'SIGNED_OUT' && puzzleId) {
+        if (event === 'SIGNED_OUT' && puzzleId.value) {
             loading.value = true;
             const puzzle = await getLocalPuzzle(puzzleId.value);
             puzzleStore.storeLocalPuzzle(puzzle);

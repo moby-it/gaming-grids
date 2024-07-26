@@ -110,17 +110,21 @@ export function savePuzzleToLocalStorage(
         })
     );
 }
-export async function fetchPuzzleIdByDate(
-    supabase: SupabaseClient,
-    date?: string
-): Promise<string | null> {
-    if (!date) date = getCurrentDate();
-    const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
-    if (data && data.length === 1) return data[0].id as string;
-    if (error) console.error(error);
-    if (data && data.length > 1) console.error('more than one puzzles found');
-    return null;
-}
+/**
+ *
+ * @param supabase SupabaseClient
+ * @param date Date of the puzzle to fetch. Pass empty string for current date.
+ * @returns
+ */
+export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date: string) =>
+    useAsyncData(async () => {
+        if (!date) date = getCurrentDate();
+        const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
+        if (data && data.length === 1) return data[0].id as string;
+        if (error) console.error(error);
+        if (data && data.length > 1) console.error('more than one puzzles found');
+    });
+
 function getPuzzleBodyFromLocalStorage(): {
     championIds: string[][];
     championNames: string[][];
