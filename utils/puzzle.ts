@@ -117,13 +117,19 @@ export function savePuzzleToLocalStorage(
  * @returns
  */
 export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date: string) =>
-    useAsyncData(async () => {
-        if (!date) date = getCurrentDate();
-        const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
-        if (data && data.length === 1) return data[0].id as string;
-        if (error) console.error(error);
-        if (data && data.length > 1) console.error('more than one puzzles found');
-    });
+    useAsyncData(
+        date,
+        async () => {
+            if (!date) throw createError('invalid puzzle date');
+            const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
+            if (data && data.length === 1) return data[0].id as string;
+            if (error) console.error(error);
+            if (data && data.length > 1) console.error('more than one puzzles found');
+        },
+        {
+            getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] as string,
+        }
+    );
 
 function getPuzzleBodyFromLocalStorage(): {
     championIds: string[][];
