@@ -21,12 +21,14 @@ export const useMostPopularStore = defineStore('most-popular', () => {
 
     const headers = useRequestHeaders(['cookie']);
     async function loadMostPopular(puzzleId: string) {
-        await puzzleStore.loadPuzzle(puzzleId!);
+        if (puzzleStore.status === 'in progress') return;
         loading.value = true;
+        await puzzleStore.loadPuzzle(puzzleId!);
         const data = await $fetch(`/api/most-popular/?puzzleId=${puzzleId}`, { headers });
         championIds.value = data.championIds;
         championNames.value = data.championNames;
         rarityScores.value = data.rarityScores;
+        loading.value = false;
     }
 
     return {

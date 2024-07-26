@@ -11,8 +11,8 @@ const { name, guesses, loading, championNames, championIds, rarityScores, status
     storeToRefs(puzzleStore);
 const supabase: SupabaseClient = useSupabaseClient();
 onMounted(async () => {
+    loading.value = true;
     if (!user.value) {
-        loading.value = true;
         const puzzle = await getLocalPuzzle(puzzleId);
         puzzleStore.storeLocalPuzzle(puzzle);
     }
@@ -75,7 +75,6 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             userId: user.value?.id ?? null,
         }),
     });
-
     puzzleStore.updatePuzzle(selectedCell.value.x, selectedCell.value.y, champion, score);
     if (!user.value) {
         savePuzzleToLocalStorage(championIds.value, championNames.value, guesses.value);
@@ -90,37 +89,33 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
         <h1>Loading...</h1>
     </section>
     <section v-else class="game">
-        <main>
+        <section class="main">
             <Modal :show="showSearch">
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
             </Modal>
-            <ClientOnly>
-                <Grid
-                    :champion-ids="championIds"
-                    :champion-names="championNames"
-                    :rarity-scores="rarityScores"
-                />
-            </ClientOnly>
-        </main>
-        <ClientOnly>
-            <section class="options">
-                <Summary
-                    :name="name"
-                    :score="score"
-                    :rarity-scores="rarityScores"
-                    :status="status"
-                    :score-modal="scoreModal"
-                    @show-modal="showScoreModal"
-                    @hide-modal="hideScoreModal"
-                />
-                <section v-if="status === 'completed'">
-                    <p>Rarity score</p>
-                    <h1>{{ score }}</h1>
-                </section>
-                <GiveUp v-if="status === 'in progress'" @give-up="giveUp" />
-                <Guesses v-if="status === 'in progress'" class="guesses" :guesses="guesses" />
+            <Grid
+                :champion-ids="championIds"
+                :champion-names="championNames"
+                :rarity-scores="rarityScores"
+            />
+        </section>
+        <section class="options">
+            <Summary
+                :name="name"
+                :score="score"
+                :rarity-scores="rarityScores"
+                :status="status"
+                :score-modal="scoreModal"
+                @show-modal="showScoreModal"
+                @hide-modal="hideScoreModal"
+            />
+            <section v-if="status === 'completed'">
+                <p>Rarity score</p>
+                <h1>{{ score }}</h1>
             </section>
-        </ClientOnly>
+            <GiveUp v-if="status === 'in progress'" @give-up="giveUp" />
+            <Guesses v-if="status === 'in progress'" class="guesses" :guesses="guesses" />
+        </section>
     </section>
 </template>
 
@@ -137,7 +132,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     flex-direction: column;
     align-items: center;
 }
-main {
+.main {
     flex-direction: column;
     align-items: center;
 }

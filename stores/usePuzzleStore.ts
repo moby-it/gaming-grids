@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 export const usePuzzleStore = defineStore('puzzle', () => {
-    const loading = ref<boolean>(false);
+    const puzzleIdStore = usePuzzleIdStore();
+    const { loading } = storeToRefs(puzzleIdStore);
     const guesses = ref<number>(9);
     const championNames: Ref<string[][]> = ref([
         ['', '', ''],
@@ -46,8 +47,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         --guesses.value;
     }
     async function loadPuzzle(puzzleId: string) {
-        const headers = useRequestHeaders(['cookie']);
+        if (name.value) return;
         loading.value = true;
+        const headers = useRequestHeaders(['cookie']);
         const data = await $fetch(`/api/puzzle/?puzzleId=${puzzleId}`, { headers });
         name.value = data.name;
         championIds.value = data.championIds;
@@ -56,6 +58,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         restrictions.value = data.restrictions;
         possibleAnswers.value = data.possibleAnswers;
         guesses.value = data.guesses;
+        loading.value = false;
     }
     return {
         loading,

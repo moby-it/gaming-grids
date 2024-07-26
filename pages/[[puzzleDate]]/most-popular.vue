@@ -3,17 +3,20 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 const supabase: SupabaseClient = useSupabaseClient();
 const route = useRoute();
+const puzzleDate = route.query.puzzleDate ? (route.query.puzzleDate as string) : '';
+const puzzleIdStore = usePuzzleIdStore();
+const { puzzleId } = storeToRefs(puzzleIdStore);
 const { user } = useAuth();
-const puzzleDate = route.params.puzzleDate as string;
-const puzzleId = await fetchPuzzleIdByDate(supabase, puzzleDate);
+puzzleIdStore.getPuzzleId(puzzleDate);
 const puzzleStore = usePuzzleStore();
 const { guesses, status } = storeToRefs(puzzleStore);
 const mostPopularStore = useMostPopularStore();
 const { championNames, championIds, rarityScores, loading } = storeToRefs(mostPopularStore);
-await mostPopularStore.loadMostPopular(puzzleId!);
+await mostPopularStore.loadMostPopular(puzzleId.value);
 onMounted(async () => {
+    loading.value = true;
     if (!user.value && puzzleId) {
-        const puzzle = await getLocalPuzzle(puzzleId);
+        const puzzle = await getLocalPuzzle(puzzleId.value);
         guesses.value = puzzle.guesses;
     }
     loading.value = false;
@@ -29,7 +32,7 @@ supabase.auth.onAuthStateChange(async (event) => {
     setTimeout(async () => {
         if (event === 'SIGNED_OUT' && puzzleId) {
             loading.value = true;
-            const puzzle = await getLocalPuzzle(puzzleId);
+            const puzzle = await getLocalPuzzle(puzzleId.value);
             puzzleStore.storeLocalPuzzle(puzzle);
             loading.value = false;
         }
@@ -37,21 +40,15 @@ supabase.auth.onAuthStateChange(async (event) => {
 });
 </script>
 <template>
-    <h1 v-if="!puzzleId">Puzzle not found</h1>
-    <section class="message" v-else-if="loading">
-        <h1>Loading...</h1>
-    </section>
-    <section v-else>
-        <section class="message" v-if="status === 'in progress'">
-            <h1>Complete puzzle firtst</h1>
-        </section>
-        <Grid
-            v-else
-            :champion-names="championNames"
-            :champion-ids="championIds"
-            :rarity-scores="rarityScores"
-        />
-    </section>
+    <h1 v-if="loading" class="message">Loading...</h1>
+    <h1 v-else-if="status === 'in progress'" class="message">Complete puzzle first</h1>
+    <Grid
+        v-else-if="status === 'completed'"
+        :champion-names="championNames"
+        :champion-ids="championIds"
+        :rarity-scores="rarityScores"
+    />
+    <h1 v-else="!puzzleId" class="message">Puzzle not found</h1>
 </template>
 <style scoped>
 .message {
