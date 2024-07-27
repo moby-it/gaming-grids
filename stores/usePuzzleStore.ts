@@ -1,8 +1,9 @@
+import { PuzzleInfo } from '#imports';
 import { defineStore } from 'pinia';
+
 export const usePuzzleStore = defineStore('puzzle', () => {
     const loading = ref(true);
     const guesses = ref<number>(9);
-    const isAnonPuzzle = ref(true);
     const championNames: Ref<string[][]> = ref([
         ['', '', ''],
         ['', '', ''],
@@ -27,11 +28,11 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     const restrictions = ref<{ row: string[]; column: string[] }>({ row: [], column: [] });
     const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 
-    function storeLocalPuzzle(LocalPuzzle: PuzzleBody) {
-        championIds.value = LocalPuzzle.championIds;
-        championNames.value = LocalPuzzle.championNames;
-        rarityScores.value = LocalPuzzle.rarityScores;
-        guesses.value = LocalPuzzle.guesses;
+    function storeLocalPuzzle(localPuzzle: PuzzleBody) {
+        championIds.value = localPuzzle.championIds;
+        championNames.value = localPuzzle.championNames;
+        rarityScores.value = localPuzzle.rarityScores;
+        guesses.value = localPuzzle.guesses;
     }
     function updatePuzzle(
         x: number,
@@ -46,13 +47,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         }
         --guesses.value;
     }
-    async function loadPuzzleClient(puzzleId: string) {
-        loading.value = true;
-        const headers = useRequestHeaders(['cookie']);
-        const puzzleBody = await $fetch(`/api/puzzle/?puzzleId=${puzzleId}`, {
-            headers,
-        });
-        if (!puzzleBody) throw createError('failed to get puzzle body');
+
+    function patchPuzzle(puzzleBody: PuzzleBody & PuzzleInfo) {
         name.value = puzzleBody.name;
         championIds.value = puzzleBody.championIds;
         championNames.value = puzzleBody.championNames;
@@ -60,29 +56,52 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         restrictions.value = puzzleBody.restrictions;
         possibleAnswers.value = puzzleBody.possibleAnswers;
         guesses.value = puzzleBody.guesses;
+    }
+    function reset() {
+        name.value = '';
+        championIds.value = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+        ];
+        championNames.value = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', ''],
+        ];
+        rarityScores.value = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
+        possibleAnswers.value = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
+        restrictions.value = { row: [], column: [] };
+        guesses.value = 9;
+    }
+    async function loadPuzzleClient(puzzleId: string) {
+        loading.value = true;
+        const puzzleBody = await $fetch(`/api/puzzle/?puzzleId=${puzzleId}`);
+        if (!puzzleBody) throw createError('failed to get puzzle body');
+        patchPuzzle(puzzleBody);
         loading.value = false;
     }
     async function loadPuzzle(puzzleId: string) {
         loading.value = true;
-        const headers = useRequestHeaders(['cookie']);
         const { data: puzzleBody } = await useFetch(`/api/puzzle/?puzzleId=${puzzleId}`, {
-            headers,
+            key: `puzzle-${puzzleId}`,
+            getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key],
         });
         if (!puzzleBody.value) throw createError('failed to get puzzle body');
-        name.value = puzzleBody.value.name;
-        championIds.value = puzzleBody.value.championIds;
-        championNames.value = puzzleBody.value.championNames;
-        rarityScores.value = puzzleBody.value.rarityScores;
-        restrictions.value = puzzleBody.value.restrictions;
-        possibleAnswers.value = puzzleBody.value.possibleAnswers;
-        guesses.value = puzzleBody.value.guesses;
-        if (headers.cookie) isAnonPuzzle.value = false;
+        patchPuzzle(puzzleBody.value);
         loading.value = false;
     }
     return {
         loading,
         name,
-        isAnonPuzzle,
         championIds,
         championNames,
         rarityScores,
@@ -90,6 +109,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         guesses,
         possibleAnswers,
         status,
+        reset,
         loadPuzzle,
         loadPuzzleClient,
         updatePuzzle,

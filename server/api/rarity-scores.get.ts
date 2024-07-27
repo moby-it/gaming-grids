@@ -3,8 +3,8 @@ import * as v from 'valibot';
 import { SupabaseClient } from '@supabase/supabase-js';
 export default defineEventHandler(async (event) => {
     const supabase: SupabaseClient = await serverSupabaseClient(event);
-    const body = await readBody(event);
-    const { puzzleId, championIds } = body;
+    const queryParams = getQuery(event);
+    const { puzzleId, championIds } = queryParams;
     const { data } = await supabase.rpc('get_puzzle_rarity_scores', {
         p_id: puzzleId,
         champion_ids: championIds,
@@ -15,5 +15,6 @@ export default defineEventHandler(async (event) => {
             statusCode: 500,
             statusMessage: 'Could not parse rarity score for local puzzle.',
         });
+    setHeader(event, 'Cache-Control', 'max-age=60, must-revalidate');
     return rarityScores;
 });

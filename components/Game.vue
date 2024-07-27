@@ -1,51 +1,24 @@
 <script setup lang="ts">
 import type { Champion } from '#imports';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { savePuzzleToLocalStorage } from '../utils/puzzle';
 
 const props = defineProps<{ puzzleId: string }>();
 const puzzleId = props.puzzleId;
 
-const supabase: SupabaseClient = useSupabaseClient();
-
 const { user } = useAuth();
 const puzzleStore = usePuzzleStore();
-const { name, guesses, loading, isAnonPuzzle, championNames, championIds, rarityScores, status } =
+const { name, guesses, loading, championNames, championIds, rarityScores, status } =
     storeToRefs(puzzleStore);
 
-await puzzleStore.loadPuzzle(puzzleId);
-
-onMounted(async () => {
-    if (!user.value) {
-        const puzzle = await getLocalPuzzle(puzzleId);
-        puzzleStore.storeLocalPuzzle(puzzle);
-    } else if (isAnonPuzzle.value) {
-        await puzzleStore.loadPuzzleClient(puzzleId);
-    }
-});
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const searchBar = ref(null);
+
 const { showScoreModal, scoreModal, hideScoreModal } = useScoreModal();
 const score = computed<number>(() => +getScore(rarityScores.value).toFixed(2));
-provide('status', status);
 provide('selectedCell', selectedCell);
 
 const showSearch = computed(
     () => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && status.value === 'in progress'
 );
-supabase.auth.onAuthStateChange(async (event) => {
-    // onAuthStateChange cannot handle async requests
-    // see https://github.com/supabase/auth-js/issues/762
-    // see https://github.com/nuxt-modules/supabase/issues/273
-    setTimeout(async () => {
-        if (event === 'SIGNED_OUT') {
-            loading.value = true;
-            const puzzle = await getLocalPuzzle(puzzleId);
-            puzzleStore.storeLocalPuzzle(puzzle);
-            loading.value = false;
-        }
-    }, 0);
-});
 
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell);
@@ -54,19 +27,20 @@ onClickOutside(searchBar, (e: Event) => {
         e.stopPropagation();
     }
 });
+
 async function giveUp() {
     guesses.value = 0;
-    showScoreModal();
     if (user.value) {
         await $fetch(`/api/giveUp/`, {
             method: 'PUT',
             body: JSON.stringify({
-                puzzleId: puzzleId,
+                puzzleId,
             }),
         });
     } else {
         savePuzzleToLocalStorage(championIds.value, championNames.value, 0);
     }
+    showScoreModal();
 }
 async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;

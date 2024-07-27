@@ -110,6 +110,10 @@ export function savePuzzleToLocalStorage(
         })
     );
 }
+export function clearPuzzleLocalStorage() {
+    localStorage.removeItem('localGame');
+}
+
 /**
  *
  * @param supabase SupabaseClient
@@ -127,7 +131,7 @@ export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date: string) =>
             if (data && data.length > 1) console.error('more than one puzzles found');
         },
         {
-            getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] as string,
+            getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key],
         }
     );
 
@@ -155,16 +159,22 @@ function getPuzzleBodyFromLocalStorage(): {
         return { championIds, championNames, guesses };
     }
 }
-export async function getLocalPuzzle(puzzleId: string): Promise<PuzzleBody> {
-    const { championIds, championNames, guesses } = getPuzzleBodyFromLocalStorage();
+export async function getRarityScores(
+    puzzleId: string,
+    championIds: string[][]
+): Promise<number[][]> {
     const rarityScores = await $fetch(`/api/rarity-scores/`, {
-        method: 'POST',
-        body: JSON.stringify({
+        query: {
             puzzleId: puzzleId,
             championIds: championIds,
-        }),
+        },
     });
-    return { championIds, championNames, guesses, rarityScores };
+    return rarityScores;
+}
+
+export async function getLocalPuzzle(puzzleId: string): Promise<Omit<PuzzleBody, 'rarityScores'>> {
+    const { championIds, championNames, guesses } = getPuzzleBodyFromLocalStorage();
+    return { championIds, championNames, guesses };
 }
 
 export async function getAnswerScore(
