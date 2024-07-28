@@ -20,7 +20,6 @@ onMounted(async () => {
     if (!user.value && puzzleId.value) {
         const puzzle = await getLocalPuzzle(puzzleId.value);
         guesses.value = puzzle.guesses;
-        console.log('inside mount of most popular', 'user', user.value, guesses.value);
         if (status.value === 'completed')
             await mostPopularStore.loadMostPopularClient(puzzleId.value);
     }

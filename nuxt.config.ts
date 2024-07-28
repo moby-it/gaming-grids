@@ -2,8 +2,7 @@
 export default defineNuxtConfig({
     runtimeConfig: {
         public: {
-            BUCKET_URL:
-                'https://znvtpipzflqwytxrtatb.supabase.co/storage/v1/object/public/champions',
+            BUCKET_URL: 'https://hermeldb.moby-it.com/storage/v1/object/public/champions',
         },
     },
     modules: [
@@ -18,8 +17,8 @@ export default defineNuxtConfig({
     },
     devtools: { enabled: true },
     supabase: {
-        url: 'https://znvtpipzflqwytxrtatb.supabase.co',
-        key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpudnRwaXB6Zmxxd3l0eHJ0YXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk3NDQ2MjksImV4cCI6MjAyNTMyMDYyOX0.GR_EKQT3J8BaOrJMgTAhziM41FqHx7sPo3RaBaF32zA',
+        url: 'https://hermeldb.moby-it.com',
+        key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ewogICJyb2xlIjogImFub24iLAogICJpc3MiOiAic3VwYWJhc2UiLAogICJpYXQiOiAxNzIyMjAwNDAwLAogICJleHAiOiAxODc5OTY2ODAwCn0.A2CnJ1KEJcEtb_01pC9WVKoadTXwGBT8yC3SSFGKZZA',
         redirect: false,
     },
 });
