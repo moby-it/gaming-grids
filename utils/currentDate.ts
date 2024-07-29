@@ -5,5 +5,5 @@ export function getCurrentDate(): string {
     // const day = String(today.getDate()).padStart(2, '0');
     // const date = `${year}-${month}-${day}`;
     // return date;
-    return `2024-6-22`;
+    return `2024-06-22`;
 }

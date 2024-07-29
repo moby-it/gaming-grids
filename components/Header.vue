@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NavBar from './NavBar.vue';
+const { user, signOut } = useAuth();
 const { showHelpModal } = useHelpModal();
 const { width } = useWindowSize();
 const isMobile = computed(() => width.value <= 425);
@@ -46,17 +47,9 @@ const isMobile = computed(() => width.value <= 425);
                     ></path>
                 </svg>
                 <HelpModal />
-                <div
-                    id="g_id_onload"
-                    data-client_id="710196254096-oio0spi37e8828vqncq360hhfs93t2cf.apps.googleusercontent.com"
-                    data-context="signin"
-                    data-ux_mode="popup"
-                    data-callback="handleToken"
-                    data-itp_support="true"
-                    data-auto_promt="false"
-                ></div>
 
                 <div
+                    v-show="!user"
                     class="g_id_signin"
                     data-type="standard"
                     data-shape="pill"
@@ -65,6 +58,13 @@ const isMobile = computed(() => width.value <= 425);
                     data-size="medium"
                     data-logo_alignment="left"
                 ></div>
+                <User
+                    v-if="user"
+                    :name="user.name"
+                    :email="user.email"
+                    :avatar-url="user.avatarUrl"
+                    @log-out="signOut"
+                />
             </div>
         </div>
         <ClientOnly>
