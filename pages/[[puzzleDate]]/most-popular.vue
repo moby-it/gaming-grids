@@ -20,7 +20,6 @@ onMounted(async () => {
     if (!user.value && puzzleId.value) {
         const puzzle = await getLocalPuzzle(puzzleId.value);
         guesses.value = puzzle.guesses;
-        console.log('inside mount of most popular', 'user', user.value, guesses.value);
         if (status.value === 'completed')
             await mostPopularStore.loadMostPopularClient(puzzleId.value);
     }
@@ -28,19 +27,6 @@ onMounted(async () => {
 
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 provide('selectedCell', selectedCell);
-
-supabase.auth.onAuthStateChange(async (event) => {
-    // onAuthStateChange cannot handle async requests
-    // see https://github.com/supabase/auth-js/issues/762
-    // see https://github.com/nuxt-modules/supabase/issues/273
-    setTimeout(async () => {
-        if (event === 'SIGNED_OUT' && puzzleId.value) {
-            loading.value = true;
-            puzzleStore.reset();
-            loading.value = false;
-        }
-    }, 0);
-});
 </script>
 <template>
     <h1 v-if="status === 'in progress'" class="message">Complete puzzle first</h1>

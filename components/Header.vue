@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import NavBar from './NavBar.vue';
-import User from './User.vue';
-const { signOut, user } = useAuth();
+const { user, signOut } = useAuth();
 const { showHelpModal } = useHelpModal();
 const { width } = useWindowSize();
 const isMobile = computed(() => width.value <= 425);
@@ -24,7 +23,6 @@ const isMobile = computed(() => width.value <= 425);
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    color="#c8aa6f"
                 >
                     <path
                         d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
@@ -49,18 +47,24 @@ const isMobile = computed(() => width.value <= 425);
                     ></path>
                 </svg>
                 <HelpModal />
-                <ClientOnly>
-                    <Button v-if="!user" @click="navigateTo('/sign-in')" buttonClass="primary"
-                        >Sign-in</Button
-                    >
-                    <User
-                        v-else
-                        :name="user.name"
-                        :avatar-url="user.avatarUrl"
-                        :email="user.email"
-                        @log-out="signOut"
-                    />
-                </ClientOnly>
+
+                <div
+                    v-show="!user"
+                    class="g_id_signin"
+                    data-type="standard"
+                    data-shape="pill"
+                    data-theme="filled_black"
+                    data-text="signin"
+                    data-size="medium"
+                    data-logo_alignment="left"
+                ></div>
+                <User
+                    v-if="user"
+                    :name="user.name"
+                    :email="user.email"
+                    :avatar-url="user.avatarUrl"
+                    @log-out="signOut"
+                />
             </div>
         </div>
         <ClientOnly>

@@ -8,10 +8,16 @@ const { signInWithGoogle } = useAuth();
                 <h1>Sign in</h1>
             </header>
             <section class="card">
-                <Button @click="async () => await signInWithGoogle()">
-                    <NuxtImg src="/Google__G__logo.svg.webp" height="20px" />
-                    Sign in with Google
-                </Button>
+                <div
+                    class="g_id_signin"
+                    data-type="standard"
+                    data-shape="pill"
+                    data-theme="filled_black"
+                    data-text="signin"
+                    data-size="medium"
+                    data-logo_alignment="left"
+                    @click="signInWithGoogle"
+                ></div>
             </section>
         </section>
     </Transition>
