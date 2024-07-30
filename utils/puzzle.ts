@@ -96,6 +96,7 @@ async function fetchUserPuzzle(
     if (success) return puzzle;
     return null;
 }
+
 export function savePuzzleToLocalStorage(
     championIds: string[][],
     chamionNames: string[][],
@@ -110,6 +111,7 @@ export function savePuzzleToLocalStorage(
         })
     );
 }
+
 export function clearPuzzleLocalStorage() {
     localStorage.removeItem('localGame');
 }
@@ -159,6 +161,7 @@ function getPuzzleBodyFromLocalStorage(): {
         return { championIds, championNames, guesses };
     }
 }
+
 export async function getRarityScores(
     puzzleId: string,
     championIds: string[][]

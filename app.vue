@@ -34,10 +34,10 @@ supabase.auth.onAuthStateChange(async (event) => {
     setTimeout(async () => {
         if (event === 'SIGNED_IN' && puzzleId.value) {
             await store.loadPuzzleClient(puzzleId.value);
+            clearPuzzleLocalStorage();
         }
         if (event === 'SIGNED_OUT' && puzzleId.value) {
             await store.loadPuzzleClient(puzzleId.value);
-            clearPuzzleLocalStorage();
         }
     }, 0);
 });
