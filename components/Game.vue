@@ -1,41 +1,24 @@
 <script setup lang="ts">
-import type { Champion, GameStatus } from '#imports';
-import { SupabaseClient } from '@supabase/supabase-js';
+import type { Champion } from '#imports';
 
-const supabase: SupabaseClient = useSupabaseClient();
 const props = defineProps<{ puzzleId: string }>();
 const puzzleId = props.puzzleId;
+
 const { user } = useAuth();
-const game = await useGame(puzzleId, user.value?.id);
+const puzzleStore = usePuzzleStore();
+const { name, guesses, loading, championNames, championIds, rarityScores, status } =
+    storeToRefs(puzzleStore);
+
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
-const guesses = ref(game.guesses);
-const cells = ref(game.cells);
-const puzzleMetadata = ref(game.puzzleMetadata);
 const searchBar = ref(null);
-const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
+
 const { showScoreModal, scoreModal, hideScoreModal } = useScoreModal();
-const score = computed<number>(() => +getScore(puzzleMetadata.value.rarityScore).toFixed(2));
-provide('status', status);
-provide('puzzleMetadata', puzzleMetadata);
+const score = computed<number>(() => +getScore(rarityScores.value).toFixed(2));
 provide('selectedCell', selectedCell);
 
 const showSearch = computed(
     () => (selectedCell.value.x >= 0 || selectedCell.value.y >= 0) && status.value === 'in progress'
 );
-
-supabase.auth.onAuthStateChange(async (event) => {
-    // onAuthStateChange cannot handle async requests
-    // see https://github.com/supabase/auth-js/issues/762
-    // see https://github.com/nuxt-modules/supabase/issues/273
-    setTimeout(async () => {
-        if (event === 'SIGNED_OUT') {
-            const puzzleBody = getPuzzleBodyFromLocalStorage();
-            puzzleMetadata.value = await getPuzzleMetadata(supabase, puzzleBody.cells, puzzleId);
-            cells.value = puzzleBody.cells;
-            guesses.value = puzzleBody.guesses;
-        }
-    }, 0);
-});
 
 onClickOutside(searchBar, (e: Event) => {
     resetSelectedCell(selectedCell);
@@ -44,31 +27,36 @@ onClickOutside(searchBar, (e: Event) => {
         e.stopPropagation();
     }
 });
+
+async function giveUp() {
+    guesses.value = 0;
+    if (user.value) {
+        await $fetch(`/api/giveUp/`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                puzzleId,
+            }),
+        });
+    } else {
+        savePuzzleToLocalStorage(championIds.value, championNames.value, 0);
+    }
+    showScoreModal();
+}
 async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;
-    const { data: score } = await supabase.rpc('champion_chosen', {
-        x: selectedCell.value.x,
-        y: selectedCell.value.y,
-        p_id: puzzleId,
-        champion_name: champion.name,
-        u_id: user.value?.id ?? null,
+    const { score } = await $fetch(`/api/submit-champion/`, {
+        method: 'POST',
+        body: JSON.stringify({
+            x: selectedCell.value.x,
+            y: selectedCell.value.y,
+            puzzleId: puzzleId,
+            champion: champion.id,
+            userId: user.value?.id ?? null,
+        }),
     });
-    if (score >= 0) {
-        cells.value[selectedCell.value.x - 1][selectedCell.value.y - 1] = champion.name;
-        puzzleMetadata.value.championIds[selectedCell.value.x - 1][selectedCell.value.y - 1] =
-            champion.id;
-        puzzleMetadata.value.rarityScore[selectedCell.value.x - 1][selectedCell.value.y - 1] =
-            score;
-    }
-    --guesses.value;
+    puzzleStore.updatePuzzle(selectedCell.value.x, selectedCell.value.y, champion, score);
     if (!user.value) {
-        localStorage.setItem(
-            'localGame',
-            JSON.stringify({
-                cells: cells.value,
-                guesses: guesses.value,
-            })
-        );
+        savePuzzleToLocalStorage(championIds.value, championNames.value, guesses.value);
     }
     resetSelectedCell(selectedCell);
     if (status.value === 'completed') showScoreModal();
@@ -76,38 +64,37 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 </script>
 
 <template>
-    <section class="game">
-        <main>
+    <section class="loading" v-if="loading">
+        <h1>Loading...</h1>
+    </section>
+    <section v-else class="game">
+        <section class="main">
             <Modal :show="showSearch">
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
             </Modal>
-            <ClientOnly>
-                <Grid
-                    :name="game.name"
-                    :cells="cells"
-                    :restrictions="game.restrictions"
-                    :guesses="guesses"
-                />
-            </ClientOnly>
-        </main>
-        <ClientOnly>
-            <section class="options">
-                <Summary
-                    :name="game.name"
-                    :score="score"
-                    :rarity-scores="puzzleMetadata.rarityScore"
-                    :status="status"
-                    :score-modal="scoreModal"
-                    @show-modal="showScoreModal"
-                    @hide-modal="hideScoreModal"
-                />
-                <section v-if="status === 'completed'">
-                    <p>Rarity score</p>
-                    <h1>{{ score }}</h1>
-                </section>
-                <Guesses v-if="status === 'in progress'" class="guesses" :guesses="guesses" />
+            <Grid
+                :champion-ids="championIds"
+                :champion-names="championNames"
+                :rarity-scores="rarityScores"
+            />
+        </section>
+        <section class="options">
+            <Summary
+                :name="name"
+                :score="score"
+                :rarity-scores="rarityScores"
+                :status="status"
+                :score-modal="scoreModal"
+                @show-modal="showScoreModal"
+                @hide-modal="hideScoreModal"
+            />
+            <section v-if="status === 'completed'">
+                <p>Rarity score</p>
+                <h1>{{ score }}</h1>
             </section>
-        </ClientOnly>
+            <GiveUp v-if="status === 'in progress'" @give-up="giveUp" />
+            <Guesses v-if="status === 'in progress'" class="guesses" :guesses="guesses" />
+        </section>
     </section>
 </template>
 
@@ -119,7 +106,19 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     justify-content: space-between;
     text-align: center;
 }
-
+.game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.main {
+    flex-direction: column;
+    align-items: center;
+}
+.loading {
+    margin-top: var(--cell);
+    color: var(--accent-300);
+}
 @media (width <= 768px) {
     .options {
         align-items: center;

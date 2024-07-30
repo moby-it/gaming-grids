@@ -1,6 +1,8 @@
 <script setup lang="ts">
 type ButtonClass = 'primary' | 'accent' | 'neutral';
-const props = withDefaults(defineProps<{ buttonClass: ButtonClass }>(), { buttonClass: 'neutral' });
+const props = withDefaults(defineProps<{ buttonClass?: ButtonClass }>(), {
+    buttonClass: 'neutral',
+});
 </script>
 
 <template>
@@ -37,6 +39,7 @@ button.primary {
 button.accent {
     color: var(--primary-100);
     background: linear-gradient(0.25turn, var(--accent-300), var(--accent-600));
+    min-width: 70px;
 }
 button:disabled {
     cursor: default;

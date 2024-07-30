@@ -2,10 +2,22 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 const supabase: SupabaseClient = useSupabaseClient();
+const { user } = useAuth();
 const route = useRoute();
-const puzzleDate = route.params.puzzleDate as string;
+const puzzleDate = (route.query.puzzleDate as string) ?? getCurrentDate();
+const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
+if (!puzzleId.value) throw createError('failed to get puzzle id');
+const store = usePuzzleStore();
+const { name } = storeToRefs(store);
+if (!name.value) await store.loadPuzzle(puzzleId.value);
 
-const puzzleId = await fetchPuzzleIdByDate(supabase, puzzleDate);
+onMounted(async () => {
+    if (!user.value && puzzleId.value) {
+        const puzzle = await getLocalPuzzle(puzzleId.value);
+        const rarityScores = await getRarityScores(puzzleId.value, puzzle.championIds);
+        store.storeLocalPuzzle({ ...puzzle, rarityScores });
+    }
+});
 </script>
 <template>
     <h1 v-if="!puzzleId">Puzzle not found</h1>
