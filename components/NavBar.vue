@@ -19,11 +19,11 @@ const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popul
 .nav-container {
     padding: var(--gap-2);
     margin-top: var(--gap-2);
-    width: max-content;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     gap: var(--gap-2);
     border-radius: var(--radius);
+    margin-right: calc(var(--cell) / 2);
 }
 
 .nav-link {

@@ -11,7 +11,10 @@ body {
     scrollbar-gutter: stable;
     height: 100vh;
 }
-
+#__nuxt {
+    max-width: 1024px;
+    margin: 0 auto;
+}
 input,
 textarea {
     background-color: rgb(80, 80, 80);
