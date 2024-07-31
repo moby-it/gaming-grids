@@ -92,7 +92,6 @@ header > div {
     justify-content: space-between;
     align-items: center;
     color: var(--accent-300);
-    max-width: 1024px;
 }
 
 header div div {

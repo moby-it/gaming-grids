@@ -19,7 +19,7 @@ useHead({
 });
 const supabase = useSupabaseClient();
 onMounted(() => {
-    window.supabase = supabase;
+    (window as any).supabase = supabase;
 });
 const store = usePuzzleStore();
 const route = useRoute();
