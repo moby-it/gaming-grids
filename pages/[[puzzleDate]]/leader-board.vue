@@ -7,7 +7,15 @@ const puzzleDate = (route.query.puzzleDate as string) ?? getCurrentDate();
 const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (!puzzleId.value) throw createError('failed to fetch puzzle');
 const { user } = useAuth();
-
+// console.log(user.value);
+if (user.value) {
+    console.log(puzzleId.value);
+    const { data, error } = await supabase.rpc('test', {
+        p_id: puzzleId.value,
+        u_id: user.value.id,
+    });
+    console.log(data);
+}
 // const puzzleStore = usePuzzleStore();
 // const { name, guesses, status } = storeToRefs(puzzleStore);
 // if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
@@ -31,5 +39,4 @@ const { user } = useAuth();
 <template>
     <h1>Leaderboard</h1>
 </template>
-<style scoped>
-</style>
+<style scoped></style>
