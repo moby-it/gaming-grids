@@ -2,6 +2,7 @@
 const route = useRoute();
 const puzzleDate = route.params.puzzleDate;
 const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popular';
+const leaderBoardLink = puzzleDate ? `${puzzleDate}/leader-board` : '/leader-board';
 </script>
 <template>
     <section class="nav-container">
@@ -11,7 +12,7 @@ const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popul
         <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
             >Most popular</NuxtLink
         >
-        <NuxtLink class="nav-link">Leaderboard</NuxtLink>
+        <NuxtLink :to="leaderBoardLink" class="nav-link" exact-active-class="active">Leaderboard</NuxtLink>
     </section>
 </template>
 
