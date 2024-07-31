@@ -8,6 +8,7 @@ const props = defineProps<{
     champion?: { name: string; id: string; rarityScore: number };
 }>();
 const { BUCKET_URL } = useRuntimeConfig().public;
+
 const store = usePuzzleStore();
 const { status } = storeToRefs(store);
 const selectedCell = inject<Ref<Cell>>('selectedCell');

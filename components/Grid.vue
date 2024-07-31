@@ -60,7 +60,6 @@ main {
     justify-content: center;
 }
 .grid-container {
-    margin-right: var(--cell);
     max-width: fit-content;
     padding: var(--gap-4);
     gap: 0;
@@ -70,6 +69,11 @@ main {
         'row-restriction-1 champion-cell champion-cell champion-cell'
         'row-restriction-2 champion-cell champion-cell champion-cell'
         'row-restriction-3 champion-cell champion-cell champion-cell';
+}
+@media (width <= 768px) {
+    .grid-container {
+        margin-right: calc(var(--cell) / 2);
+    }
 }
 @media (width <= 426px) {
     .grid-container {

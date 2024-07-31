@@ -46,7 +46,7 @@ watchEffect(() => {
 
 <style scoped>
 .search {
-    margin-top: var(--gap-4);
+    margin-top: var(--gap-8);
     display: flex;
     width: calc(var(--cell) * 3);
     height: var(--gap-6);
