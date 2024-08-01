@@ -8,13 +8,9 @@ const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (!puzzleId.value) throw createError('failed to fetch puzzle');
 const { user } = useAuth();
 // console.log(user.value);
+const store = useLeaderBoardStore();
 if (user.value) {
-    console.log(puzzleId.value);
-    const { data, error } = await supabase.rpc('test', {
-        p_id: puzzleId.value,
-        u_id: user.value.id,
-    });
-    console.log(data);
+    await store.loadLeaderBoard(puzzleId.value);
 }
 // const puzzleStore = usePuzzleStore();
 // const { name, guesses, status } = storeToRefs(puzzleStore);
@@ -37,6 +33,7 @@ if (user.value) {
 // provide('selectedCell', selectedCell);
 </script>
 <template>
-    <h1>Leaderboard</h1>
+    <h2 v-if="!user?.id">You must first sign in to see the leaderboard</h2>
+    <LeaderBoardContainer v-else />
 </template>
 <style scoped></style>

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 export const useMostPopularStore = defineStore('most-popular', () => {
-    const loading = ref(false);
+    const loading = ref<boolean>(false);
     const championIds = ref<string[][]>([
         ['', '', ''],
         ['', '', ''],
