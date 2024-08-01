@@ -1,14 +1,13 @@
-<template>
- <ul>
- 
-  
- </ul>
-</template>
-
 <script lang="ts" setup>
+
 
 </script>
 
-<style>
 
-</style>
+<template>
+    <h1>Leaderboard</h1>
+    <ul></ul>
+</template>
+
+
+<style></style>

@@ -12,7 +12,9 @@ const leaderBoardLink = puzzleDate ? `${puzzleDate}/leader-board` : '/leader-boa
         <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
             >Most popular</NuxtLink
         >
-        <NuxtLink :to="leaderBoardLink" class="nav-link" exact-active-class="active">Leaderboard</NuxtLink>
+        <NuxtLink :to="leaderBoardLink" class="nav-link" exact-active-class="active"
+            >Leaderboard</NuxtLink
+        >
     </section>
 </template>
 
