@@ -20,6 +20,15 @@ onMounted(async () => {
 });
 </script>
 <template>
-    <h1 v-if="!puzzleId">Puzzle not found</h1>
-    <Game v-else :puzzle-id="puzzleId" />
+    <section>
+        <NavBar />
+        <h1 v-if="!puzzleId">Puzzle not found</h1>
+        <Game v-else :puzzle-id="puzzleId" />
+    </section>
 </template>
+<style scoped>
+section:has(.nav-container) {
+    display: flex;
+    flex-direction: column;
+}
+</style>

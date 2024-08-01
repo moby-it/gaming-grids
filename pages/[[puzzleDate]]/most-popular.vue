@@ -29,17 +29,21 @@ const selectedCell = ref<Cell>({ x: -1, y: -1 });
 provide('selectedCell', selectedCell);
 </script>
 <template>
-    <h1 v-if="status === 'in progress'" class="message">Complete puzzle first</h1>
-    <h1 v-else-if="loading" class="message">Loading...</h1>
-    <Grid
-        v-else
-        :champion-names="championNames"
-        :champion-ids="championIds"
-        :rarity-scores="rarityScores"
-    />
+    <section>
+        <NavBar />
+        <h2 v-if="status === 'in progress'" class="message">Complete puzzle first</h2>
+        <h1 v-else-if="loading" class="message">Loading...</h1>
+        <Grid
+            v-else
+            :champion-names="championNames"
+            :champion-ids="championIds"
+            :rarity-scores="rarityScores"
+        />
+    </section>
 </template>
 <style scoped>
 .message {
+    text-align: center;
     margin-top: var(--cell);
     color: var(--accent-300);
 }

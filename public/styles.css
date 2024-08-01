@@ -11,6 +11,9 @@ body {
     scrollbar-gutter: stable;
     height: 100vh;
 }
+main {
+    padding-top: var(--gap-4);
+}
 #__nuxt {
     max-width: 1024px;
     margin: 0 auto;
@@ -68,7 +71,11 @@ a {
     background-color: hsla(225, 57%, 17%, 0.99);
     box-shadow: 3px 3px 10px var(--primary-600);
 }
-
+@media (width >= 992px) {
+    main {
+        margin-right: calc(var(--cell) / 2);
+    }
+}
 @media (max-width: 992px) {
     .modal {
         width: 550px;

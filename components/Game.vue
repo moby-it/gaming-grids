@@ -100,7 +100,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 
 <style scoped>
 .options {
-    margin-top: var(--gap-4);
+    margin-top: calc(var(--cell) / 2);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -108,7 +108,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 }
 .game {
     display: flex;
-    flex-direction: column;
+    gap: var(--gap-2);
     align-items: center;
 }
 .main {
@@ -120,7 +120,11 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     color: var(--accent-300);
 }
 @media (width <= 768px) {
+    .game {
+        flex-direction: column;
+    }
     .options {
+        margin-top: var(--gap-2);
         align-items: center;
     }
 }

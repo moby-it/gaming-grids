@@ -5,10 +5,15 @@
     --gap-4: 1rem;
     --gap-5: 2rem;
     --gap-6: 3rem;
+    --gap-7: 4rem;
+    --gap-8: 5rem;
     --radius: 10px;
-    --cell: 9rem;
+    --radius: 10px;
+    --radius: 10px;
+    --gap-6: 3rem;
+    --radius: 10px;
+    --cell: 10rem;
 }
-
 
 @media (width <=992px) {
     :root {

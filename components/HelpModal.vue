@@ -12,7 +12,7 @@ onClickOutside(modal, (e: Event) => {
     <Modal :show="helpModal">
         <section ref="modal" class="modal">
             <header>
-                <h4>How to play LeagueGrid.</h4>
+                <h4>Welcome to LeagueGrid! Here's how to play:</h4>
                 <Exit @click="hideHelpModal" />
             </header>
             <p>You have nine guesses to fill-put the grid.</p>
