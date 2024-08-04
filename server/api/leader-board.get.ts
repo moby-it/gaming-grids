@@ -11,6 +11,14 @@ export default defineEventHandler(async (event) => {
         p_id: puzzleId,
         u_id: userId,
     });
+    const { data: users } = await supabase.schema('auth').from('users').select('*');
+    console.log(users);
+
+    const { output, success } = v.safeParse(
+        v.array(v.object({ rank: v.number(), user_name: v.string(), user_score: v.number() })),
+        data
+    );
+    console.log(success);
     setHeader(event, 'Cache-Control', 'max-age=60, must-revalidate');
     return data;
 });

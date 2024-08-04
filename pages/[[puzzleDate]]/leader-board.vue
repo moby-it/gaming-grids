@@ -7,33 +7,39 @@ const puzzleDate = (route.query.puzzleDate as string) ?? getCurrentDate();
 const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (!puzzleId.value) throw createError('failed to fetch puzzle');
 const { user } = useAuth();
-// console.log(user.value);
 const store = useLeaderBoardStore();
+const { users, loading } = storeToRefs(store);
 if (user.value) {
     await store.loadLeaderBoard(puzzleId.value);
 }
-// const puzzleStore = usePuzzleStore();
-// const { name, guesses, status } = storeToRefs(puzzleStore);
-// if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
-
-// const mostPopularStore = useMostPopularStore();
-// const { championNames, championIds, rarityScores, loading } = storeToRefs(mostPopularStore);
-// if (status.value === 'completed') await mostPopularStore.loadMostPopular(puzzleId.value);
-
-// onMounted(async () => {
-//     if (!user.value && puzzleId.value) {
-//         const puzzle = await getLocalPuzzle(puzzleId.value);
-//         guesses.value = puzzle.guesses;
-//         if (status.value === 'completed')
-//             await mostPopularStore.loadMostPopularClient(puzzleId.value);
-//     }
-// });
-
-// const selectedCell = ref<Cell>({ x: -1, y: -1 });
-// provide('selectedCell', selectedCell);
+const puzzleStore = usePuzzleStore();
+const { name, status } = storeToRefs(puzzleStore);
+if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
 </script>
 <template>
-    <h2 v-if="!user?.id">You must first sign in to see the leaderboard</h2>
-    <LeaderBoardContainer v-else />
+    <section class="container">
+        <NavBar />
+        <section v-if="loading">
+            <h1>Loading...</h1>
+        </section>
+        <section v-else-if="!user?.id" class="message">
+            <h2>You must first sign in to see the leaderboard</h2>
+        </section>
+        <LeaderBoardContainer :users="users" v-else-if="status === 'completed'" />
+        <section v-else class="message">
+            <h2>Complete puzzle first</h2>
+        </section>
+    </section>
 </template>
-<style scoped></style>
+<style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.message {
+    text-align: center;
+    margin-top: var(--cell);
+    color: var(--accent-300);
+}
+</style>

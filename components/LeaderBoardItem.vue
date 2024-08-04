@@ -1,13 +1,51 @@
+<script lang="ts" setup>
+const props = defineProps<{ user: { user_name: string; rank: number; user_score: number } }>();
+</script>
 <template>
-  <div>
-    
-  </div>
+    <li>
+        <section class="user">
+            <section class="rank">
+                <span>{{ props.user.rank }}.</span>
+            </section>
+            <section>
+                <span>{{ props.user.user_name }}</span>
+            </section>
+            <section class="score">
+                <span>{{ props.user.user_score.toFixed(2) }}</span>
+            </section>
+        </section>
+    </li>
 </template>
 
-<script lang="ts" setup>
-
-</script>
-
-<style>
-
+<style scoped>
+.user {
+    display: flex;
+    width: calc(var(--cell) * 2.5);
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--accent-300);
+    padding: var(--gap-2) var(--gap-2);
+    margin: var(--gap-3) 0;
+    border-radius: calc(var(--radius) * 2);
+}
+.rank {
+    border: 1px solid var(--accent-300);
+    width: var(--gap-5);
+    height: var(--gap-5);
+    border-radius: var(--gap-5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.score {
+    font-size: var(--font-size-s);
+}
+.current-user {
+    background-color: var(--accent-100) !important;
+}
+@media (width <= 576px) {
+    .user {
+        width: calc(var(--cell) * 3.5);
+    }
+}
 </style>

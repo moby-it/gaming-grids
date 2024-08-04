@@ -18,9 +18,6 @@ const { name } = storeToRefs(store);
         <NuxtLink :to="leaderBoardLink" class="nav-link" exact-active-class="active"
             >Leaderboard</NuxtLink
         >
-        <NuxtLink :to="leaderBoardLink" class="nav-link" exact-active-class="active"
-            >Leaderboard</NuxtLink
-        >
     </section>
 </template>
 
