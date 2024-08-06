@@ -19,11 +19,11 @@ if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
 <template>
     <section class="container">
         <NavBar />
-        <section v-if="loading">
-            <h1>Loading...</h1>
-        </section>
-        <section v-else-if="!user?.id" class="message">
+        <section v-if="!user?.id" class="message">
             <h2>You must first sign in to see the leaderboard</h2>
+        </section>
+        <section v-else-if="loading" class="message">
+            <h1>Loading...</h1>
         </section>
         <LeaderBoardContainer :users="users" v-else-if="status === 'completed'" />
         <section v-else class="message">

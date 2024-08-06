@@ -31,7 +31,7 @@ BEGIN
     RETURN QUERY
     WITH ranked_puzzles AS (
         SELECT
-            DENSE_RANK() OVER (ORDER BY
+            RANK() OVER (ORDER BY
                 (
                     SELECT SUM(score)
                     FROM unnest(get_puzzle_rarity_scores(p_id, up.cells)) AS score
@@ -52,4 +52,3 @@ BEGIN
 END;
 $function$
 ;
-

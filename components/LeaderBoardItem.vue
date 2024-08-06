@@ -1,10 +1,22 @@
 <script lang="ts" setup>
 const props = defineProps<{ user: { user_name: string; rank: number; user_score: number } }>();
+const rankClass = computed(() => {
+    if (props.user.rank === 1) {
+        return 'gold';
+    }
+    if (props.user.rank === 2) {
+        return 'silver';
+    }
+    if (props.user.rank === 3) {
+        return 'bronze';
+    }
+    return '';
+});
 </script>
 <template>
     <li>
         <section class="user">
-            <section class="rank">
+            <section class="rank" :class="rankClass">
                 <span>{{ props.user.rank }}.</span>
             </section>
             <section>
@@ -39,6 +51,22 @@ const props = defineProps<{ user: { user_name: string; rank: number; user_score:
 }
 .score {
     font-size: var(--font-size-s);
+}
+
+.gold.rank {
+    background-color: gold !important;
+    color: var(--primary-900) !important;
+    border: 1px solid gold !important;
+}
+.silver.rank {
+    background-color: silver !important;
+    color: var(--primary-900) !important;
+    border: 1px solid silver !important;
+}
+.bronze.rank {
+    background-color: rgb(205, 127, 50) !important;
+    color: var(--primary-900) !important;
+    border: 1px solid rgb(205, 127, 50) !important;
 }
 .current-user {
     background-color: var(--accent-100) !important;
