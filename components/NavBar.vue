@@ -2,6 +2,7 @@
 const route = useRoute();
 const puzzleDate = route.params.puzzleDate;
 const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popular';
+const leaderboardLink = puzzleDate ? `${puzzleDate}/leader-board` : '/leaderboard';
 const store = usePuzzleStore();
 const { name } = storeToRefs(store);
 </script>
@@ -14,7 +15,9 @@ const { name } = storeToRefs(store);
         <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
             >Most popular</NuxtLink
         >
-        <NuxtLink class="nav-link">Leaderboard</NuxtLink>
+        <NuxtLink :to="leaderboardLink" class="nav-link" exact-active-class="active"
+            >Leaderboard</NuxtLink
+        >
     </section>
 </template>
 

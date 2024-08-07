@@ -17,11 +17,11 @@ export const User = v.pipe(
     }))
 );
 
-export function getScore(rarityScores: (number | null)[][]): number {
+export function getScore(rarityScores: number[][]): number {
     let sum = 0;
     for (const rows of rarityScores) {
         for (const cell of rows) {
-            sum += cell || 100;
+            sum += cell;
         }
     }
     return sum;

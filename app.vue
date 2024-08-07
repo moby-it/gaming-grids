@@ -46,6 +46,7 @@ supabase.auth.onAuthStateChange(async (event) => {
         }
         if (event === 'SIGNED_OUT' && puzzleId.value) {
             await store.loadPuzzleClient(puzzleId.value);
+            once.value = 0;
         }
     }, 0);
 });

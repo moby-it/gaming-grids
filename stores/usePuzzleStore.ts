@@ -57,9 +57,9 @@ export const usePuzzleStore = defineStore('puzzle', () => {
             ['', '', ''],
         ];
         rarityScores.value = [
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
+            [100, 100, 100],
+            [100, 100, 100],
+            [100, 100, 100],
         ];
         possibleAnswers.value = [
             [0, 0, 0],
