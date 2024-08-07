@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Champion } from '#imports';
 import { getFocusedChoice } from '~/utils/navigateList';
 
 const props = defineProps<{ listItems: string[] }>();

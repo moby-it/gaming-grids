@@ -24,8 +24,8 @@ onMounted(() => {
 const store = usePuzzleStore();
 const route = useRoute();
 const puzzleDate = (route.query.puzzleDate as string) ?? getCurrentDate();
-const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
-if (!puzzleId.value) throw createError('failed to fetch puzzle');
+const { data: puzzleId, error } = await fetchPuzzleIdByDate(supabase, puzzleDate);
+if (error.value) throw createError(error.value);
 
 supabase.auth.onAuthStateChange(async (event) => {
     // onAuthStateChange cannot handle async requests

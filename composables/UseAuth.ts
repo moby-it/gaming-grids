@@ -6,10 +6,10 @@ export const useAuth = () => {
     const session = useSupabaseSession();
     const user = computed(() => {
         if (!session.value?.user) return null;
-        const { output, success } = safeParse(User, session.value.user);
+        const { output, success, issues } = safeParse(User, session.value.user);
         if (!success) {
-            console.log('failed to parse user');
-            return null;
+            console.error(issues);
+            throw createError('failed to parse fetchUserPuzzle');
         }
         return output;
     });
@@ -20,14 +20,14 @@ export const useAuth = () => {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
         });
-        if (error) console.log(error);
+        if (error) throw createError(error);
         loading.value = false;
     }
 
     async function signOut() {
         loading.value = true;
         const { error } = await supabase.auth.signOut();
-        if (error) console.log(error);
+        if (error) throw createError(error);
         loading.value = false;
     }
     return {

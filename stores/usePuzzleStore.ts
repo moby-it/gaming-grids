@@ -1,5 +1,6 @@
 import { PuzzleInfo } from '#imports';
 import { defineStore } from 'pinia';
+import type { Restriction } from '~/utils/puzzle';
 
 export const usePuzzleStore = defineStore('puzzle', () => {
     const loading = ref(true);
@@ -25,7 +26,10 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         [0, 0, 0],
     ]);
     const name = ref<string>('');
-    const restrictions = ref<{ row: string[]; column: string[] }>({ row: [], column: [] });
+    const restrictions = ref<PuzzleInfo['restrictions']>({
+        row: [],
+        column: [],
+    });
     const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 
     function storeLocalPuzzle(localPuzzle: PuzzleBody) {
@@ -91,12 +95,13 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     }
     async function loadPuzzle(puzzleId: string) {
         loading.value = true;
-        const { data: puzzleBody } = await useFetch(`/api/puzzle/?puzzleId=${puzzleId}`, {
+        const { data: puzzleBody, error } = await useFetch(`/api/puzzle/?puzzleId=${puzzleId}`, {
             key: `puzzle-${puzzleId}`,
             getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key],
         });
-        if (!puzzleBody.value) throw createError('failed to get puzzle body');
-        patchPuzzle(puzzleBody.value);
+        if (error.value) throw createError(error.value);
+
+        patchPuzzle(puzzleBody.value!);
         loading.value = false;
     }
     return {

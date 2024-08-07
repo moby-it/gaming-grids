@@ -37,12 +37,12 @@ function onCellClick(x: number, y: number) {
         <RestrictionCell
             :style="{ 'grid-area': 'col-restriction-' + (index + 1) }"
             v-for="(restriction, index) in restrictions.column"
-            :text="restriction"
+            :text="restriction.name"
         />
         <RestrictionCell
             :style="{ 'grid-area': 'row-restriction-' + (index + 1) }"
             v-for="(restriction, index) in restrictions.row"
-            :text="restriction"
+            :text="restriction.name"
         />
         <Cell
             v-for="n in 9"

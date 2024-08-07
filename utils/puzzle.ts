@@ -1,24 +1,40 @@
 import * as v from 'valibot';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { getRestrictionPossibleAnswers } from './calculateResults';
+export const Restriction = v.object({
+    name: v.string(),
+    champion_list: v.array(v.string()),
+    created_at: v.string(),
+});
+export const RestrictionView = v.object({
+    name: v.string(),
+    created_at: v.string(),
+    possibleAnswers: v.array(v.array(v.number())),
+});
+
+export type Restriction = v.InferOutput<typeof Restriction>;
 
 export type GameStatus = 'completed' | 'in progress';
+
 export const PuzzleInfo = v.pipe(
     v.object({
-        puzzle_name: v.string(),
-        row_restrictions: v.array(v.string()),
-        col_restrictions: v.array(v.string()),
-        cell_possible_answers_count: v.array(v.array(v.number())),
+        name: v.string(),
+        row_restrictions: v.array(Restriction),
+        col_restrictions: v.array(Restriction),
     }),
     v.transform((o) => ({
-        name: o.puzzle_name,
+        name: o.name,
         restrictions: {
-            row: o.row_restrictions,
-            column: o.col_restrictions,
+            row: o.row_restrictions.map((r) => ({ name: r.name, created_at: r.created_at })),
+            column: o.col_restrictions.map((r) => ({ name: r.name, created_at: r.created_at })),
         },
-        possibleAnswers: o.cell_possible_answers_count,
+        possibleAnswers: o.row_restrictions.map((rr) =>
+            o.col_restrictions.map((cr) => getRestrictionPossibleAnswers(rr, cr).length)
+        ),
     }))
 );
 export type PuzzleInfo = v.InferOutput<typeof PuzzleInfo>;
+
 export const UserPuzzle = v.pipe(
     v.object({
         guesses: v.number(),
@@ -40,24 +56,21 @@ const PuzzleBody = v.object({
     rarityScores: v.array(v.array(v.number())),
 });
 export type UserPuzzle = v.InferOutput<typeof UserPuzzle>;
+
 export async function getPuzzleInfo(
     supabase: SupabaseClient,
     puzzleId: string
 ): Promise<PuzzleInfo> {
-    const { data, error } = await supabase.rpc('get_puzzle_info', {
-        puzzle_id: puzzleId,
-    });
-    if (error)
+    const { data, error } = await supabase.from('puzzle').select().eq('id', puzzleId);
+    if (error) {
         throw createError({
             statusCode: 500,
             statusMessage: error.message,
+            cause: error,
         });
-    const { success, output } = v.safeParse(PuzzleInfo, data[0]);
-    if (!success)
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Could not parse puzzle info',
-        });
+    }
+    const { success, output, issues } = v.safeParse(PuzzleInfo, data[0]);
+    if (!success) throw createError(issues.map((i) => i.message).join(', '));
     return output;
 }
 export type PuzzleBody = v.InferOutput<typeof PuzzleBody>;
@@ -73,12 +86,7 @@ export async function getPuzzleBody(
             statusCode: 500,
             statusMessage: 'Could not parse the user puzzle.',
         });
-    return {
-        championNames: userPuzzle.championNames,
-        championIds: userPuzzle.championIds,
-        rarityScores: userPuzzle.rarityScores,
-        guesses: userPuzzle.guesses,
-    };
+    return userPuzzle;
 }
 
 async function fetchUserPuzzle(
@@ -129,8 +137,8 @@ export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date: string) =>
             if (!date) throw createError('invalid puzzle date');
             const { data, error } = await supabase.from('puzzle').select('id').eq('date', date);
             if (data && data.length === 1) return data[0].id as string;
-            if (error) console.error(error);
-            if (data && data.length > 1) console.error('more than one puzzles found');
+            if (error) throw createError(error);
+            if (data && data.length > 1) throw createError('more than one puzzles found');
         },
         {
             getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key],

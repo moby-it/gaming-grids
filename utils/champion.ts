@@ -1,5 +1,4 @@
 import * as v from 'valibot';
-import { SupabaseClient } from '@supabase/supabase-js';
 
 export const Champion = v.pipe(
     v.object({
