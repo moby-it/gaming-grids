@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { SupabaseClient } from '@supabase/supabase-js';
-const props = defineProps<{ users: { user_name: string; rank: number; user_score: number }[] }>();
+const props = defineProps<{ users: { userName: string; rank: number; userScore: number }[] }>();
 const { user } = useAuth();
-const currentUser = computed(() => props.users.find((u) => u.user_name === user.value?.name));
+const currentUser = computed(() => props.users.find((u) => u.userName === user.value?.name));
 const supabase: SupabaseClient = useSupabaseClient();
 </script>
 
@@ -38,6 +38,7 @@ const supabase: SupabaseClient = useSupabaseClient();
 .header {
     width: 100%;
     border-bottom: 1px solid var(--accent-300);
+    color: var(--accent-300);
 }
 @media (width <= 576px) {
     .container {

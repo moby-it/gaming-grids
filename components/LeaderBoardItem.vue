@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const props = defineProps<{ user: { user_name: string; rank: number; user_score: number } }>();
+const props = defineProps<{ user: { userName: string; rank: number; userScore: number } }>();
 const rankClass = computed(() => {
     if (props.user.rank === 1) {
         return 'gold';
@@ -20,10 +20,10 @@ const rankClass = computed(() => {
                 <span>{{ props.user.rank }}.</span>
             </section>
             <section>
-                <span>{{ props.user.user_name }}</span>
+                <span>{{ props.user.userName }}</span>
             </section>
             <section class="score">
-                <span>{{ props.user.user_score.toFixed(2) }}</span>
+                <span>{{ props.user.userScore.toFixed(2) }}</span>
             </section>
         </section>
     </li>
