@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia';
 export const useLeaderBoardStore = defineStore('leaderboard', () => {
     const loading = ref<boolean>(false);
-    const users = ref<{ userName: string; rank: number; userScore: number }[]>([]);
+    const users = ref<{ userName: string; rank: number; userScore: number }[]>([
+        { userName: '', rank: 0, userScore: 900 },
+    ]);
     async function loadLeaderBoard(puzzleId: string) {
         loading.value = true;
         const { data, error } = await useFetch(`/api/leader-board/?puzzleId=${puzzleId}`, {

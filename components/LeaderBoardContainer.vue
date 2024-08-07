@@ -13,7 +13,7 @@ const supabase: SupabaseClient = useSupabaseClient();
         </section>
         <ul>
             <section class="list-item">
-                <LeaderBoardItem :user="currentUser!" class="current-user" />
+                <LeaderBoardItem v-if="currentUser" :user="currentUser!" class="current-user" />
                 <LeaderBoardItem v-for="user of users" :user="user" />
             </section>
         </ul>

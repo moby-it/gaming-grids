@@ -9,9 +9,7 @@ if (!puzzleId.value) throw createError('failed to fetch puzzle');
 const { user } = useAuth();
 const store = useLeaderBoardStore();
 const { users, loading } = storeToRefs(store);
-if (user.value) {
-    await store.loadLeaderBoard(puzzleId.value);
-}
+await store.loadLeaderBoard(puzzleId.value);
 const puzzleStore = usePuzzleStore();
 const { name, status } = storeToRefs(puzzleStore);
 if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
@@ -19,10 +17,7 @@ if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
 <template>
     <section class="container">
         <NavBar />
-        <section v-if="!user?.id" class="message">
-            <h2>You must first sign in to see the leaderboard</h2>
-        </section>
-        <section v-else-if="loading" class="message">
+        <section v-if="loading" class="message">
             <h1>Loading...</h1>
         </section>
         <LeaderBoardContainer :users="users" v-else-if="status === 'completed'" />
