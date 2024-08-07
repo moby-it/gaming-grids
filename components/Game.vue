@@ -95,10 +95,10 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
 
 <style scoped>
 .options {
+    width: var(--cell);
     margin-top: calc(var(--cell) / 2);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     text-align: center;
 }
 .game {

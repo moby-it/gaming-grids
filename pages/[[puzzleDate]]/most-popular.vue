@@ -34,7 +34,12 @@ provide('selectedCell', selectedCell);
         <NavBar />
         <h2 v-if="status === 'in progress'" class="message">Complete puzzle first</h2>
         <h1 v-else-if="loading" class="message">Loading...</h1>
-        <Grid v-else :champion-names="championNames" :rarity-scores="rarityScores" />
+        <Grid
+            id="most-popular-grid"
+            v-else
+            :champion-names="championNames"
+            :rarity-scores="rarityScores"
+        />
     </section>
 </template>
 <style scoped>

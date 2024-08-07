@@ -70,6 +70,11 @@ const rankClass = computed(() => {
 }
 .current-user {
     background-color: var(--accent-100) !important;
+    border-radius: var(--radius);
+    color: var(--primary-700);
+    .user {
+        border: none;
+    }
 }
 @media (width <= 576px) {
     .user {
