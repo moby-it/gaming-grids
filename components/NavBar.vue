@@ -5,22 +5,39 @@ const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popul
 const leaderboardLink = puzzleDate ? `${puzzleDate}/leader-board` : '/leaderboard';
 const store = usePuzzleStore();
 const { name } = storeToRefs(store);
+const showPuzzles = ref(false);
 </script>
 <template>
-    <section class="nav-container">
-        <NuxtLink :to="`/${puzzleDate}`" class="nav-link" exact-active-class="active"
-            >My grid</NuxtLink
-        >
-        <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
-            >Most popular</NuxtLink
-        >
-        <NuxtLink :to="leaderboardLink" class="nav-link" exact-active-class="active"
-            >Leaderboard</NuxtLink
-        >
+    <section>
+        <span class="name"
+            >{{ name }}
+            <NavArrowDown @click="() => (showPuzzles = !showPuzzles)" style="cursor: pointer"
+        /></span>
+        <Modal :show="showPuzzles">
+            <SelectPuzzleModal />
+        </Modal>
+        <section class="nav-container">
+            <NuxtLink :to="`/${puzzleDate}`" class="nav-link" exact-active-class="active"
+                >My grid</NuxtLink
+            >
+            <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
+                >Most popular</NuxtLink
+            >
+            <NuxtLink :to="leaderboardLink" class="nav-link" exact-active-class="active"
+                >Leaderboard</NuxtLink
+            >
+        </section>
     </section>
 </template>
 
 <style>
+.name {
+    font-size: var(--font-size-xl);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .nav-container {
     padding: var(--gap-2);
     margin-top: var(--gap-2);
