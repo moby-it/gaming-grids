@@ -71,7 +71,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             <Modal :show="showSearch">
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
             </Modal>
-            <Grid :champion-names="championNames" :rarity-scores="rarityScores" />
+            <Grid id="game-grid" :champion-names="championNames" :rarity-scores="rarityScores" />
         </section>
         <section class="options">
             <Summary
@@ -118,9 +118,20 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
     .game {
         flex-direction: column;
     }
+    #game-grid {
+        margin-right: var(--cell);
+    }
     .options {
         margin-top: var(--gap-2);
         align-items: center;
+    }
+}
+@media (width <= 426px) {
+    #game-grid {
+        margin-right: 0;
+    }
+    .options {
+        margin-top: var(--gap-2);
     }
 }
 </style>

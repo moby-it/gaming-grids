@@ -8,7 +8,6 @@ const { name } = storeToRefs(store);
 </script>
 <template>
     <section class="nav-container">
-        <span>{{ name }}</span>
         <NuxtLink :to="`/${puzzleDate}`" class="nav-link" exact-active-class="active"
             >My grid</NuxtLink
         >

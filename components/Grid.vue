@@ -31,7 +31,7 @@ function onCellClick(x: number, y: number) {
 </script>
 <template>
     <section class="grid-container">
-        <RestrictionCell style="grid-area: title; color: var(--accent-300)" :text="name" />
+        <RestrictionCell style="grid-area: title; color: var(--accent-300)" :text="''" />
         <RestrictionCell
             :style="{ 'grid-area': 'col-restriction-' + (index + 1) }"
             v-for="(restriction, index) in restrictions.column"
