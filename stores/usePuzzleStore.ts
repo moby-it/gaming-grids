@@ -1,6 +1,5 @@
-import { PuzzleInfo } from '#imports';
+import { Champion, PuzzleInfo } from '#imports';
 import { defineStore } from 'pinia';
-import type { Restriction } from '~/utils/puzzle';
 
 export const usePuzzleStore = defineStore('puzzle', () => {
     const loading = ref(true);
@@ -10,11 +9,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         ['', '', ''],
         ['', '', ''],
     ]);
-    const championIds: Ref<string[][]> = ref([
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', ''],
-    ]);
+
     const rarityScores: Ref<number[][]> = ref([
         [0, 0, 0],
         [0, 0, 0],
@@ -33,20 +28,13 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     const status = computed<GameStatus>(() => (guesses.value > 0 ? 'in progress' : 'completed'));
 
     function storeLocalPuzzle(localPuzzle: PuzzleBody) {
-        championIds.value = localPuzzle.championIds;
         championNames.value = localPuzzle.championNames;
         rarityScores.value = localPuzzle.rarityScores;
         guesses.value = localPuzzle.guesses;
     }
-    function updatePuzzle(
-        x: number,
-        y: number,
-        champion: { name: string; id: string },
-        score: number
-    ) {
+    function updatePuzzle(x: number, y: number, champion: Champion, score: number) {
         if (score >= 0) {
             championNames.value[x - 1][y - 1] = champion.name;
-            championIds.value[x - 1][y - 1] = champion.id;
             rarityScores.value[x - 1][y - 1] = score;
         }
         --guesses.value;
@@ -54,7 +42,6 @@ export const usePuzzleStore = defineStore('puzzle', () => {
 
     function patchPuzzle(puzzleBody: PuzzleBody & PuzzleInfo) {
         name.value = puzzleBody.name;
-        championIds.value = puzzleBody.championIds;
         championNames.value = puzzleBody.championNames;
         rarityScores.value = puzzleBody.rarityScores;
         restrictions.value = puzzleBody.restrictions;
@@ -63,11 +50,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     }
     function reset() {
         name.value = '';
-        championIds.value = [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', ''],
-        ];
+
         championNames.value = [
             ['', '', ''],
             ['', '', ''],
@@ -107,7 +90,6 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     return {
         loading,
         name,
-        championIds,
         championNames,
         rarityScores,
         restrictions,

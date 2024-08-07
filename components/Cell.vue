@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { getNameRadius, getScoreRadius } from '~/utils/cells';
 import type { StyleValue } from 'vue';
+import type { Champion } from '#imports';
 
 const props = defineProps<{
     x: number;
     y: number;
-    champion?: { name: string; id: string; rarityScore: number };
+    champion?: { name: string; rarityScore: number };
 }>();
 const { BUCKET_URL } = useRuntimeConfig().public;
+const champions = inject<Champion[]>('champions');
 
 const store = usePuzzleStore();
 const { status } = storeToRefs(store);
@@ -17,9 +19,12 @@ const score = computed(() =>
         ? props.champion?.rarityScore
         : props.champion?.rarityScore.toFixed(2)
 );
-const imageSrc = computed(() =>
-    props.champion?.id ? `${BUCKET_URL}/${props.champion?.id}_0.jpg` : ''
-);
+const imageSrc = computed(() => {
+    if (!props.champion?.name) return '';
+    const championId = champions?.find((c) => c.name === props.champion?.name)?.champion_id;
+    return `${BUCKET_URL}/${championId}_0.jpg`;
+});
+
 const isSelected = computed(
     () =>
         status?.value === 'in progress' &&
@@ -44,7 +49,7 @@ const styles = computed(() => {
         class="cell"
         :class="{ selected: isSelected, answered: !!champion, hoverable: status === 'in progress' }"
     >
-        <section v-if="props.champion?.id" class="metadata">
+        <section v-if="props.champion?.name" class="metadata">
             <section class="rarity-score" :style="getScoreRadius(props.x, props.y)">
                 <p>{{ score }}%</p>
             </section>

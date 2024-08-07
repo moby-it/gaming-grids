@@ -1,15 +1,9 @@
 import * as v from 'valibot';
 
-export const Champion = v.pipe(
-    v.object({
-        name: v.string(),
-        champion_id: v.string(),
-    }),
-    v.transform((c) => ({
-        name: c.name,
-        id: c.champion_id,
-    }))
-);
+export const Champion = v.object({
+    name: v.string(),
+    champion_id: v.string(),
+});
 
 export type Champion = v.InferOutput<typeof Champion>;
 

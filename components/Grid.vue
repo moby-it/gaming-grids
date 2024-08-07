@@ -1,8 +1,7 @@
 <script setup lang="ts">
-type Champion = { name: string; id: string; rarityScore: number };
+type Champion = { name: string; rarityScore: number };
 const props = defineProps<{
     championNames: string[][];
-    championIds: string[][];
     rarityScores: number[][];
 }>();
 const puzzleStore = usePuzzleStore();
@@ -12,7 +11,6 @@ const selectedCell = inject<Ref<Cell>>('selectedCell');
 function getChampion(x: number, y: number): Champion | undefined {
     return {
         name: props.championNames[x - 1][y - 1],
-        id: props.championIds[x - 1][y - 1],
         rarityScore: props.rarityScores[x - 1][y - 1],
     };
 }

@@ -14,7 +14,7 @@ const { name, guesses, status } = storeToRefs(puzzleStore);
 if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
 
 const mostPopularStore = useMostPopularStore();
-const { championNames, championIds, rarityScores, loading } = storeToRefs(mostPopularStore);
+const { championNames, rarityScores, loading } = storeToRefs(mostPopularStore);
 if (status.value === 'completed') await mostPopularStore.loadMostPopular(puzzleId.value);
 
 onMounted(async () => {
@@ -34,12 +34,7 @@ provide('selectedCell', selectedCell);
         <NavBar />
         <h2 v-if="status === 'in progress'" class="message">Complete puzzle first</h2>
         <h1 v-else-if="loading" class="message">Loading...</h1>
-        <Grid
-            v-else
-            :champion-names="championNames"
-            :champion-ids="championIds"
-            :rarity-scores="rarityScores"
-        />
+        <Grid v-else :champion-names="championNames" :rarity-scores="rarityScores" />
     </section>
 </template>
 <style scoped>

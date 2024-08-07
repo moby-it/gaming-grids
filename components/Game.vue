@@ -6,8 +6,7 @@ const puzzleId = props.puzzleId;
 
 const { user } = useAuth();
 const puzzleStore = usePuzzleStore();
-const { name, guesses, loading, championNames, championIds, rarityScores, status } =
-    storeToRefs(puzzleStore);
+const { name, guesses, loading, championNames, rarityScores, status } = storeToRefs(puzzleStore);
 
 const selectedCell = ref<Cell>({ x: -1, y: -1 });
 const searchBar = ref(null);
@@ -38,7 +37,7 @@ async function giveUp() {
             }),
         });
     } else {
-        savePuzzleToLocalStorage(championIds.value, championNames.value, 0);
+        savePuzzleToLocalStorage(puzzleId, championNames.value, 0);
     }
     showScoreModal();
 }
@@ -50,13 +49,13 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             x: selectedCell.value.x,
             y: selectedCell.value.y,
             puzzleId: puzzleId,
-            champion: champion.id,
+            champion: champion.name,
             userId: user.value?.id ?? null,
         }),
     });
     puzzleStore.updatePuzzle(selectedCell.value.x, selectedCell.value.y, champion, score);
     if (!user.value) {
-        savePuzzleToLocalStorage(championIds.value, championNames.value, guesses.value);
+        savePuzzleToLocalStorage(puzzleId, championNames.value, guesses.value);
     }
     resetSelectedCell(selectedCell);
     if (status.value === 'completed') showScoreModal();
@@ -72,11 +71,7 @@ async function handleChampionChosen(champion: Champion): Promise<void> {
             <Modal :show="showSearch">
                 <Search @champion-chosen="handleChampionChosen" ref="searchBar" />
             </Modal>
-            <Grid
-                :champion-ids="championIds"
-                :champion-names="championNames"
-                :rarity-scores="rarityScores"
-            />
+            <Grid :champion-names="championNames" :rarity-scores="rarityScores" />
         </section>
         <section class="options">
             <Summary

@@ -2,11 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useMostPopularStore = defineStore('most-popular', () => {
     const loading = ref(false);
-    const championIds = ref<string[][]>([
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', ''],
-    ]);
+
     const championNames = ref<string[][]>([
         ['', '', ''],
         ['', '', ''],
@@ -21,7 +17,6 @@ export const useMostPopularStore = defineStore('most-popular', () => {
     async function loadMostPopularClient(puzzleId: string) {
         loading.value = true;
         const data = await $fetch(`/api/most-popular/?puzzleId=${puzzleId}`);
-        championIds.value = data.championIds;
         championNames.value = data.championNames;
         rarityScores.value = data.rarityScores;
         loading.value = false;
@@ -35,7 +30,6 @@ export const useMostPopularStore = defineStore('most-popular', () => {
             },
         });
         if (!data.value) throw createError('failed to fetch most popular puzzle');
-        championIds.value = data.value.championIds;
         championNames.value = data.value.championNames;
         rarityScores.value = data.value.rarityScores;
         loading.value = false;
@@ -44,7 +38,6 @@ export const useMostPopularStore = defineStore('most-popular', () => {
     return {
         championNames,
         loading,
-        championIds,
         rarityScores,
         loadMostPopular,
         loadMostPopularClient,

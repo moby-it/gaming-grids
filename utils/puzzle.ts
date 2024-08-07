@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { getRestrictionPossibleAnswers } from './calculateResults';
+
 export const Restriction = v.object({
     name: v.string(),
     champion_list: v.array(v.string()),
@@ -35,28 +36,6 @@ export const PuzzleInfo = v.pipe(
 );
 export type PuzzleInfo = v.InferOutput<typeof PuzzleInfo>;
 
-export const UserPuzzle = v.pipe(
-    v.object({
-        guesses: v.number(),
-        champion_ids: v.array(v.array(v.string())),
-        champion_names: v.array(v.array(v.string())),
-        rarity_scores: v.array(v.array(v.number())),
-    }),
-    v.transform((p) => ({
-        guesses: p.guesses,
-        championIds: p.champion_ids,
-        championNames: p.champion_names,
-        rarityScores: p.rarity_scores,
-    }))
-);
-const PuzzleBody = v.object({
-    guesses: v.number(),
-    championIds: v.array(v.array(v.string())),
-    championNames: v.array(v.array(v.string())),
-    rarityScores: v.array(v.array(v.number())),
-});
-export type UserPuzzle = v.InferOutput<typeof UserPuzzle>;
-
 export async function getPuzzleInfo(
     supabase: SupabaseClient,
     puzzleId: string
@@ -73,55 +52,62 @@ export async function getPuzzleInfo(
     if (!success) throw createError(issues.map((i) => i.message).join(', '));
     return output;
 }
-export type PuzzleBody = v.InferOutput<typeof PuzzleBody>;
 
-export async function getPuzzleBody(
+export const UserPuzzle = v.pipe(
+    v.object({
+        guesses: v.number(),
+        champion_names: v.array(v.array(v.string())),
+        rarity_scores: v.array(v.array(v.number())),
+    }),
+    v.transform((p) => ({
+        guesses: p.guesses,
+        championNames: p.champion_names,
+        rarityScores: p.rarity_scores,
+    }))
+);
+export type UserPuzzle = v.InferOutput<typeof UserPuzzle>;
+
+export async function fetchUserPuzzle(
     supabase: SupabaseClient,
     puzzleId: string,
     userId: string
-): Promise<PuzzleBody> {
-    const userPuzzle = await fetchUserPuzzle(supabase, puzzleId, userId);
-    if (!userPuzzle)
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Could not parse the user puzzle.',
-        });
-    return userPuzzle;
-}
-
-async function fetchUserPuzzle(
-    supabase: SupabaseClient,
-    puzzleId: string,
-    userId: string
-): Promise<UserPuzzle | null> {
+): Promise<UserPuzzle> {
     const { data, error } = await supabase.rpc('get_user_puzzle', { u_id: userId, p_id: puzzleId });
-    if (error)
+    if (error) {
         throw createError({
             statusCode: 500,
             statusMessage: error.message,
         });
+    }
     const { output: puzzle, success } = v.safeParse(UserPuzzle, data[0]);
-    if (success) return puzzle;
-    return null;
+    if (!success) throw createError('failed to parse user puzzle');
+    return puzzle;
 }
 
+const PuzzleBody = v.object({
+    guesses: v.number(),
+    championNames: v.array(v.array(v.string())),
+    rarityScores: v.array(v.array(v.number())),
+});
+
+export type PuzzleBody = v.InferOutput<typeof PuzzleBody>;
+
 export function savePuzzleToLocalStorage(
-    championIds: string[][],
+    puzzleId: string,
     chamionNames: string[][],
     guesses: number
 ) {
     localStorage.setItem(
-        'localGame',
+        puzzleId,
         JSON.stringify({
-            championIds: championIds,
             championNames: chamionNames,
             guesses: guesses,
         })
     );
 }
 
-export function clearPuzzleLocalStorage() {
-    localStorage.removeItem('localGame');
+export function clearPuzzleLocalStorage(puzzleId: string) {
+    localStorage.removeItem(puzzleId);
 }
 
 /**
@@ -145,8 +131,7 @@ export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date: string) =>
         }
     );
 
-function getPuzzleBodyFromLocalStorage(): {
-    championIds: string[][];
+function getPuzzleBodyFromLocalStorage(puzzleId: string): {
     championNames: string[][];
     guesses: number;
 } {
@@ -155,37 +140,33 @@ function getPuzzleBodyFromLocalStorage(): {
         ['', '', ''],
         ['', '', ''],
     ];
-    let championIds = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', ''],
-    ];
+
     let guesses = 9;
-    const cachedGame = localStorage.getItem('localGame');
+    const cachedGame = localStorage.getItem(puzzleId);
     if (cachedGame) {
         return JSON.parse(cachedGame);
     } else {
-        savePuzzleToLocalStorage(championIds, championNames, guesses);
-        return { championIds, championNames, guesses };
+        savePuzzleToLocalStorage(puzzleId, championNames, guesses);
+        return { championNames, guesses };
     }
 }
 
 export async function getRarityScores(
     puzzleId: string,
-    championIds: string[][]
+    championNames: string[][]
 ): Promise<number[][]> {
     const rarityScores = await $fetch(`/api/rarity-scores/`, {
         query: {
             puzzleId: puzzleId,
-            championIds: championIds,
+            championNames: championNames,
         },
     });
     return rarityScores;
 }
 
 export async function getLocalPuzzle(puzzleId: string): Promise<Omit<PuzzleBody, 'rarityScores'>> {
-    const { championIds, championNames, guesses } = getPuzzleBodyFromLocalStorage();
-    return { championIds, championNames, guesses };
+    const { championNames, guesses } = getPuzzleBodyFromLocalStorage(puzzleId);
+    return { championNames, guesses };
 }
 
 export async function getAnswerScore(
@@ -200,7 +181,7 @@ export async function getAnswerScore(
         x: x,
         y: y,
         p_id: puzzleId,
-        champion_id: champion,
+        champion_name: champion,
         u_id: userId ?? null,
     });
     return data;

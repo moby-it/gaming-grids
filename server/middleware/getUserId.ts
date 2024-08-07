@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+
 export default defineEventHandler(async (event) => {
     const cookies = parseCookies(event);
     const token = cookies['sb-access-token'];

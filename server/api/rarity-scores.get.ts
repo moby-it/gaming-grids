@@ -4,10 +4,10 @@ import { SupabaseClient } from '@supabase/supabase-js';
 export default defineEventHandler(async (event) => {
     const supabase: SupabaseClient = await serverSupabaseClient(event);
     const queryParams = getQuery(event);
-    const { puzzleId, championIds } = queryParams;
+    const { puzzleId, championNames } = queryParams;
     const { data } = await supabase.rpc('get_puzzle_rarity_scores', {
         p_id: puzzleId,
-        champion_ids: championIds,
+        champion_names: championNames,
     });
     const { output: rarityScores, success } = v.safeParse(v.array(v.array(v.number())), data);
     if (!success)

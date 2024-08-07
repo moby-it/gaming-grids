@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server';
-import { getPuzzleBody, getPuzzleInfo, PuzzleInfo } from '~/utils/puzzle';
-import getUserId from '../middleware/getUserId';
+import { fetchUserPuzzle, getPuzzleInfo } from '~/utils/puzzle';
+
 export default defineEventHandler(async (event) => {
     const puzzleId = getQuery(event).puzzleId as string;
     if (!puzzleId)
@@ -10,19 +10,13 @@ export default defineEventHandler(async (event) => {
         });
 
     const supabase = await serverSupabaseClient(event);
-    await getUserId(event);
     const userId = event.context.userId;
-
     let championNames: string[][] = [
         ['', '', ''],
         ['', '', ''],
         ['', '', ''],
     ];
-    let championIds: string[][] = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', ''],
-    ];
+
     let rarityScores: number[][] = [
         [0, 0, 0],
         [0, 0, 0],
@@ -32,9 +26,8 @@ export default defineEventHandler(async (event) => {
 
     const puzzleInfo = await getPuzzleInfo(supabase, puzzleId);
     if (userId) {
-        const puzzleBody = await getPuzzleBody(supabase, puzzleId, userId);
+        const puzzleBody = await fetchUserPuzzle(supabase, puzzleId, userId);
         championNames = puzzleBody.championNames;
-        championIds = puzzleBody.championIds;
         rarityScores = puzzleBody.rarityScores;
         guesses = puzzleBody.guesses;
     }
@@ -44,7 +37,6 @@ export default defineEventHandler(async (event) => {
         restrictions: puzzleInfo.restrictions,
         possibleAnswers: puzzleInfo.possibleAnswers,
         guesses,
-        championIds,
         championNames,
         rarityScores,
     };

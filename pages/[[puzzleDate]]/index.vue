@@ -15,7 +15,7 @@ if (!name.value) await store.loadPuzzle(puzzleId.value);
 onMounted(async () => {
     if (!user.value && puzzleId.value) {
         const puzzle = await getLocalPuzzle(puzzleId.value);
-        const rarityScores = await getRarityScores(puzzleId.value, puzzle.championIds);
+        const rarityScores = await getRarityScores(puzzleId.value, puzzle.championNames);
         store.storeLocalPuzzle({ ...puzzle, rarityScores });
     }
 });
