@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getNameRadius, getScoreRadius } from '~/utils/cells';
 import type { StyleValue } from 'vue';
 import type { Champion } from '#imports';
 

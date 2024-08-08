@@ -11,11 +11,6 @@ export const useHelpModal = () => {
             if (!localStorage.getItem('seenModal')) setTimeout(() => showHelpModal(), 0);
             localStorage.setItem('seenModal', 'true');
         }
-        window.addEventListener('keyup', (e) => {
-            if (e.key === 'Escape') {
-                hideHelpModal();
-            }
-        });
     });
     return { helpModal, showHelpModal, hideHelpModal };
 };

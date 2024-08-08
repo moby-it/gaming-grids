@@ -14,7 +14,7 @@ onClickOutside(modal, (e: Event) => {
 
 <template>
     <Button @click="showModal = true"> Give up </Button>
-    <Modal :show="showModal">
+    <Modal :show="showModal" @close="showModal = false">
         <section class="modal" ref="modal">
             <header>
                 <section class="heading">

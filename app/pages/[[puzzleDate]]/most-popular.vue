@@ -3,7 +3,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 const supabase: SupabaseClient = useSupabaseClient();
 const route = useRoute();
-const puzzleDate = (route.query.puzzleDate as string) ?? getCurrentDate();
+const puzzleDate = (route.params.puzzleDate as string) || '';
 const { data: puzzleId, error } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (error.value) throw createError(error.value);
 if (!puzzleId.value) throw createError('puzzle id not found');

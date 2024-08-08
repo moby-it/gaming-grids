@@ -3,20 +3,27 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 const supabase: SupabaseClient = useSupabaseClient();
 const route = useRoute();
-const puzzleDate = (route.query.puzzleDate as string) ?? getCurrentDate();
+const puzzleDate = (route.params.puzzleDate as string) || '';
 const { data: puzzleId } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (!puzzleId.value) throw createError('failed to fetch puzzle');
 
-const store = useLeaderboardStore();
-const { users, loading } = storeToRefs(store);
-await store.loadLeaderboard(puzzleId.value);
-
 const puzzleStore = usePuzzleStore();
-const { name, status } = storeToRefs(puzzleStore);
+const { name, status, guesses } = storeToRefs(puzzleStore);
 if (!name.value) await puzzleStore.loadPuzzle(puzzleId.value);
 
+const store = useLeaderboardStore();
+const { users, loading } = storeToRefs(store);
+if (status.value === 'completed') await store.loadLeaderboard(puzzleId.value);
+
+onMounted(async () => {
+    if (!user.value && puzzleId.value) {
+        const puzzle = await getLocalPuzzle(puzzleId.value);
+        guesses.value = puzzle.guesses;
+        if (status.value === 'completed') await store.loadLeaderBoardClient(puzzleId.value);
+    }
+});
 const { user } = useAuth();
-const currentUser = computed(() => users.value.find((u) => u.userName === user.value?.name));
+const currentUser = computed(() => users.value.find((u) => u.username === user.value?.name));
 </script>
 <template>
     <section class="container">

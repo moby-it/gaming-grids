@@ -44,7 +44,7 @@ onClickOutside(modal, (e: Event) => {
             Summary
         </section>
     </Button>
-    <Modal :show="scoreModal">
+    <Modal :show="scoreModal" @close="$emit('hideModal')">
         <section class="modal" ref="modal">
             <header>
                 <section class="heading">

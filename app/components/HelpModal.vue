@@ -9,7 +9,7 @@ onClickOutside(modal, (e: Event) => {
 </script>
 
 <template>
-    <Modal :show="helpModal">
+    <Modal :show="helpModal" @close="hideHelpModal">
         <section ref="modal" class="modal">
             <header>
                 <h4>Welcome to LeagueGrid! Here's how to play:</h4>

@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { getFocusedChoice } from '~/utils/navigateList';
-
 const props = defineProps<{ listItems: string[] }>();
 const listItems = ref<HTMLElement[]>([]);
 
 const focusedChoice = ref<number>(0);
 
 const emits = defineEmits<{
-    championChosen: [value: string];
+    championChosen: [value: string | undefined];
 }>();
 onMounted(() => {
     const handleKeydown = (e: KeyboardEvent) => {

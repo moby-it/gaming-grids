@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const route = useRoute();
-const puzzleDate = route.params.puzzleDate;
+const puzzleDate = (route.query.puzzleDate as string) || '';
 const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popular';
 const leaderboardLink = puzzleDate ? `${puzzleDate}/leader-board` : '/leaderboard';
 const store = usePuzzleStore();
@@ -9,11 +9,10 @@ const showPuzzles = ref(false);
 </script>
 <template>
     <section>
-        <span class="name"
-            >{{ name }}
-            <NavArrowDown @click="() => (showPuzzles = !showPuzzles)" style="cursor: pointer"
+        <span class="name" @click="() => (showPuzzles = !showPuzzles)"
+            >{{ name }} <NavArrowDown style="cursor: pointer"
         /></span>
-        <Modal :show="showPuzzles">
+        <Modal :show="showPuzzles" @close="showPuzzles = false">
             <SelectPuzzleModal />
         </Modal>
         <section class="nav-container">

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const props = defineProps<{ user: { userName: string; rank: number; userScore: number } }>();
+const props = defineProps<{ user: LeaderboardUsers[number] }>();
 const rankClass = computed(() => {
     if (props.user.rank === 1) {
         return 'gold';
@@ -20,7 +20,7 @@ const rankClass = computed(() => {
                 <span>{{ props.user.rank }}.</span>
             </section>
             <section>
-                <span>{{ props.user.userName }}</span>
+                <span>{{ props.user.username }}</span>
             </section>
             <section class="score">
                 <span>{{ props.user.userScore.toFixed(2) }}</span>
