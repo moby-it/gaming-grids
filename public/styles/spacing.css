@@ -12,7 +12,7 @@
     --radius: 10px;
     --gap-6: 3rem;
     --radius: 10px;
-    --cell: 10rem;
+    --cell: 9.5rem;
 }
 
 @media (width <=992px) {

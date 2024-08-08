@@ -1,5 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server';
-import { fetchUserPuzzle, getPuzzleInfo } from '~/utils/puzzle';
+import { getPuzzleInfo } from '../utils/puzzle';
 
 export default defineEventHandler(async (event) => {
     const puzzleId = getQuery(event).puzzleId as string;
@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
     return {
         puzzleId,
         name: puzzleInfo.name,
+        date: puzzleInfo.date,
         restrictions: puzzleInfo.restrictions,
         possibleAnswers: puzzleInfo.possibleAnswers,
         guesses,

@@ -11,13 +11,16 @@ body {
     scrollbar-gutter: stable;
     height: 100vh;
 }
+
 main {
     padding-top: var(--gap-4);
 }
+
 #__nuxt {
     max-width: 1024px;
     margin: 0 auto;
 }
+
 input,
 textarea {
     background-color: rgb(80, 80, 80);
@@ -62,6 +65,12 @@ a {
 }
 
 .modal {
+
+    
+    font-family: 'Spiegel';
+    color: var(--accent-200);
+    font-weight: 400;
+
     cursor: default;
     border-top: 1px solid var(--primary-600);
     border-left: 1px solid var(--primary-600);
@@ -70,13 +79,10 @@ a {
     width: 600px;
     background-color: hsla(225, 57%, 17%, 0.99);
     box-shadow: 3px 3px 10px var(--primary-600);
+    padding: var(--gap-4);
 }
-@media (width >= 992px) {
-    main {
-        margin-right: calc(var(--cell) / 2);
-    }
-}
-@media (max-width: 992px) {
+
+@media (width <=992px) {
     .modal {
         width: 550px;
     }

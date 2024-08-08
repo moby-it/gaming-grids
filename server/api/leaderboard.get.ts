@@ -1,20 +1,24 @@
 import { serverSupabaseClient } from '#supabase/server';
-import * as v from 'valibot';
 import { SupabaseClient } from '@supabase/supabase-js';
+
+import * as v from 'valibot';
+import { LeaderboardSchema } from '../utils/types';
+
 export default defineEventHandler(async (event) => {
     const supabase: SupabaseClient = await serverSupabaseClient(event);
-    const queryParams = getQuery(event);
-    const { puzzleId, championNames } = queryParams;
-    const { data } = await supabase.rpc('get_puzzle_rarity_scores', {
+    const puzzleId = getQuery(event).puzzleId as string;
+    const userId = event.context.userId;
+    const { data } = await supabase.rpc('get_leaderboard', {
         p_id: puzzleId,
-        champion_names: championNames,
+        u_id: userId,
     });
-    const { output: rarityScores, success } = v.safeParse(v.array(v.array(v.number())), data);
+    const { output, success } = v.safeParse(LeaderboardSchema, data);
     if (!success)
         throw createError({
             statusCode: 500,
-            statusMessage: 'Could not parse rarity score for local puzzle.',
+            statusMessage: 'Could not parse leaderboard.',
         });
+
     setHeader(event, 'Cache-Control', 'max-age=3600, must-revalidate');
-    return rarityScores;
+    return output;
 });
