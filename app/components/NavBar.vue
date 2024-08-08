@@ -18,7 +18,7 @@ const showPuzzles = ref(false);
 <template>
     <section class="navbar">
         <span class="name" style="cursor: pointer" @click="() => (showPuzzles = !showPuzzles)"
-            >{{ name }} <NavArrowDown
+            >{{ name }} <IconsNavArrowDown
         /></span>
         <Modal :show="showPuzzles" @close="showPuzzles = false">
             <SelectPuzzleModal @close="showPuzzles = false" />

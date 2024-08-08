@@ -14,7 +14,7 @@ onClickOutside(modal, (e: Event) => {
             <header>
                 <hgroup>
                     <h2>Welcome to LeagueGrid!</h2>
-                    <Exit @click="hideHelpModal" />
+                    <IconsExit @click="hideHelpModal" />
                 </hgroup>
                 <h4>Here's how to play:</h4>
             </header>

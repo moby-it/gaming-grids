@@ -11,7 +11,6 @@ if (!puzzleId.value) throw createError('puzzle id not found');
 const store = usePuzzleStore();
 const { name, loading, date } = storeToRefs(store);
 if (!name.value || puzzleDate !== date.value) await store.loadPuzzle(puzzleId.value);
-
 onMounted(async () => {
     if (!user.value && puzzleId.value) {
         const puzzle = await getLocalPuzzle(puzzleId.value);

@@ -52,7 +52,7 @@ onClickOutside(modal, (e: Event) => {
                     <h2>{{ props.name }}</h2>
                 </section>
                 <section>
-                    <Exit class="exit" @click="emits('hideModal')" />
+                    <IconsExit class="exit" @click="emits('hideModal')" />
                 </section>
             </header>
             <section class="grid-body">

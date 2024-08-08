@@ -56,21 +56,51 @@ supabase.auth.onAuthStateChange(async (event) => {
 });
 </script>
 <template>
-    <div
-        id="g_id_onload"
-        data-client_id="710196254096-oio0spi37e8828vqncq360hhfs93t2cf.apps.googleusercontent.com"
-        data-context="signin"
-        data-ux_mode="popup"
-        data-callback="handleSignInWithGoogle"
-        data-nonce=""
-        data-auto_select="true"
-        data-itp_support="true"
-        data-use_fedcm_for_prompt="true"
-    ></div>
-    <Header />
-    <NavBar />
-    <section id="modal"></section>
-    <main>
-        <NuxtPage />
-    </main>
+    <NuxtErrorBoundary>
+        <div
+            id="g_id_onload"
+            data-client_id="710196254096-oio0spi37e8828vqncq360hhfs93t2cf.apps.googleusercontent.com"
+            data-context="signin"
+            data-ux_mode="popup"
+            data-callback="handleSignInWithGoogle"
+            data-nonce=""
+            data-auto_select="true"
+            data-itp_support="true"
+            data-use_fedcm_for_prompt="true"
+        ></div>
+        <Header />
+        <NavBar />
+        <section id="modal"></section>
+        <main>
+            <NuxtPage />
+        </main>
+        <template #error="{ error, clearError }">
+            <section class="error">
+                <h1>Application failed</h1>
+                <h2>{{ error }}</h2>
+                <Button :button-class="'accent'" @click="clearError">
+                    Go to Home <IconsRightArrow
+                /></Button>
+            </section>
+        </template>
+    </NuxtErrorBoundary>
 </template>
+<style lang="css">
+.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-2);
+    margin-top: var(--gap-6);
+
+    p {
+        font-size: var(--font-size-l);
+    }
+    button {
+        display: flex;
+        align-items: center;
+        gap: var(--gap-2);
+        align-self: center;
+    }
+}
+</style>

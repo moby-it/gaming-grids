@@ -2,7 +2,7 @@
 
 ## TODO
 
-- Implement play past puzzles features
+- Add some error handling
 
 ## Future Considerations
 

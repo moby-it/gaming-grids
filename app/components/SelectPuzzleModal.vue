@@ -13,7 +13,7 @@ onClickOutside(modal, (e: Event) => {
     <section ref="modal" class="modal">
         <header>
             <h2>Previous days</h2>
-            <Exit @click="$emit('close')" />
+            <IconsExit @click="$emit('close')" />
         </header>
         <p v-if="status === 'pending'">Loading...</p>
         <p v-else-if="status === 'error'">Failed to fetch latest puzzle dates</p>

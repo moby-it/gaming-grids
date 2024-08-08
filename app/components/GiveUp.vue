@@ -21,7 +21,7 @@ onClickOutside(modal, (e: Event) => {
                     <h2>Are you sure you want to give up?</h2>
                 </section>
                 <section>
-                    <Exit style="align-self: flex-end" @click="showModal = false" />
+                    <IconsExit style="align-self: flex-end" @click="showModal = false" />
                 </section>
             </header>
             <main>
