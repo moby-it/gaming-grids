@@ -19,11 +19,13 @@ export type GameStatus = 'completed' | 'in progress';
 export const PuzzleInfo = v.pipe(
     v.object({
         name: v.string(),
+        date: v.string(),
         row_restrictions: v.array(Restriction),
         col_restrictions: v.array(Restriction),
     }),
     v.transform((o) => ({
         name: o.name,
+        date: o.date,
         restrictions: {
             row: o.row_restrictions.map((r) => ({ name: r.name, created_at: r.created_at })),
             column: o.col_restrictions.map((r) => ({ name: r.name, created_at: r.created_at })),

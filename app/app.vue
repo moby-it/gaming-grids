@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const once = ref(0);
+import { fetchPuzzleIdByDateClient } from './utils/puzzle';
+
 useHead({
     script: [
         {
@@ -19,34 +20,37 @@ useHead({
     ],
 });
 const supabase = useSupabaseClient();
-const { user } = useAuth();
+const prevAuthState = ref('INITIAL_SESSION');
 onMounted(() => {
     (window as any).supabase = supabase;
-    if (user.value) once.value = 1;
 });
 const store = usePuzzleStore();
+const { name } = storeToRefs(store);
 const route = useRoute();
 const puzzleDate = route.params.puzzleDate as string;
 const { data: puzzleId, error } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (error.value) throw createError(error.value);
-
+if (!name.value) await store.loadPuzzle(puzzleId.value!);
 const { data: champions, error: championsError } = await supabase.from('champion').select();
 if (championsError) throw createError('failed to fetch champions');
 provide('champions', champions);
 
 supabase.auth.onAuthStateChange(async (event) => {
+    if (prevAuthState.value === 'INITIAL_SESSION' && event === 'SIGNED_IN') return;
+    if (event === prevAuthState.value) return;
     // onAuthStateChange cannot handle async requests
     // see https://github.com/supabase/auth-js/issues/762
     // see https://github.com/nuxt-modules/supabase/issues/273
     setTimeout(async () => {
-        if (event === 'SIGNED_IN' && puzzleId.value && !once.value) {
-            await store.loadPuzzleClient(puzzleId.value);
-            once.value = 1;
-            clearPuzzleLocalStorage(puzzleId.value);
+        prevAuthState.value = event;
+        const puzzleDate = route.params.puzzleDate as string;
+        const puzzleId = await fetchPuzzleIdByDateClient(supabase, puzzleDate);
+        if (event === 'SIGNED_IN') {
+            await store.loadPuzzleClient(puzzleId);
+            clearPuzzleLocalStorage(puzzleId);
         }
-        if (event === 'SIGNED_OUT' && puzzleId.value) {
-            await store.loadPuzzleClient(puzzleId.value);
-            once.value = 0;
+        if (event === 'SIGNED_OUT') {
+            await store.loadPuzzleClient(puzzleId);
         }
     }, 0);
 });
@@ -64,6 +68,7 @@ supabase.auth.onAuthStateChange(async (event) => {
         data-use_fedcm_for_prompt="true"
     ></div>
     <Header />
+    <NavBar />
     <section id="modal"></section>
     <main>
         <NuxtPage />

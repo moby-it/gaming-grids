@@ -81,6 +81,7 @@ header {
     justify-content: space-between;
     align-items: baseline;
     color: var(--accent-300);
+    margin-bottom: var(--gap-2);
 }
 
 header div {

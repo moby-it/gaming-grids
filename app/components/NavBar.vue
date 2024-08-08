@@ -1,22 +1,30 @@
 <script lang="ts" setup>
-const route = useRoute();
-const puzzleDate = (route.params.puzzleDate as string) || '';
-const mostPopularLink = puzzleDate ? `/${puzzleDate}/most-popular` : '/most-popular';
-const leaderboardsLink = puzzleDate ? `/${puzzleDate}/leaderboard` : '/leaderboard';
 const store = usePuzzleStore();
-const { name } = storeToRefs(store);
+const { date, name } = storeToRefs(store);
+const puzzleDate = () => useRoute().params['puzzleDate'];
+
+const myGridLink = computed(() => (puzzleDate() ? `/${date.value}` : '/'));
+
+const mostPopularLink = computed(() =>
+    puzzleDate() ? `/${date.value}/most-popular` : '/most-popular'
+);
+
+const leaderboardsLink = computed(() =>
+    puzzleDate() ? `/${date.value}/leaderboard` : '/leaderboard'
+);
+
 const showPuzzles = ref(false);
 </script>
 <template>
-    <section>
-        <span class="name" @click="() => (showPuzzles = !showPuzzles)"
-            >{{ name }} <NavArrowDown style="cursor: pointer"
+    <section class="navbar">
+        <span class="name" style="cursor: pointer" @click="() => (showPuzzles = !showPuzzles)"
+            >{{ name }} <NavArrowDown
         /></span>
         <Modal :show="showPuzzles" @close="showPuzzles = false">
-            <SelectPuzzleModal />
+            <SelectPuzzleModal @close="showPuzzles = false" />
         </Modal>
-        <section class="nav-container">
-            <NuxtLink :to="`/${puzzleDate}`" class="nav-link" exact-active-class="active"
+        <section class="links-container">
+            <NuxtLink :to="myGridLink" class="nav-link" exact-active-class="active"
                 >My grid</NuxtLink
             >
             <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
@@ -29,15 +37,24 @@ const showPuzzles = ref(false);
     </section>
 </template>
 
-<style>
+<style scoped>
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .name {
     font-size: var(--font-size-xl);
     text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: var(--gap-2);
+    border-radius: var(--radius);
+    transition: background-color 200ms ease-in;
+    &:hover {
+        border-radius: var(--radius);
+        background-color: var(--accent-200);
+    }
 }
-.nav-container {
+.links-container {
     padding: var(--gap-2);
     margin-top: var(--gap-2);
     display: flex;
@@ -65,7 +82,7 @@ const showPuzzles = ref(false);
 }
 
 @media (width <= 426px) {
-    .nav-container {
+    .links-container {
         margin: auto;
     }
 }

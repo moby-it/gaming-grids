@@ -22,29 +22,30 @@ export function clearPuzzleLocalStorage(puzzleId: string) {
  *
  * @param supabase SupabaseClient
  * @param date Date of the puzzle to fetch. Pass empty string for current date.
- * @returns
+ * @returns puzzle Id as string
  */
 export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date?: string) =>
     useAsyncData(
         date || 'latestDate',
-        async () => {
-            if (date && !isValidDate(date)) throw createError(`invalid date string: ${date}`);
-            const { data, error } = !!date
-                ? await supabase.from('puzzle').select('id').eq('date', date)
-                : await supabase
-                      .from('puzzle')
-                      .select('id')
-                      .lte('date', new Date().toUTCString())
-                      .order('date', { ascending: false })
-                      .limit(1);
-            if (error) throw createError(error);
-            if (!data.length) throw createError(`puzzle for date ${date} not found`);
-            return data[0]?.id as string;
-        },
+        async () => await fetchPuzzleIdByDateClient(supabase, date),
         {
             getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key],
         }
     );
+export const fetchPuzzleIdByDateClient = async (supabase: SupabaseClient, date?: string) => {
+    if (date && !isValidDate(date)) throw createError(`invalid date string: ${date}`);
+    const { data, error } = !!date
+        ? await supabase.from('puzzle').select('id').eq('date', date)
+        : await supabase
+              .from('puzzle')
+              .select('id')
+              .lte('date', new Date().toUTCString())
+              .order('date', { ascending: false })
+              .limit(1);
+    if (error) throw createError(error);
+    if (!data.length) throw createError(`puzzle for date ${date} not found`);
+    return data[0]?.id as string;
+};
 
 function getPuzzleBodyFromLocalStorage(puzzleId: string): {
     championNames: string[][];

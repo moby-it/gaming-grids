@@ -8,8 +8,8 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(['showModal', 'hideModal']);
 
-const getCellScore = (x: number, y: number) => {
-    return props.rarityScores[x - 1][y - 1];
+const getCellScore = (x: number, y: number): number => {
+    return props.rarityScores[x - 1]![y - 1] as number;
 };
 
 const modal = ref(null);

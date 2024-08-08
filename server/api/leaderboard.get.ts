@@ -19,6 +19,6 @@ export default defineEventHandler(async (event) => {
             statusMessage: 'Could not parse leaderboard.',
         });
 
-    setHeader(event, 'Cache-Control', 'max-age=60, must-revalidate');
+    setHeader(event, 'Cache-Control', 'max-age=3600, must-revalidate');
     return output;
 });

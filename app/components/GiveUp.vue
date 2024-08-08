@@ -17,11 +17,11 @@ onClickOutside(modal, (e: Event) => {
     <Modal :show="showModal" @close="showModal = false">
         <section class="modal" ref="modal">
             <header>
-                <section class="heading">
-                    <h1>Are you sure you want to give up?</h1>
+                <section style="text-align: center" class="heading">
+                    <h2>Are you sure you want to give up?</h2>
                 </section>
                 <section>
-                    <Exit class="exit" @click="showModal = false" />
+                    <Exit style="align-self: flex-end" @click="showModal = false" />
                 </section>
             </header>
             <main>
@@ -33,23 +33,6 @@ onClickOutside(modal, (e: Event) => {
 </template>
 
 <style scoped>
-.modal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: default;
-    text-align: center;
-    box-shadow: 3px 3px 10px var(--primary-600);
-
-    h1 {
-        font-family: 'Spiegel';
-        color: var(--accent-300);
-        font-size: var(--font-size-l);
-    }
-}
-.exit {
-    align-self: flex-end;
-}
 main {
     display: flex;
     width: 100%;

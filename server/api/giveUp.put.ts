@@ -1,6 +1,5 @@
 import { serverSupabaseClient } from '#supabase/server';
-import { UserPuzzle } from '~/app/utils/puzzle';
-
+import { UserPuzzle } from '#imports';
 export default defineEventHandler(async (event) => {
     const userId = event.context.userId;
     const body = await readBody(event);

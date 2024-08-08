@@ -1,5 +1,9 @@
 # Notes
 
+## TODO
+
+- Implement play past puzzles features
+
 ## Future Considerations
 
 Consider moving logic outside of supabase functions. To do that:

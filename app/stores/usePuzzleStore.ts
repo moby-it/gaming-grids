@@ -20,7 +20,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
         [0, 0, 0],
         [0, 0, 0],
     ]);
-    const name = ref<string>('');
+    const name = ref('');
+    const date = ref('');
     const restrictions = ref<PuzzleInfo['restrictions']>({
         row: [],
         column: [],
@@ -42,6 +43,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
 
     function patchPuzzle(puzzleBody: PuzzleBody & PuzzleInfo) {
         name.value = puzzleBody.name;
+        date.value = puzzleBody.date;
         championNames.value = puzzleBody.championNames;
         rarityScores.value = puzzleBody.rarityScores;
         restrictions.value = puzzleBody.restrictions;
@@ -90,6 +92,7 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     return {
         loading,
         name,
+        date,
         championNames,
         rarityScores,
         restrictions,

@@ -15,6 +15,6 @@ export default defineEventHandler(async (event) => {
             statusCode: 500,
             statusMessage: 'Could not parse rarity score for local puzzle.',
         });
-    setHeader(event, 'Cache-Control', 'max-age=60, must-revalidate');
+    setHeader(event, 'Cache-Control', 'max-age=3600, must-revalidate');
     return rarityScores;
 });

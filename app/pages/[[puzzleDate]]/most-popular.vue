@@ -30,8 +30,7 @@ const selectedCell = ref<Cell>({ x: -1, y: -1 });
 provide('selectedCell', selectedCell);
 </script>
 <template>
-    <section>
-        <NavBar />
+    <section class="most-popular">
         <h2 v-if="status === 'in progress'" class="message">Complete puzzle first</h2>
         <h1 v-else-if="loading" class="message">Loading...</h1>
         <Grid
@@ -43,9 +42,22 @@ provide('selectedCell', selectedCell);
     </section>
 </template>
 <style scoped>
+.most-popular {
+    margin-right: calc(var(--cell) + var(--gap-2));
+}
 .message {
     text-align: center;
     margin-top: var(--cell);
     color: var(--accent-300);
+}
+@media (width <= 769px) {
+    .most-popular {
+        margin-right: var(--cell);
+    }
+}
+@media (width <= 426px) {
+    .most-popular {
+        margin-right: 0;
+    }
 }
 </style>

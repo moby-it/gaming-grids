@@ -9,8 +9,8 @@ const { data: puzzleId, error } = await fetchPuzzleIdByDate(supabase, puzzleDate
 if (error.value) throw createError(error.value);
 if (!puzzleId.value) throw createError('puzzle id not found');
 const store = usePuzzleStore();
-const { name } = storeToRefs(store);
-if (!name.value) await store.loadPuzzle(puzzleId.value);
+const { name, loading, date } = storeToRefs(store);
+if (!name.value || puzzleDate !== date.value) await store.loadPuzzle(puzzleId.value);
 
 onMounted(async () => {
     if (!user.value && puzzleId.value) {
@@ -22,9 +22,8 @@ onMounted(async () => {
 </script>
 <template>
     <section>
-        <NavBar />
-        <h1 v-if="!puzzleId">Puzzle not found</h1>
-        <Game v-else :puzzle-id="puzzleId" />
+        <h1 v-if="loading">Loading...</h1>
+        <Game v-else :puzzle-id="puzzleId!" />
     </section>
 </template>
 <style scoped>

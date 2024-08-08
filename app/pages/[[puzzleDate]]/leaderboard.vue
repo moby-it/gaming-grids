@@ -27,7 +27,6 @@ const currentUser = computed(() => users.value.find((u) => u.username === user.v
 </script>
 <template>
     <section class="container">
-        <NavBar />
         <section v-if="loading" class="message">
             <h1>Loading...</h1>
         </section>

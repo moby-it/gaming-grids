@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
     return {
         puzzleId,
         name: puzzleInfo.name,
+        date: puzzleInfo.date,
         restrictions: puzzleInfo.restrictions,
         possibleAnswers: puzzleInfo.possibleAnswers,
         guesses,

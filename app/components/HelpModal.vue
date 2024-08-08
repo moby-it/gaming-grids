@@ -12,8 +12,11 @@ onClickOutside(modal, (e: Event) => {
     <Modal :show="helpModal" @close="hideHelpModal">
         <section ref="modal" class="modal">
             <header>
-                <h4>Welcome to LeagueGrid! Here's how to play:</h4>
-                <Exit @click="hideHelpModal" />
+                <hgroup>
+                    <h2>Welcome to LeagueGrid!</h2>
+                    <Exit @click="hideHelpModal" />
+                </hgroup>
+                <h4>Here's how to play:</h4>
             </header>
             <p>You have nine guesses to fill-put the grid.</p>
             <p>
@@ -37,25 +40,15 @@ svg {
 }
 
 .modal {
-    p,
-    h4 {
-        font-family: 'Spiegel';
-        color: var(--accent-200);
-        font-weight: 400;
-        padding: var(--gap-4);
-    }
-
     p {
         font-size: var(--font-size-s);
     }
 
-    h4 {
-        font-size: var(--font-size-l);
-    }
-    header {
+    header > hgroup {
         display: flex;
         justify-content: space-between;
         align-items: start;
+        margin-bottom: var(--gap-2);
     }
 }
 </style>
