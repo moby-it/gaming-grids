@@ -2,7 +2,6 @@ import * as v from 'valibot';
 
 export const Champion = v.object({
     name: v.string(),
-    champion_id: v.string(),
 });
 
 export type Champion = v.InferOutput<typeof Champion>;

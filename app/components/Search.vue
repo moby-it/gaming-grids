@@ -10,7 +10,7 @@ const timeout = ref<ReturnType<typeof setTimeout> | null>(null);
 const emits = defineEmits<{
     championChosen: [value: Champion];
 }>();
-const handleChampionChosen = (championName: string) => {
+const handleChampionChosen = (championName: string | undefined) => {
     const champion = champions.value.find((c) => c.name === championName);
     if (champion) emits('championChosen', champion);
 };

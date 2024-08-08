@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 export const usePuzzleStore = defineStore('puzzle', () => {
     const loading = ref(true);
     const guesses = ref<number>(9);
-    const championNames: Ref<string[][]> = ref([
+    const championNames = ref<string[][]>([
         ['', '', ''],
         ['', '', ''],
         ['', '', ''],
@@ -34,8 +34,8 @@ export const usePuzzleStore = defineStore('puzzle', () => {
     }
     function updatePuzzle(x: number, y: number, champion: Champion, score: number) {
         if (score >= 0) {
-            championNames.value[x - 1][y - 1] = champion.name;
-            rarityScores.value[x - 1][y - 1] = score;
+            championNames.value[x - 1]![y - 1] = champion.name;
+            rarityScores.value[x - 1]![y - 1] = score;
         }
         --guesses.value;
     }

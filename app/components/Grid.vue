@@ -5,13 +5,15 @@ const props = defineProps<{
     rarityScores: number[][];
 }>();
 const puzzleStore = usePuzzleStore();
-const { name, restrictions, status, possibleAnswers } = storeToRefs(puzzleStore);
+const { restrictions, status, possibleAnswers } = storeToRefs(puzzleStore);
 
 const selectedCell = inject<Ref<Cell>>('selectedCell');
-function getChampion(x: number, y: number): Champion | undefined {
+function getChampion(x: number, y: number): Champion {
+    const name = props.championNames[x - 1]?.[y - 1] as string;
+    const rarityScore = props.rarityScores[x - 1]?.[y - 1] as number;
     return {
-        name: props.championNames[x - 1][y - 1],
-        rarityScore: props.rarityScores[x - 1][y - 1],
+        name,
+        rarityScore,
     };
 }
 const getX = (n: number) => Math.ceil(n / 3);
@@ -22,7 +24,7 @@ function onCellClick(x: number, y: number) {
     selectedCell.value = {
         x,
         y,
-        possibleAnswers: possibleAnswers.value[x - 1][y - 1],
+        possibleAnswers: possibleAnswers.value[x - 1]?.[y - 1],
     };
     setTimeout(() => {
         document.getElementById('search-player')?.focus();

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 const route = useRoute();
-const puzzleDate = (route.query.puzzleDate as string) || '';
-const mostPopularLink = puzzleDate ? `${puzzleDate}/most-popular` : '/most-popular';
-const leaderboardLink = puzzleDate ? `${puzzleDate}/leader-board` : '/leaderboard';
+const puzzleDate = (route.params.puzzleDate as string) || '';
+const mostPopularLink = puzzleDate ? `/${puzzleDate}/most-popular` : '/most-popular';
+const leaderboardsLink = puzzleDate ? `/${puzzleDate}/leaderboard` : '/leaderboard';
 const store = usePuzzleStore();
 const { name } = storeToRefs(store);
 const showPuzzles = ref(false);
@@ -22,7 +22,7 @@ const showPuzzles = ref(false);
             <NuxtLink :to="mostPopularLink" class="nav-link" exact-active-class="active"
                 >Most popular</NuxtLink
             >
-            <NuxtLink :to="leaderboardLink" class="nav-link" exact-active-class="active"
+            <NuxtLink :to="leaderboardsLink" class="nav-link" exact-active-class="active"
                 >Leaderboard</NuxtLink
             >
         </section>

@@ -43,7 +43,7 @@ async function giveUp() {
 }
 async function handleChampionChosen(champion: Champion): Promise<void> {
     if (guesses.value <= 0) return;
-    const { score } = await $fetch(`/api/submit-champion/`, {
+    const { score } = await $fetch(`/api/submit-champion`, {
         method: 'POST',
         body: JSON.stringify({
             x: selectedCell.value.x,

@@ -35,7 +35,7 @@ export const fetchPuzzleIdByDate = (supabase: SupabaseClient, date?: string) =>
                       .from('puzzle')
                       .select('id')
                       .lte('date', new Date().toUTCString())
-                      .order('date')
+                      .order('date', { ascending: false })
                       .limit(1);
             if (error) throw createError(error);
             if (!data.length) throw createError(`puzzle for date ${date} not found`);

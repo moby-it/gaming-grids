@@ -26,7 +26,7 @@ onMounted(() => {
 });
 const store = usePuzzleStore();
 const route = useRoute();
-const puzzleDate = route.query.puzzleDate as string;
+const puzzleDate = route.params.puzzleDate as string;
 const { data: puzzleId, error } = await fetchPuzzleIdByDate(supabase, puzzleDate);
 if (error.value) throw createError(error.value);
 
