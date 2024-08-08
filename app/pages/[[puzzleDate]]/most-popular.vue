@@ -42,7 +42,7 @@ provide('selectedCell', selectedCell);
     </section>
 </template>
 <style scoped>
-.most-popular {
+#most-popular-grid {
     margin-right: calc(var(--cell) + var(--gap-2));
 }
 .message {
@@ -51,12 +51,12 @@ provide('selectedCell', selectedCell);
     color: var(--accent-300);
 }
 @media (width <= 769px) {
-    .most-popular {
+    #most-popular-grid {
         margin-right: var(--cell);
     }
 }
 @media (width <= 426px) {
-    .most-popular {
+    #most-popular-grid {
         margin-right: 0;
     }
 }
