@@ -4,6 +4,11 @@ import { fetchPuzzleIdByDateClient } from './utils/puzzle';
 useHead({
     script: [
         {
+            src: 'https://moby-it.com/js/script.js',
+            defer: true,
+            'data-domain': 'league.mobyplaygrounds.com',
+        },
+        {
             defer: true,
             src: '/login.js',
         },

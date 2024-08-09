@@ -35,6 +35,6 @@ export default defineEventHandler(async (event) => {
     const supabase: SupabaseClient = await serverSupabaseClient(event);
     const puzzleId = getQuery(event).puzzleId as string;
     const { championNames, rarityScores } = await getMostPopular(supabase, puzzleId);
-    setHeader(event, 'Cache-Control', 'max-age=60, must-revalidate');
+    setHeader(event, 'Cache-Control', 'max-age=3600, must-revalidate');
     return { championNames, rarityScores };
 });

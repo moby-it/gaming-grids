@@ -31,8 +31,8 @@ provide('selectedCell', selectedCell);
 </script>
 <template>
     <section class="most-popular">
-        <h2 v-if="status === 'in progress'" class="message">Complete puzzle first</h2>
-        <h1 v-else-if="loading" class="message">Loading...</h1>
+        <h1 v-if="loading" class="message">Loading...</h1>
+        <h2 v-else-if="status === 'in progress'" class="message">Complete puzzle first</h2>
         <Grid
             id="most-popular-grid"
             v-else

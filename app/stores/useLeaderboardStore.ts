@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
-import * as v from 'valibot';
 
 export const useLeaderboardStore = defineStore('leaderboard', () => {
-    const loading = ref<boolean>(false);
+    const loading = ref(false);
     const users = ref<LeaderboardUsers>([{ username: '', rank: 0, userScore: 900 }]);
     async function loadLeaderboard(puzzleId: string) {
         loading.value = true;
-        const { data, error } = await useFetch(`/api/leaderboard/?puzzleId=${puzzleId}`, {
+        const { data } = await useFetch(`/api/leaderboard/?puzzleId=${puzzleId}`, {
             key: `leaderboard-${puzzleId}`,
             getCachedData: (key, nuxtApp) => {
                 return nuxtApp.payload.data[key];
@@ -18,13 +17,9 @@ export const useLeaderboardStore = defineStore('leaderboard', () => {
     }
     async function loadLeaderboardClient(puzzleId: string) {
         loading.value = true;
-        const data = await $fetch(`/api/leader-board/?puzzleId=${puzzleId}`);
-        const { output, success, issues } = v.safeParse(LeaderboardUsersSchema, data);
-        if (!success) {
-            console.error(JSON.stringify(issues));
-            throw createError('failed to parse leaderboard users');
-        }
-        users.value = output;
+        const data = await $fetch(`/api/leaderboard/?puzzleId=${puzzleId}`);
+        users.value = data;
+        loading.value = false;
     }
     return { loading, users, loadLeaderboard, loadLeaderBoardClient: loadLeaderboardClient };
 });
