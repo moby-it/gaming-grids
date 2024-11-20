@@ -27,28 +27,3 @@ jobs:
                   build-args: |
                       GIT_SHA=${{ github.sha }}
                   tags: ${{ secrets.REPOSITORY_NAME }}/gaming-grids:develop , ${{ secrets.REPOSITORY_NAME }}/gaming-grids:${{ github.sha }}
-    deploy:
-        needs: [build]
-        runs-on: ubuntu-22.04
-        steps:
-            - uses: actions/checkout@v4
-            - uses: azure/setup-kubectl@v4
-              with:
-                  version: 'v1.30.1'
-              id: install
-            - uses: azure/k8s-set-context@v4
-              name: Set Context
-              with:
-                  method: service-account
-                  k8s-url: ${{ secrets.KUBE_DEV_SERVER_URL }}
-                  k8s-secret: ${{ secrets.KUBE_SA_TOKEN_DEV }}
-              id: setcontext
-            - name: Apply k8s
-              uses: Azure/k8s-deploy@v5
-              with:
-                  name: kubernetes
-                  namespace: gaming-grids
-                  images: ghcr.io/moby-it/gaming-grids:${{ github.sha }}
-                  action: deploy
-                  manifests: |
-                      k8s/app.yaml
